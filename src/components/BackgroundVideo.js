@@ -46,6 +46,6 @@ const styles = StyleSheet.create({
   overlay: {
     backgroundColor: '#000000',
     ...StyleSheet.absoluteFillObject,
-    opacity: 0.5,
+    opacity: 0.65,
   },
 });
