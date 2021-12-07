@@ -21,7 +21,7 @@ export default class BackgroundVideo extends Component {
     return (
       <Animated.View style={[ styles.container, { opacity: opacityAnimated } ]}>
         <Video
-          source={require('../assets/videos/background.mp4').default}
+          source={require('../assets/videos/background2.mp4').default}
           shouldPlay
           isLooping
           resizeMode={'cover'}
