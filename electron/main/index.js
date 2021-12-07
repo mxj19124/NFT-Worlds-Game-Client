@@ -10,7 +10,15 @@ const isDevelopment = process.env.NODE_ENV !== 'production';
 let mainWindow;
 
 function createMainWindow() {
-  const browserWindow = new BrowserWindow({ webPreferences: { nodeIntegration: true } });
+  const browserWindow = new BrowserWindow({
+    width: 980,
+    height: 552,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+    backgroundColor: '#000000'
+  });
 
   if (isDevelopment) {
     browserWindow.webContents.openDevTools();
