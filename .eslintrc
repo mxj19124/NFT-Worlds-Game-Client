@@ -22,14 +22,6 @@
     "react/jsx-handler-names": 0,
     "react/jsx-closing-bracket-location": 0,
     "react-native/no-unused-styles": 2,
-    "react-native/sort-styles": [
-      "error",
-      "asc",
-      {
-        "ignoreClassNames": false,
-        "ignoreStyleProperties": false
-      }
-    ],
     "no-return-assign": 0,
     "object-curly-spacing": [2, "always"],
     "array-bracket-spacing": [2, "always"]

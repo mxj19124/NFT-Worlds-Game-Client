@@ -3,13 +3,14 @@ import { Text, StyleSheet } from 'react-native';
 
 export default class Heading extends Component {
   render() {
-    const { uppercase, children, style } = this.props;
+    const { uppercase, large, children, style } = this.props;
 
     return (
       <Text
         style={[
-          uppercase ? styles.uppercase : null,
           styles.text,
+          uppercase ? styles.uppercase : null,
+          large ? styles.large : null,
           style,
         ]}
       >
@@ -24,6 +25,9 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontFamily: 'Bold',
     fontSize: 16,
+  },
+  large: {
+    fontSize: 18,
   },
   uppercase: {
     textTransform: 'uppercase',

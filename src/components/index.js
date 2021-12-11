@@ -4,6 +4,7 @@ import Heading from './Heading';
 import ImageButton from './ImageButton';
 import LinkText from './LinkText';
 import SubText from './SubText';
+import TextButton from './TextButton';
 import TextInputField from './TextInputField';
 
 export {
@@ -13,5 +14,6 @@ export {
   ImageButton,
   LinkText,
   SubText,
+  TextButton,
   TextInputField,
 };
