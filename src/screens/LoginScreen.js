@@ -1,21 +1,32 @@
 import React, { Component } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
+import { shell } from 'electron';
 import { Button, Heading, TextInputField, LinkText } from '../components';
 
 export default class LoginScreen extends Component {
-  _openForgotPassword = () => {
+  state = {
+    loading: false,
+  }
 
+  _login = () => {
+
+  }
+
+  _openForgotPassword = () => {
+    shell.openExternal('https://www.minecraft.net/password/forgot');
   }
 
   _openCreateAccount = () => {
-
+    shell.openExternal('https://www.minecraft.net/store/minecraft-java-edition');
   }
 
   _openNFTWorlds = () => {
-
+    shell.openExternal('https://www.nftworlds.com');
   }
 
   render() {
+    const { loading } = this.state;
+
     return (
       <View style={styles.container}>
         <Image
@@ -25,7 +36,7 @@ export default class LoginScreen extends Component {
         />
 
         <View style={styles.loginForm}>
-          <Heading style={styles.heading}>Minecraft Login</Heading>
+          <Heading uppercase style={styles.heading}>Minecraft Login</Heading>
           <Text style={styles.infoText}>Your Minecraft account is used to login.</Text>
 
           <TextInputField
@@ -41,7 +52,7 @@ export default class LoginScreen extends Component {
             style={styles.textInput}
           />
 
-          <Button>Login</Button>
+          <Button onPress={this._login} loading={loading}>Login</Button>
         </View>
 
         <View style={styles.linksContainer}>
@@ -63,25 +74,20 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
+  disclaimerText: {
+    bottom: -20,
+    color: '#666666',
+    position: 'absolute',
+  },
   heading: {
-    textAlign: 'center',
     marginBottom: 2,
+    textAlign: 'center',
   },
-  logoImage: {
-    height: 42,
-    width: 300,
-  },
-  loginForm: {
-    backgroundColor: '#00000066',
-    borderRadius: 3,
-    marginTop: 30,
-    minWidth: 250,
-    padding: 30,
-  },
-  textInput: {
+  infoText: {
+    color: '#CCCCCC',
+    fontFamily: 'regular',
+    fontSize: 10,
     marginBottom: 30,
-  },
-  textInputText: {
     textAlign: 'center',
   },
   linksContainer: {
@@ -90,20 +96,25 @@ const styles = StyleSheet.create({
     marginTop: 15,
     width: 250,
   },
-  infoText: {
-    color: '#CCCCCC',
-    fontFamily: 'regular',
-    fontSize: 10,
-    textAlign: 'center',
+  loginForm: {
+    backgroundColor: '#00000088',
+    borderRadius: 3,
+    marginTop: 30,
+    minWidth: 250,
+    padding: 30,
+  },
+  logoImage: {
+    height: 42,
+    width: 300,
+  },
+  textInput: {
     marginBottom: 30,
+  },
+  textInputText: {
+    textAlign: 'center',
   },
   visitLink: {
     alignSelf: 'center',
     marginTop: 10,
-  },
-  disclaimerText: {
-    color: '#666666',
-    position: 'absolute',
-    bottom: -20,
   },
 });

@@ -3,7 +3,7 @@ import { View, Image, StyleSheet } from 'react-native';
 import * as Font from 'expo-font';
 import { BackgroundVideo } from './components';
 
-import { LoginScreen } from './screens';
+import { LoginScreen, HomeScreen } from './screens';
 
 export default class Main extends Component {
   componentDidMount() {
@@ -18,7 +18,8 @@ export default class Main extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <LoginScreen />
+        <HomeScreen />
+
         <BackgroundVideo />
       </View>
     );

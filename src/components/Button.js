@@ -1,30 +1,54 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { TouchableOpacity, Text, ActivityIndicator, StyleSheet } from 'react-native';
 
 export default class Button extends Component {
   render() {
-    const { style, textStyle, children, ...props } = this.props;
+    const { bold, big, style, textStyle, children, loading, ...props } = this.props;
 
     return (
-      <TouchableOpacity {...props} style={[ styles.button, style  ]}>
-        <Text style={[ styles.text, textStyle ]}>{children}</Text>
+      <TouchableOpacity disabled={loading} {...props} style={[ styles.button, style ]}>
+        {!loading && (
+          <Text
+            style={[
+              styles.text,
+              big ? styles.big : null,
+              bold ? styles.bold : null,
+              textStyle,
+            ]}
+          >
+            {children}
+          </Text>
+        )}
+
+        {loading && (
+          <ActivityIndicator size={'small'} color={'#FFFFFF'} />
+        )}
       </TouchableOpacity>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  big: {
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+  },
+  bold: {
+    fontFamily: 'Bold',
+  },
   button: {
     alignItems: 'center',
-    borderWidth: 1,
     borderColor: '#FFFFFF',
     borderRadius: 3,
+    borderWidth: 1,
+    minHeight: 32,
     paddingHorizontal: 12,
     paddingVertical: 4,
   },
   text: {
     color: '#FFFFFF',
-    fontSize: 18,
     fontFamily: 'Regular',
+    fontSize: 18,
+    textTransform: 'uppercase',
   },
 });

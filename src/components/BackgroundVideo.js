@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { View, Animated, StyleSheet } from 'react-native';
-import { Video, AVPlaybackStatus } from 'expo-av';
+import { Video } from 'expo-av';
 
 export default class BackgroundVideo extends Component {
   state ={
-    opacityAnimated: new Animated.Value(0,)
+    opacityAnimated: new Animated.Value(0),
   }
 
   _fadeInVideo = () => {
@@ -40,12 +40,12 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     zIndex: -1,
   },
-  video: {
-    flex: 1,
-  },
   overlay: {
     backgroundColor: '#000000',
     ...StyleSheet.absoluteFillObject,
-    opacity: 0.65,
+    opacity: 0.75,
+  },
+  video: {
+    flex: 1,
   },
 });

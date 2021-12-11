@@ -1,0 +1,37 @@
+{
+  "parser": "babel-eslint",
+  "globals": {
+    "fetch": true,
+    "alert": true,
+    "FormData": true,
+    "__DEV__": true
+  },
+  "extends": ["standard", "standard-react"],
+  "plugins": [
+    "react",
+    "react-native"
+  ],
+  "rules": {
+    "semi": [2, "always"],
+    "space-before-function-paren": 0,
+    "comma-dangle": [2, "always-multiline"],
+    "react/prop-types": 0,
+    "react/jsx-no-bind": 0,
+    "react/jsx-fragments": 0,
+    "react/jsx-curly-brace-presence": 0,
+    "react/jsx-handler-names": 0,
+    "react/jsx-closing-bracket-location": 0,
+    "react-native/no-unused-styles": 2,
+    "react-native/sort-styles": [
+      "error",
+      "asc",
+      {
+        "ignoreClassNames": false,
+        "ignoreStyleProperties": false
+      }
+    ],
+    "no-return-assign": 0,
+    "object-curly-spacing": [2, "always"],
+    "array-bracket-spacing": [2, "always"]
+  }
+}
