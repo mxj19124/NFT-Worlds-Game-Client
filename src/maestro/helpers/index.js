@@ -1,1 +1,5 @@
-export default [];
+import NavigationHelper from './NavigationHelper';
+
+export default [
+  NavigationHelper,
+];

@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { shell } from 'electron';
 import { Button, Heading, TextInputField, LinkText } from '../components';
+import maestro from '../maestro';
+
+const { navigationHelper } = maestro.helpers;
 
 export default class LoginScreen extends Component {
   state = {
@@ -9,7 +12,7 @@ export default class LoginScreen extends Component {
   }
 
   _login = () => {
-
+    navigationHelper.openScreen('home');
   }
 
   _openForgotPassword = () => {

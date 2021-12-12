@@ -3,10 +3,10 @@ import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
 export default class TextButton extends Component {
   render() {
-    const { active, textStyle, style, children } = this.props;
+    const { active, textStyle, onPress, style, children } = this.props;
 
     return (
-      <TouchableOpacity style={[ styles.container, style ]}>
+      <TouchableOpacity onPress={onPress} style={[ styles.container, style ]}>
         <Text
           style={[
             styles.text,

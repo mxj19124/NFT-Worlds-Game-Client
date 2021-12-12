@@ -2,8 +2,15 @@ import React, { Component } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { shell } from 'electron';
 import { ImageButton } from '../';
+import maestro from '../../maestro';
+
+const { navigationHelper } = maestro.helpers;
 
 export default class Header extends Component {
+  _openSettings = () => {
+    navigationHelper.openScreen('settings');
+  }
+
   _openOpenSea = () => {
     shell.openExternal('https://opensea.io/collection/nft-worlds');
   }
@@ -53,7 +60,7 @@ export default class Header extends Component {
         </View>
 
         <View style={[ styles.headingSection, styles.headingRight ]}>
-          <TouchableOpacity style={styles.profileButton}>
+          <TouchableOpacity onPress={this._openSettings} style={styles.profileButton}>
             <View style={styles.profileInfoContainer}>
               <Text style={styles.profileText}>iamarkdev</Text>
               <Text style={styles.balanceText}>0.00 WRLD</Text>
