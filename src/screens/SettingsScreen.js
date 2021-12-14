@@ -8,8 +8,8 @@ const { navigationHelper } = maestro.helpers;
 
 export default class LoginScreen extends Component {
   state = {
-    activeSidebarSection: 'about', // 'account',
-    section: 'about', //'account',
+    activeSidebarSection: 'account',
+    section: 'account',
     sectionOpacity: new Animated.Value(1),
   }
 

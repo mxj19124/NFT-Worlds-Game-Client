@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ContentBox, Heading, SubText, TextButton } from '../';
+import maestro from '../../maestro';
+
+const { navigationHelper } = maestro.helpers;
 
 export default class AccountSection extends Component {
   _logout = () => {
-    alert('TODO');
+    navigationHelper.openScreen('login');
   }
 
   render() {

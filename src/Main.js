@@ -6,11 +6,9 @@ import maestro from './maestro';
 
 import { LoginScreen, HomeScreen, SettingsScreen } from './screens';
 
-const { navigationHelper } = maestro.helpers;
-
 export default class Main extends Component {
   state = {
-    screen: 'settings', //'login',
+    screen: 'login',
     opacityAnimated: new Animated.Value(0),
   }
 

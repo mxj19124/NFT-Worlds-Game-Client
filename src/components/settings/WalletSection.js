@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { ContentBox, Heading, SubText, TextButton } from '../';
+import { ContentBox, Heading, SubText } from '../';
 
 export default class WalletSection extends Component {
   render() {

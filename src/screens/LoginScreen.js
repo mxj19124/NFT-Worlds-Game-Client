@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { shell } from 'electron';
-import { Button, Heading, TextInputField, LinkText } from '../components';
+import { Button, Heading, TextInputField, ImageButton, LinkText } from '../components';
 import maestro from '../maestro';
 
 const { navigationHelper } = maestro.helpers;
@@ -40,7 +40,7 @@ export default class LoginScreen extends Component {
 
         <View style={styles.loginForm}>
           <Heading uppercase style={styles.heading}>Minecraft Login</Heading>
-          <Text style={styles.infoText}>Your Minecraft account is used to login.</Text>
+          <Text style={styles.infoText}>Your Mojang account is used to login.</Text>
 
           <TextInputField
             placeholder={'Email Address'}
@@ -63,9 +63,13 @@ export default class LoginScreen extends Component {
           <LinkText onPress={this._openCreateAccount}>need an account?</LinkText>
         </View>
 
-        <LinkText onPress={this._openNFTWorlds} style={styles.visitLink}>visit nftworlds.com</LinkText>
+        <ImageButton
+          source={require('../assets/images/microsoft-login.svg').default}
+          imageStyle={styles.microsoftLoginImage}
+          style={styles.microsoftLoginButton}
+        />
 
-        <Text style={[ styles.infoText, styles.disclaimerText ]}>NFT Worlds is not affiliated with Mojang AB.</Text>
+        <Text style={[ styles.infoText, styles.disclaimerText ]}>NFT Worlds is not affiliated with Mojang AB or Microsoft.</Text>
       </View>
     );
   }
@@ -103,12 +107,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#00000088',
     borderRadius: 3,
     marginTop: 30,
-    minWidth: 250,
+    minWidth: 270,
     padding: 30,
   },
   logoImage: {
     height: 42,
     width: 300,
+  },
+  microsoftLoginButton: {
+    alignSelf: 'center',
+    marginTop: 15,
+    minWidth: 190,
+  },
+  microsoftLoginImage: {
+    height: 35,
   },
   textInput: {
     marginBottom: 30,
