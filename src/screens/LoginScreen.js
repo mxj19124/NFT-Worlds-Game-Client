@@ -15,6 +15,10 @@ export default class LoginScreen extends Component {
     navigationHelper.openScreen('home');
   }
 
+  _loginWithMicrosoft = () => {
+    alert('Microsoft sign in is not yet available. Please sign in using a Mojang account.');
+  }
+
   _openForgotPassword = () => {
     shell.openExternal('https://www.minecraft.net/password/forgot');
   }
@@ -64,6 +68,7 @@ export default class LoginScreen extends Component {
         </View>
 
         <ImageButton
+          onPress={this._loginWithMicrosoft}
           source={require('../assets/images/microsoft-login.svg').default}
           imageStyle={styles.microsoftLoginImage}
           style={styles.microsoftLoginButton}
