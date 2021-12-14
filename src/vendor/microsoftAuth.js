@@ -1,15 +1,13 @@
 import requestPromise from 'request-promise';
 
 // Constants
-const CLIENT_ID = '';
+const CLIENT_ID = 'bf51f29d-6a70-4f4e-8cdb-2b358074ad4c';
 const TOKEN_ENDPOINT = 'https://login.microsoftonline.com/consumers/oauth2/v2.0/token';
 const AUTH_XBL_ENDPOINT = 'https://user.auth.xboxlive.com/user/authenticate';
 const AUTH_XSTS_ENDPOINT = 'https://xsts.auth.xboxlive.com/xsts/authorize';
 const AUTH_MC_ENDPOINT = 'https://api.minecraftservices.com/authentication/login_with_xbox';
 const MC_PROFILE_ENDPOINT = 'https://api.minecraftservices.com/minecraft/profile';
 const MC_STORE_ENDPOINT = 'https://api.minecraftservices.com/entitlements/mcstore';
-
-const clientId = '0c7c8228-98ff-4ed8-ae28-af41852ba6ab';
 
 async function _getXBLToken(accessToken) {
   const data = {};
@@ -99,7 +97,7 @@ export async function getAccessToken(authCode) {
   const response = await requestPromise(TOKEN_ENDPOINT, {
     method: 'post',
     formData: {
-      client_id: clientId,
+      client_id: CLIENT_ID,
       code: authCode,
       scope: 'XboxLive.signin',
       redirect_uri: 'https://login.microsoftonline.com/common/oauth2/nativeclient',
@@ -128,7 +126,7 @@ export async function refreshAccessToken(refreshToken) {
   const response = await requestPromise(TOKEN_ENDPOINT, {
     method: 'post',
     formData: {
-      client_id: clientId,
+      client_id: CLIENT_ID,
       refresh_token: refreshToken,
       scope: 'XboxLive.signin',
       redirect_uri: 'https://login.microsoftonline.com/common/oauth2/nativeclient',
