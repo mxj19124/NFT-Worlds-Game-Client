@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { View, Animated, StyleSheet } from 'react-native';
 import { Heading, TextButton } from '../components';
+import { AboutSection, AccountSection, GameSection, UpdatesSection, WalletSection } from '../components/settings';
 import maestro from '../maestro';
 
 const { navigationHelper } = maestro.helpers;
 
 export default class LoginScreen extends Component {
   state = {
-    activeSidebarSection: 'account',
-    section: 'account',
+    activeSidebarSection: 'about', // 'account',
+    section: 'about', //'account',
     sectionOpacity: new Animated.Value(1),
   }
 
@@ -26,7 +27,7 @@ export default class LoginScreen extends Component {
     return new Promise(resolve => {
       Animated.timing(this.state.sectionOpacity, {
         toValue: show ? 1 : 0,
-        duration: 500,
+        duration: 350,
         useNativeDriver: true,
       }).start(resolve);
     });
@@ -34,40 +35,36 @@ export default class LoginScreen extends Component {
 
   _renderAccount = () => {
     return (
-      <View />
+      <AccountSection />
     );
   }
 
-  _renderGameSettings = () => {
+  _renderGame = () => {
     return (
-      <View />
+      <GameSection />
     );
   }
 
   _renderWallet = () => {
     return (
-      <View />
+      <WalletSection />
     );
   }
 
   _renderAbout = () => {
     return (
-      <View />
+      <AboutSection />
     );
   }
 
   _renderUpdates = () => {
     return (
-      <View />
+      <UpdatesSection />
     );
   }
 
-  _logout = () => {
-    navigationHelper.openScreen('login');
-  }
-
   render() {
-    const { section, activeSidebarSection } = this.state;
+    const { section, activeSidebarSection, sectionOpacity } = this.state;
 
     return (
       <View style={styles.container}>
@@ -85,11 +82,11 @@ export default class LoginScreen extends Component {
               </TextButton>
 
               <TextButton
-                active={activeSidebarSection === 'settings'}
-                onPress={() => this._changeSection('settings')}
+                active={activeSidebarSection === 'game'}
+                onPress={() => this._changeSection('game')}
                 style={styles.menuButton}
               >
-                Game Settings
+                Game
               </TextButton>
 
               <TextButton
@@ -100,32 +97,34 @@ export default class LoginScreen extends Component {
                 Wallet
               </TextButton>
 
-              <TextButton
-                active={activeSidebarSection === 'about'}
-                onPress={() => this._changeSection('about')}
-                style={styles.menuButton}
-              >
-                About
-              </TextButton>
+              <View style={styles.spacedMenuContainer}>
+                <TextButton
+                  active={activeSidebarSection === 'about'}
+                  onPress={() => this._changeSection('about')}
+                  style={styles.menuButton}
+                >
+                  About
+                </TextButton>
 
-              <TextButton
-                active={activeSidebarSection === 'updates'}
-                onPress={() => this._changeSection('updates')}
-                style={styles.menuButton}
-              >
-                Updates
-              </TextButton>
-
-              <View style={styles.divider} />
-
-              <TextButton onPress={this._logout} style={styles.menuButton}>Logout</TextButton>
+                <TextButton
+                  active={activeSidebarSection === 'updates'}
+                  onPress={() => this._changeSection('updates')}
+                  style={styles.menuButton}
+                >
+                  Updates
+                </TextButton>
+              </View>
             </View>
           </View>
         </View>
 
-        <View style={styles.contentContainer}>
-          <View style={styles.box} />
-        </View>
+        <Animated.View style={[ styles.contentContainer, { opacity: sectionOpacity } ]}>
+          {section === 'account' && this._renderAccount()}
+          {section === 'game' && this._renderGame()}
+          {section === 'wallet' && this._renderWallet()}
+          {section === 'about' && this._renderAbout()}
+          {section === 'updates' && this._renderUpdates()}
+        </Animated.View>
 
         <View style={styles.spacingContainer} />
 
@@ -142,11 +141,6 @@ export default class LoginScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  box: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#000000',
-  },
   closeButton: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -173,16 +167,10 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    paddingHorizontal: 60,
-  },
-  divider: {
-    backgroundColor: '#AAAAAA',
-    height: 1,
-    marginBottom: 10,
-    width: 65,
+    paddingHorizontal: 80,
   },
   menuButton: {
-    marginBottom: 12,
+    paddingVertical: 6,
   },
   menuContainer: {
     alignItems: 'flex-end',
@@ -190,7 +178,10 @@ const styles = StyleSheet.create({
   },
   menuItemsContainer: {
     marginLeft: 10,
-    marginTop: 40,
+    marginTop: 34,
+  },
+  spacedMenuContainer: {
+    marginVertical: 30,
   },
   spacingContainer: {
     width: '10%',
