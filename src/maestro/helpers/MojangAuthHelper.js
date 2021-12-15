@@ -13,7 +13,7 @@ export default class MojangAuthHelper extends Helper {
   }
 
   async authenticate(username, password, clientToken, requestUser = true, agent = MINECRAFT_AGENT) {
-    const response = await requestPromise(`${AUTH_BASE_URI}/authenticate`, {
+    return requestPromise(`${AUTH_BASE_URI}/authenticate`, {
       method: 'post',
       body: {
         agent,
@@ -24,16 +24,10 @@ export default class MojangAuthHelper extends Helper {
       },
       json: true,
     });
-
-    if (response.statusCode !== 200) {
-      throw new Error(response.body);
-    }
-
-    return response.body;
   }
 
   async validate(accessToken, clientToken) {
-    const response = await requestPromise(`${AUTH_BASE_URI}/validate`, {
+    await requestPromise(`${AUTH_BASE_URI}/validate`, {
       method: 'post',
       body: {
         accessToken,
@@ -41,16 +35,12 @@ export default class MojangAuthHelper extends Helper {
       },
       json: true,
     });
-
-    if (response.statusCode !== 204) {
-      throw new Error(response.body);
-    }
 
     return true;
   }
 
   async invalidate(accessToken, clientToken) {
-    const response = await requestPromise(`${AUTH_BASE_URI}/invalidate`, {
+    await requestPromise(`${AUTH_BASE_URI}/invalidate`, {
       method: 'post',
       body: {
         accessToken,
@@ -59,15 +49,11 @@ export default class MojangAuthHelper extends Helper {
       json: true,
     });
 
-    if (response.statusCode !== 204) {
-      throw new Error(response.body);
-    }
-
     return true;
   }
 
   async refresh(accessToken, clientToken, requestUser = true) {
-    const response = await requestPromise(`${AUTH_BASE_URI}/refresh`, {
+    return requestPromise(`${AUTH_BASE_URI}/refresh`, {
       method: 'post',
       body: {
         accessToken,
@@ -76,11 +62,5 @@ export default class MojangAuthHelper extends Helper {
       },
       json: true,
     });
-
-    if (response.statusCode !== 200) {
-      throw new Error(response.body);
-    }
-
-    return response.body;
   }
 }
