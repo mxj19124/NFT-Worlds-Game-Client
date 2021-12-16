@@ -4,13 +4,17 @@ import { ContentBox, Heading, SubText, TextButton } from '../';
 import maestro from '../../maestro';
 
 const { navigationHelper } = maestro.helpers;
+const { userManager } = maestro.managers;
 
 export default class AccountSection extends Component {
   _logout = () => {
+    userManager.logout();
     navigationHelper.openScreen('login');
   }
 
   render() {
+    const selectedProfile = userManager.getSelectedProfile();
+
     return (
       <View style={styles.container}>
         <Heading large>Account Settings</Heading>
@@ -18,12 +22,12 @@ export default class AccountSection extends Component {
 
         <ContentBox style={styles.box}>
           <SubText bold>Username</SubText>
-          <SubText white>ArkDev</SubText>
+          <SubText white>{selectedProfile.name}</SubText>
 
           <View style={styles.fieldSpacer} />
 
           <SubText bold>UUID</SubText>
-          <SubText white>4e668a103ac04762ade0980e5790e497</SubText>
+          <SubText white>{selectedProfile.id}</SubText>
 
           <TextButton
             onPress={this._logout}

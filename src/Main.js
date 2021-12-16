@@ -6,13 +6,15 @@ import maestro from './maestro';
 
 import { LoginScreen, HomeScreen, SettingsScreen } from './screens';
 
+const { userManager } = maestro.managers;
+
 export default class Main extends Component {
   state = {
     screen: 'login',
     opacityAnimated: new Animated.Value(0),
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     maestro.link(this);
 
     Font.loadAsync({
@@ -22,7 +24,13 @@ export default class Main extends Component {
       BoldItalic: require('./assets/fonts/Montserrat-BoldItalic.ttf').default,
     });
 
-    this._fade(true, 2000);
+    await userManager.loadUser();
+
+    this.setState({
+      screen: userManager.isLoggedIn() ? 'home' : 'login',
+    }, () => {
+      this._fade(true, 2000);
+    });
   }
 
   componentWillUnmount() {

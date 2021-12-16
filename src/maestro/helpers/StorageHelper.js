@@ -14,7 +14,7 @@ export default class StorageHelper extends Helper {
     fs.writeFileSync(filePath, json);
   }
 
-  async writeBinaryFile(filename, buffer) {
+  writeBinaryFile(filename, buffer) {
     const { appSystemHelper } = this.maestro.helpers;
     const filePath = appSystemHelper.getAppStorageFilePath(filename);
 

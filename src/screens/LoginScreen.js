@@ -1,18 +1,37 @@
 import React, { Component } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
 import { shell } from 'electron';
 import { Button, Heading, TextInputField, ImageButton, LinkText } from '../components';
 import maestro from '../maestro';
 
+const { userManager } = maestro.managers;
 const { navigationHelper } = maestro.helpers;
 
 export default class LoginScreen extends Component {
   state = {
+    email: null,
+    password: null,
     loading: false,
   }
 
-  _login = () => {
-    navigationHelper.openScreen('home');
+  _login = async () => {
+    const { email, password } = this.state;
+
+    if (!email || !password) {
+      return alert('An email address and password must be provided.');
+    }
+
+    this.setState({ loading: true });
+
+    try {
+      await userManager.loginWithMojang(email, password);
+
+      navigationHelper.openScreen('home');
+    } catch (error) {
+      console.log(error);
+      this.setState({ loading: false });
+      alert(error.error.errorMessage);
+    }
   }
 
   _loginWithMicrosoft = () => {
@@ -20,7 +39,7 @@ export default class LoginScreen extends Component {
   }
 
   _openForgotPassword = () => {
-    shell.openExternal('https://www.minecraft.net/password/forgot');
+    shell.openExternal('hattps://www.minecraft.net/password/forgot');
   }
 
   _openCreateAccount = () => {
@@ -47,12 +66,14 @@ export default class LoginScreen extends Component {
           <Text style={styles.infoText}>Your Mojang account is used to login.</Text>
 
           <TextInputField
+            onChangeText={email => this.setState({ email })}
             placeholder={'Email Address'}
             textInputStyle={styles.textInputText}
             style={styles.textInput}
           />
 
           <TextInputField
+            onChangeText={password => this.setState({ password })}
             placeholder={'Password'}
             secureTextEntry
             textInputStyle={styles.textInputText}

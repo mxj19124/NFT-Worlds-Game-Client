@@ -5,6 +5,7 @@ import { ImageButton } from '../';
 import maestro from '../../maestro';
 
 const { navigationHelper } = maestro.helpers;
+const { userManager } = maestro.managers;
 
 export default class Header extends Component {
   _openSettings = () => {
@@ -25,6 +26,7 @@ export default class Header extends Component {
 
   render() {
     const { style } = this.props;
+    const selectedProfile = userManager.getSelectedProfile();
 
     return (
       <View style={[ styles.container, style ]}>
@@ -62,7 +64,7 @@ export default class Header extends Component {
         <View style={[ styles.headingSection, styles.headingRight ]}>
           <TouchableOpacity onPress={this._openSettings} style={styles.profileButton}>
             <View style={styles.profileInfoContainer}>
-              <Text style={styles.profileText}>iamarkdev</Text>
+              <Text style={styles.profileText}>{selectedProfile.name}</Text>
               <Text style={styles.balanceText}>0.00 WRLD</Text>
             </View>
 
