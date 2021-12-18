@@ -1,11 +1,88 @@
 import React, { Component } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { shell } from 'electron';
-import { Button, ImageButton, Heading, SubText } from '../';
+import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { Button, Heading } from '../';
+import AssetGuard from '../../libs/AssetGuard';
+import JavaGuard from '../../libs/JavaGuard';
+import maestro from '../../maestro';
+
+const { appSystemHelper } = maestro.helpers;
 
 export default class Header extends Component {
   _alertComingSoon = () => {
     alert('Many more NFT Worlds will be available to play soon.\n\nCurrently, only the Scavenger Hunt world is available to showcase multiplayer.');
+  }
+
+  _launch = async () => {
+    const javaGuard = new JavaGuard();
+    const appStorageDirectory = appSystemHelper.getAppStorageDirectory();
+    const commonDirectory = appSystemHelper.getCommonDirectory();
+
+    try {
+      let javaExecutablePath = await javaGuard.validateJava(appStorageDirectory);
+
+      if (!javaExecutablePath) {
+        const installJava = confirm(
+          'No Compatible Java Installation Found!\n\n' +
+          'In order to play NFT Worlds, you need a 64-bit installation of Java.\n\n' +
+          'Would you like us to install a copy?\n\n' +
+          `By continuing you accept Oracle's license agreement.\n\n(http://www.oracle.com/technetwork/java/javase/terms/license/index.html)`
+        );
+
+        if (installJava) {
+          const javaInstallAssetGuard = new AssetGuard(commonDirectory, null);
+
+          javaInstallAssetGuard.on('progress', data => {
+            console.log('GOT PROGRESS', data);
+          });
+
+          javaInstallAssetGuard.on('complete', data => {
+            console.log('GOT COMPELTE', data);
+          });
+
+          javaInstallAssetGuard.on('error', data => {
+            throw data;
+          });
+
+          const queueResult = await javaInstallAssetGuard._enqueueOpenJDK(appStorageDirectory);
+
+          if (!queueResult) {
+            return alert('An unexpected error occured while downloading Java. Please try again.');
+          }
+
+          await javaInstallAssetGuard.processDlQueues([
+            { id: 'java', limit: 1 },
+          ]);
+
+          javaExecutablePath = await javaGuard.validateJava(appStorageDirectory);
+        }
+      }
+
+      const validateJavaResult = await javaGuard._validateJavaBinary(javaExecutablePath);
+
+      if (!validateJavaResult.valid) {
+        throw new Error(`Invalid Java Detected: ${JSON.stringify(validateJavaResult)}`);
+      }
+
+      const gameAssetGuard = new AssetGuard(commonDirectory, javaExecutablePath);
+
+      gameAssetGuard.on('progress', data => {
+        console.log('GOT PROGRESS', data);
+      });
+
+      gameAssetGuard.on('complete', data => {
+        console.log('GOT COMPLETE', data);
+      });
+
+      gameAssetGuard.on('error', data => {
+        throw data;
+      });
+
+      const validationResult = await gameAssetGuard.validateOrDownloadEverything('main-1.12.2');
+
+      console.log(validationResult);
+    } catch (error) {
+      alert(error.message);
+    }
   }
 
   render() {
@@ -56,7 +133,7 @@ export default class Header extends Component {
         <Heading style={styles.worldNameHeading}>Scavenger Hunt</Heading>
         <Heading style={styles.worldNumberHeading}>World #662</Heading>
 
-        <Button big bold>Join World</Button>
+        <Button onPress={this._launch} big bold>Join World</Button>
       </View>
     );
   }

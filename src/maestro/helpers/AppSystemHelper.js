@@ -38,4 +38,16 @@ export default class AppSystemHelper extends Helper {
   getSystemRoot() {
     return SYSTEM_ROOT;
   }
+
+  getCommonDirectory() {
+    return path.join(APP_STORAGE_DIRECTORY, 'common');
+  }
+
+  getInstanceDirectory() {
+    return path.join(APP_STORAGE_DIRECTORY, 'instances');
+  }
+
+  getJavaExecutable() {
+    return null; // TODO: should return stored executable dir.
+  }
 }

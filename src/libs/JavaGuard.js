@@ -7,9 +7,9 @@ import Registry from 'winreg';
 import MinecraftUtil from './MinecraftUtil';
 
 export default class JavaGuard extends EventEmitter {
-  constructor(mcVersion) {
+  constructor() {
     super();
-    this.mcVersion = mcVersion;
+    this.mcVersion = '1.12.2'; //'1.17.1'; // hardcode version, we lock to 1.17.1
   }
 
   // /**

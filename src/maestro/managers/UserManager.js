@@ -37,7 +37,7 @@ export default class UserManager extends Manager {
   }
 
   async loginWithMicrosoft() {
-    
+    // TODO
   }
 
   async loadUser() {
