@@ -10,10 +10,11 @@ export default class DistroIndex {
    */
 
   static fromJSON(json) {
-    const servers = json.servers;
-    json.servers = [];
+    const servers = [ ...json.servers ];
+    const copyJson = { ...json };
+    copyJson.servers = [];
 
-    const distro = Object.assign(new DistroIndex(), json);
+    const distro = Object.assign(new DistroIndex(), copyJson);
     distro._resolveServers(servers);
     distro._resolveMainServer();
 

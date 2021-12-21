@@ -2,10 +2,14 @@ import React, { Component } from 'react';
 import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { Button, Heading } from '../';
 import AssetGuard from '../../libs/AssetGuard';
+import DistroIndex from '../../libs/DistroIndex';
 import JavaGuard from '../../libs/JavaGuard';
+import GameProcessBuilder from '../../libs/GameProcessBuilder';
 import maestro from '../../maestro';
 
 const { appSystemHelper } = maestro.helpers;
+const { userManager } = maestro.managers;
+const distributionConfig = { ...require('../../assets/data/distribution.json') };
 
 export default class Header extends Component {
   _alertComingSoon = () => {
@@ -18,6 +22,8 @@ export default class Header extends Component {
     const commonDirectory = appSystemHelper.getCommonDirectory();
 
     try {
+      await userManager.validateOrRefreshUser();
+
       let javaExecutablePath = await javaGuard.validateJava(appStorageDirectory);
 
       if (!javaExecutablePath) {
@@ -78,9 +84,36 @@ export default class Header extends Component {
       });
 
       const validationResult = await gameAssetGuard.validateOrDownloadEverything('main-1.12.2');
-
       console.log(validationResult);
+
+      if (!validationResult.forgeData || !validationResult.versionData) {
+        throw new Error('Failed to get forge or version data.');
+      }
+
+      // not getting server
+      const distroIndex = await DistroIndex.fromJSON(distributionConfig);
+      const server = distroIndex.getServer('main-1.12.2');
+
+      console.log('server', server);
+
+      const gameAccount = userManager.getGameAccount();
+
+      // TODO: Need to refresh account session!!!!
+      console.log('game account', gameAccount);
+
+      const gameProcessBuilder = new GameProcessBuilder(
+        server,
+        validationResult.versionData,
+        validationResult.forgeData,
+        gameAccount,
+        'alpha', // todo: temporary launcher version
+      );
+
+      const gameProcess = gameProcessBuilder.build(javaExecutablePath);
+      gameProcess.stdout.on('data', data => console.log('stdout game:', data));
+      gameProcess.stderr.on('data', data => console.log('stderr game:', data));
     } catch (error) {
+      console.error(error);
       alert(error.message);
     }
   }

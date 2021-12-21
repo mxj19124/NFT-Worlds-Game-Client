@@ -10,10 +10,11 @@ export default class Server {
    */
 
   static fromJSON(json) {
-    const mdls = json.modules;
-    json.modules = [];
+    const mdls = [ ...json.modules ];
+    const copyJson = { ...json };
+    copyJson.modules = [];
 
-    const serv = Object.assign(new Server(), json);
+    const serv = Object.assign(new Server(), copyJson);
     serv._resolveModules(mdls);
 
     return serv;

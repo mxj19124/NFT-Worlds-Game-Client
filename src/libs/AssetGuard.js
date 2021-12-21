@@ -19,7 +19,7 @@ import Module from './distribution/Module';
 
 const MODULE_TYPES = Module.getModuleTypes();
 
-const distributionConfig = require('../assets/data/distribution.json');
+const distributionConfig = { ...require('../assets/data/distribution.json') };
 
 export default class AssetGuard extends EventEmitter {
   /**
@@ -893,6 +893,7 @@ export default class AssetGuard extends EventEmitter {
   async validateOrDownloadEverything(serverid, dev = false) {
     try {
       const distroIndex = await DistroIndex.fromJSON(distributionConfig);
+
       const server = distroIndex.getServer(serverid);
 
       // Validate Everything

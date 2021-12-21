@@ -16,9 +16,10 @@ const CONFIG_STORE_TEMPLATE = {
   game: {
     resWidth: 1280,
     resHeight: 720,
-    fullscreen: false,
+    fullscreen: true, //false,
     autoConnect: true,
     launchDetached: true,
+    modConfigurations: [],
   },
   launcher: {
     dataDirectory: null,
@@ -51,5 +52,45 @@ export default class ConfigManager extends Manager {
     const { storageHelper } = this.maestro.helpers;
 
     storageHelper.writeJSONFile(CONFIG_STORAGE_FILENAME, this.store);
+  }
+
+  getAutoConnect() {
+    return this.store.game.autoConnect;
+  }
+
+  getFullscreen() {
+    return this.store.game.fullscreen;
+  }
+
+  getGameHeight() {
+    return this.store.game.resHeight;
+  }
+
+  getGameWidth() {
+    return this.store.game.resWidth;
+  }
+
+  getJVMOptions() {
+    return this.store.java.jvmOptions;
+  }
+
+  getMaxRAM() {
+    return '4G';
+//    return this.store.java.maxRAM;
+  }
+
+  getMinRAM() {
+    return '4G';
+//    return this.store.java.minRAM;
+  }
+
+  getLaunchDetached() {
+    return this.store.game.launchDetached;
+  }
+
+  getModConfiguration() {
+    return {
+      'main-1.12.2': [],
+    };
   }
 }

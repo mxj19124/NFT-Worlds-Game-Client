@@ -3,6 +3,7 @@ import { Manager } from 'react-native-maestro';
 const USER_STORAGE_FILENAME = 'user.json';
 const USER_STORE_TEMPLATE = {
   accessToken: null,
+  clientToken: null,
   loginMethod: null, // mojang, microsoft
   availableProfiles: [],
   selectedProfile: null,
@@ -27,6 +28,7 @@ export default class UserManager extends Manager {
 
     this.updateStore({
       accessToken: authResponse.accessToken,
+      clientToken: authResponse.clientToken,
       loginMethod: 'mojang',
       availableProfiles: authResponse.availableProfiles,
       selectedProfile: authResponse.selectedProfile,
@@ -53,6 +55,28 @@ export default class UserManager extends Manager {
     this.updateStore(update);
   }
 
+  async validateOrRefreshUser() {
+    const { mojangAuthHelper } = this.maestro.helpers;
+    const { accessToken, clientToken } = this.store;
+
+    if (!accessToken) {
+      throw new Error('No logged in user access token found.');
+    }
+
+    const isValid = mojangAuthHelper.validate(accessToken);
+
+    if (!isValid) {
+      const refreshResponse = await mojangAuthHelper.refresh(accessToken, clientToken);
+
+      this.updateStore({
+        accessToken: refreshResponse.accessToken,
+        clientToken: refreshResponse.clientToken,
+      });
+
+      this.saveUserData();
+    }
+  }
+
   saveUserData() {
     const { storageHelper } = this.maestro.helpers;
 
@@ -61,6 +85,18 @@ export default class UserManager extends Manager {
 
   getSelectedProfile() {
     return this.store.selectedProfile;
+  }
+
+  getGameAccount() {
+    const selectedProfile = this.getSelectedProfile();
+
+    return {
+      accessToken: this.store.accessToken,
+      username: selectedProfile.name,
+      uuid: selectedProfile.id,
+      displayName: selectedProfile.name,
+      type: 'mojang',
+    };
   }
 
   isLoggedIn() {

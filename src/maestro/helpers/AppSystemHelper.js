@@ -47,6 +47,10 @@ export default class AppSystemHelper extends Helper {
     return path.join(APP_STORAGE_DIRECTORY, 'instances');
   }
 
+  getTempNativeFolder() {
+    return 'NFTWNatives';
+  }
+
   getJavaExecutable() {
     return null; // TODO: should return stored executable dir.
   }
