@@ -39,7 +39,7 @@ export default class LoginScreen extends Component {
   }
 
   _openForgotPassword = () => {
-    shell.openExternal('hattps://www.minecraft.net/password/forgot');
+    shell.openExternal('https://www.minecraft.net/password/forgot');
   }
 
   _openCreateAccount = () => {
