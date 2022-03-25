@@ -3,7 +3,9 @@
 import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
 import { format as formatUrl } from 'url';
+import * as remote from '@electron/remote/main';
 
+remote.initialize();
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 // global reference to mainWindow (necessary to prevent window from being garbage collected)
@@ -20,6 +22,7 @@ function createMainWindow() {
     backgroundColor: '#000000'
   });
 
+  remote.enable(browserWindow.webContents);
   if (isDevelopment) {
     browserWindow.webContents.openDevTools();
   }

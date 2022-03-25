@@ -1,13 +1,13 @@
 import fs from 'fs-extra';
 import path from 'path';
 import { Helper } from 'react-native-maestro';
-import { remote } from 'electron';
+import { app } from '@electron/remote';
 
 // Expo overwrites electron's process & process.env
 // so we need to make an eager copy at runtime start.
 const SYSTEM_PROCESS = Object.assign({}, process);
 
-const SYSTEM_ROOT = remote.app.getPath('appData');
+const SYSTEM_ROOT = app.getPath('appData');
 const APP_STORAGE_DIRECTORY = path.join(SYSTEM_ROOT, '.nftworlds');
 
 export default class AppSystemHelper extends Helper {
