@@ -45,7 +45,15 @@ export default class UserManager extends Manager {
   async loadUser() {
     const { storageHelper } = this.maestro.helpers;
 
-    const userData = storageHelper.readJSONFile(USER_STORAGE_FILENAME) || {};
+    const readUserData = () => {
+      try {
+        return storageHelper.readJSONFile(USER_STORAGE_FILENAME)
+      } catch {
+        return {}
+      }
+    }
+
+    const userData = readUserData();
     const update = {};
 
     Object.keys(USER_STORE_TEMPLATE).forEach(key => {
