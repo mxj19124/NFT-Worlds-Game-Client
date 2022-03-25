@@ -28,14 +28,25 @@ export default class LoginScreen extends Component {
 
       navigationHelper.openScreen('home');
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      alert(error.message);
+    } finally {
       this.setState({ loading: false });
-      alert(error.error.errorMessage);
     }
   }
 
-  _loginWithMicrosoft = () => {
-    alert('Microsoft sign in is not yet available. Please sign in using a Mojang account.');
+  _loginWithMicrosoft = async () => {
+    this.setState({ loading: true });
+
+    try {
+      await userManager.loginWithMicrosoft();
+
+      navigationHelper.openScreen('home');
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.setState({ loading: false });
+    }
   }
 
   _openForgotPassword = () => {
