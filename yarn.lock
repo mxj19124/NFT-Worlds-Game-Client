@@ -1507,6 +1507,7 @@ __metadata:
     axios: ^0.26.1
     electron: ^17.2.0
     electron-builder: ^22.14.13
+    electron-is-dev: ^2.0.0
     electron-store: ^8.0.1
     electron-webpack: ^2.8.2
     electron-webpack-ts: ^4.0.1
@@ -1521,6 +1522,7 @@ __metadata:
     nbt: ^0.8.1
     react: ^17.0.2
     react-dom: ^17.0.2
+    source-map-support: ^0.5.21
     typescript: ^4.6.3
     webpack: ^4.46.0
     xo: ^0.48.0
@@ -4751,6 +4753,13 @@ __metadata:
     rimraf: ^2.5.2
     semver: ^5.3.0
   checksum: d71f956e4faf817a0273f8bb95d3bd54ce0e9ff78e6f27c39de1e2f5b6c912fee9456122bfd4728279f57ce36538dab9aa681003c839a9acc7facc96987828c5
+  languageName: node
+  linkType: hard
+
+"electron-is-dev@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "electron-is-dev@npm:2.0.0"
+  checksum: 7393f46f06153d70a427ea904c60a092e50fbf1015c26c342cebb8324ada8c9e0c0f1f02867af56d9cc76f47be17da8cb311ea6bdc83343e7ebd2323ec4014c8
   languageName: node
   linkType: hard
 
@@ -11297,7 +11306,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"source-map-support@npm:^0.5.16, source-map-support@npm:^0.5.19, source-map-support@npm:~0.5.12":
+"source-map-support@npm:^0.5.16, source-map-support@npm:^0.5.19, source-map-support@npm:^0.5.21, source-map-support@npm:~0.5.12":
   version: 0.5.21
   resolution: "source-map-support@npm:0.5.21"
   dependencies:

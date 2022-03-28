@@ -1,8 +1,8 @@
 import { app } from 'electron'
+import isDev from 'electron-is-dev'
 import path, { join as joinPath } from 'path'
-import process from 'process'
 
-export const IS_DEV = process.env.NODE_ENV !== 'production'
+export const IS_DEV = isDev
 
 const dataDir = '.nftworlds'
 const appData = app.getPath('appData')

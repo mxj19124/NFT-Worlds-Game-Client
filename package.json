@@ -33,11 +33,13 @@
   "dependencies": {
     "@electron/remote": "^2.0.8",
     "axios": "^0.26.1",
+    "electron-is-dev": "^2.0.0",
     "electron-store": "^8.0.1",
     "eventemitter3": "^4.0.7",
     "minecraft-launcher-core": "^3.16.12",
     "mkdirp": "^1.0.4",
     "msmc": "^3.0.6",
-    "nbt": "^0.8.1"
+    "nbt": "^0.8.1",
+    "source-map-support": "^0.5.21"
   }
 }
