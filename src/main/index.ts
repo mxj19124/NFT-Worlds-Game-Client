@@ -4,12 +4,12 @@ import Store from 'electron-store'
 import { join as joinPath } from 'path'
 import process from 'process'
 import { initHandlers } from './ipc/handler'
-import { isDevelopment } from './lib/env'
+import { IS_DEV } from './lib/env'
 
 remote.initialize()
 Store.initRenderer()
 
-if (!isDevelopment && module.hot) {
+if (!IS_DEV && module.hot) {
   module.hot.accept()
 }
 
@@ -26,7 +26,7 @@ const createWindow = async () => {
   win.removeMenu()
   remote.enable(win.webContents)
 
-  if (isDevelopment) {
+  if (IS_DEV) {
     win.webContents.openDevTools()
 
     const port = process.env.ELECTRON_WEBPACK_WDS_PORT
