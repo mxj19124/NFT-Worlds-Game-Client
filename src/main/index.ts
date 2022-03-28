@@ -15,10 +15,13 @@ if (!IS_DEV && module.hot) {
 
 const createWindow = async () => {
   const win = new BrowserWindow({
+    title: 'NFT Worlds',
+
     width: 1280,
     height: 720,
-    title: 'NFT Worlds',
-    resizable: false,
+    minWidth: 1280,
+    minHeight: 720,
+
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
