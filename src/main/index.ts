@@ -3,8 +3,8 @@ import Store from 'electron-store'
 import { join as joinPath } from 'path'
 import process from 'process'
 import { initHandlers } from './ipc/handler'
+import { isDevelopment } from './lib/env'
 
-const isDevelopment = process.env.NODE_ENV !== 'production'
 Store.initRenderer()
 
 if (!isDevelopment && module.hot) {
