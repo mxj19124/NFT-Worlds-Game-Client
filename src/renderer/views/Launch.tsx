@@ -1,6 +1,6 @@
-import React, { type FC, useCallback } from 'react'
+import React, { type FC, useCallback, useEffect } from 'react'
 import { useStore } from '../hooks/useStore'
-import { launch } from '../ipc/launch'
+import { launch, launchEvents } from '../ipc/launch'
 import { type World } from '../lib/worlds'
 
 export const Launch: FC<{ children?: never }> = () => {
@@ -10,6 +10,19 @@ export const Launch: FC<{ children?: never }> = () => {
   if (state.worlds instanceof Error) {
     throw new TypeError('Launch view rendered with worlds error')
   }
+
+  const onClose = useCallback(() => {
+    console.log('close')
+    dispatch({ type: 'setStatus', value: 'idle' })
+  }, [dispatch])
+
+  useEffect(() => {
+    launchEvents.addListener('close', onClose)
+
+    return () => {
+      launchEvents.removeListener('close', onClose)
+    }
+  }, [onClose])
 
   const handleLogout = useCallback(() => {
     dispatch({ type: 'clearUser' })
@@ -23,10 +36,17 @@ export const Launch: FC<{ children?: never }> = () => {
         throw new TypeError('Launch requested with worlds error')
       }
 
-      const options = { version: '1.18.2', memory: { max: '6G', min: '4G' } }
+      const options: IPC.LaunchOptions = {
+        version: '1.18.2',
+        width: 1280,
+        height: 720,
+        memory: { max: '6G', min: '4G' },
+      }
+
+      dispatch({ type: 'setStatus', value: 'gameRunning' })
       void launch(state.user, options, world, state.worlds)
     },
-    [state]
+    [state, dispatch]
   )
 
   return (
@@ -40,6 +60,7 @@ export const Launch: FC<{ children?: never }> = () => {
         <button
           key={world.worldId}
           type='button'
+          disabled={state.status === 'gameRunning'}
           onClick={() => launchWorld(world)}
         >
           Launch {world.name}

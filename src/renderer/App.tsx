@@ -59,7 +59,7 @@ const Router: FC = () => {
       return <Login />
 
     case 'gameRunning':
-      return <div>Game Running!</div>
+      return <Launch />
 
     case 'idle':
       if (!state.user) return <Login />
