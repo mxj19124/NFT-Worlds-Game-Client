@@ -1,5 +1,5 @@
 import { app } from 'electron'
-import { join as joinPath } from 'path'
+import path, { join as joinPath } from 'path'
 import process from 'process'
 
 export const IS_DEV = process.env.NODE_ENV !== 'production'
@@ -13,6 +13,7 @@ export const APP_ROOT = IS_DEV
 const env: IPC.Environment = {
   isDev: IS_DEV,
   appRoot: APP_ROOT,
+  appRootAbsolute: path.resolve(APP_ROOT),
 }
 
 // @ts-expect-error Global Assign

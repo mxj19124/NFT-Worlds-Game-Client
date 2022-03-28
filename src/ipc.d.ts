@@ -14,5 +14,6 @@ declare namespace IPC {
   export interface Environment {
     isDev: boolean
     appRoot: string
+    appRootAbsolute: string
   }
 }
