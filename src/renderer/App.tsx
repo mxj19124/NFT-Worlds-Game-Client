@@ -13,5 +13,22 @@ export const App: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch])
 
-  return state.user ? <Launch /> : <Login />
+  // TODO: Ensure each state has a valid view
+  switch (state.status) {
+    case 'init':
+      return null
+
+    case 'authenticating':
+      return <div>Authenticating...</div>
+
+    case 'gameRunning':
+      return <div>Game Running!</div>
+
+    case 'idle':
+      if (!state.user) return <Login />
+      return <Launch />
+
+    default:
+      throw new Error('Unhandled status!')
+  }
 }
