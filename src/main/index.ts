@@ -1,3 +1,4 @@
+import * as remote from '@electron/remote/main'
 import { app, BrowserWindow } from 'electron'
 import Store from 'electron-store'
 import { join as joinPath } from 'path'
@@ -5,6 +6,7 @@ import process from 'process'
 import { initHandlers } from './ipc/handler'
 import { isDevelopment } from './lib/env'
 
+remote.initialize()
 Store.initRenderer()
 
 if (!isDevelopment && module.hot) {
@@ -22,6 +24,7 @@ const createWindow = async () => {
   })
 
   win.removeMenu()
+  remote.enable(win.webContents)
 
   if (isDevelopment) {
     win.webContents.openDevTools()

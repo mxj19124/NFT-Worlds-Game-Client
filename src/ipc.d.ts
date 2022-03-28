@@ -10,4 +10,9 @@ declare namespace IPC {
 
     memory: LauncherOptions['memory']
   }
+
+  export interface Environment {
+    isDev: boolean
+    appRoot: string
+  }
 }

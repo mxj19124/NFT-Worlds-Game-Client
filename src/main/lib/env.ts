@@ -9,3 +9,11 @@ const appData = app.getPath('appData')
 export const APP_ROOT = isDevelopment
   ? joinPath('.', dataDir)
   : joinPath(appData, dataDir)
+
+const env: IPC.Environment = {
+  isDev: isDevelopment,
+  appRoot: APP_ROOT,
+}
+
+// @ts-expect-error Global Assign
+global.env = env

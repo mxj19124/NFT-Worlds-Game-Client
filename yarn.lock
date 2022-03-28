@@ -1385,6 +1385,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@electron/remote@npm:^2.0.8":
+  version: 2.0.8
+  resolution: "@electron/remote@npm:2.0.8"
+  peerDependencies:
+    electron: ">= 13.0.0"
+  checksum: d0ef11b3f09d789baf4330c2c021cfc1a997fc5ffdb56e8810ed7fe2fd76cda1a168c0589d2a10284a907fd3829bae14002a58b35c4881473cdd0049f07fbd63
+  languageName: node
+  linkType: hard
+
 "@electron/universal@npm:1.0.5":
   version: 1.0.5
   resolution: "@electron/universal@npm:1.0.5"
@@ -1490,6 +1499,7 @@ __metadata:
   resolution: "@nftworlds/client@workspace:."
   dependencies:
     "@babel/preset-react": ^7.16.7
+    "@electron/remote": ^2.0.8
     "@types/mkdirp": ^1.0.2
     "@types/node": ^17.0.23
     "@types/react": ^17.0.43
