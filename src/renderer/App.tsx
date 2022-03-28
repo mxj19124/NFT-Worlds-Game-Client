@@ -18,7 +18,7 @@ const GlobalStyles = createGlobalStyle`
 
     color: white;
     background-color: #111;
-    font-family: 'Montserrat';
+    font-family: 'Open Sans';
   }
 
   #app {
