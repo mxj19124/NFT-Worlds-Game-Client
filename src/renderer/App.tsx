@@ -1,6 +1,8 @@
-import { type FC, useEffect } from 'react'
+import React, { type FC, useEffect } from 'react'
 import { useStore } from './hooks/useStore'
 import { init } from './state/init'
+import { Launch } from './views/Launch'
+import { Login } from './views/Login'
 
 export const App: FC = () => {
   // Initialise the store
@@ -11,6 +13,5 @@ export const App: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch])
 
-  // TODO: Render a view
-  return null
+  return state.user ? <Launch /> : <Login />
 }
