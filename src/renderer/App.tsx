@@ -56,7 +56,7 @@ const Router: FC = () => {
       return null
 
     case 'authenticating':
-      return <div>Authenticating...</div>
+      return <Login />
 
     case 'gameRunning':
       return <div>Game Running!</div>

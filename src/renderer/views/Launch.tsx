@@ -4,12 +4,16 @@ import { launch } from '../ipc/launch'
 import { type World } from '../lib/worlds'
 
 export const Launch: FC<{ children?: never }> = () => {
-  const { state } = useStore()
+  const { state, dispatch } = useStore()
   if (!state.user) throw new Error('Launch view rendered with no user')
   if (!state.worlds) throw new Error('Launch view rendered with no worlds')
   if (state.worlds instanceof Error) {
     throw new TypeError('Launch view rendered with worlds error')
   }
+
+  const handleLogout = useCallback(() => {
+    dispatch({ type: 'clearUser' })
+  }, [dispatch])
 
   const launchWorld = useCallback(
     (world: World) => {
@@ -28,6 +32,9 @@ export const Launch: FC<{ children?: never }> = () => {
   return (
     <div>
       <h1>Logged in as {state.user.name}</h1>
+      <button type='button' onClick={handleLogout}>
+        Log Out
+      </button>
 
       {state.worlds.map(world => (
         <button

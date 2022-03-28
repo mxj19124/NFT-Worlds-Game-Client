@@ -6,6 +6,7 @@ const store = new Store<PersistentStore>({
   name: 'state',
   cwd: APP_ROOT_ABSOLUTE,
 })
+
 interface PersistentStore {
   user: State['user']
 }

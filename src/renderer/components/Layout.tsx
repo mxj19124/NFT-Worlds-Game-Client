@@ -13,10 +13,12 @@ const Container = styled.div`
 
 const Image = styled.img`
   width: 40%;
+  margin-bottom: 16px;
 `
 
 const Children = styled.div`
   width: 100%;
+  flex-grow: 1;
 `
 
 export const Layout: FC = ({ children }) => (
