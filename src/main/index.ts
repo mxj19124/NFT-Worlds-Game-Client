@@ -27,8 +27,6 @@ const createWindow = async () => {
   remote.enable(win.webContents)
 
   if (IS_DEV) {
-    win.webContents.openDevTools()
-
     const port = process.env.ELECTRON_WEBPACK_WDS_PORT
     if (!port) {
       throw new Error('Webpack Port is undefined!')
@@ -41,6 +39,10 @@ const createWindow = async () => {
   }
 
   win.focus()
+  if (IS_DEV) {
+    win.webContents.openDevTools()
+  }
+
   return win
 }
 
