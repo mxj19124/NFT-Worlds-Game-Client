@@ -1,11 +1,11 @@
 import { Buffer } from 'buffer'
-import { app, type WebContents } from 'electron'
+import { type WebContents } from 'electron'
 import { writeFile } from 'fs/promises'
 import { Client, type ILauncherOptions } from 'minecraft-launcher-core'
 import mkdirp from 'mkdirp'
 import { getMCLC, type profile as Profile } from 'msmc'
 import { join as joinPath } from 'path'
-import { isDevelopment } from '../lib/env'
+import { APP_ROOT } from '../lib/env'
 import { generateServersFile, worldToServer } from '../lib/serversDat'
 
 const launcher = new Client()
@@ -20,11 +20,8 @@ export const launch = async (
 
   // eslint-disable-next-line max-params
 ) => {
-  const appData = app.getPath('appData')
-  const root = isDevelopment ? './.minecraft' : joinPath(appData, '.nftworlds')
-
-  // Ensure root directory exists
-  await mkdirp(root)
+  const root = joinPath(APP_ROOT, '.nftworlds')
+  await mkdirp(root) // Ensure root directory exists
 
   const servers = worlds.map(world => worldToServer(world))
   const serversDatFile = generateServersFile(servers)

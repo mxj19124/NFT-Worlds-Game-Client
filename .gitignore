@@ -13,5 +13,5 @@ node_modules
 # Compiled Output
 dist
 
-# Minecraft Dev
-.minecraft
+# Dev Storage
+.nftworlds
