@@ -53,6 +53,7 @@
       "unnamedComponents": "arrow-function"
     }],
 
+    "@typescript-eslint/naming-convention": 0,
     "@typescript-eslint/no-unnecessary-boolean-literal-compare": 0,
     "@typescript-eslint/no-confusing-void-expression": ["error", {
       "ignoreArrowShorthand": true
