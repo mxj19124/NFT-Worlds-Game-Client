@@ -8,6 +8,8 @@ export type LaunchOptions = IPC.LaunchOptions
 export const launch = async (
   profile: Profile,
   options: LaunchOptions,
+  world: NFTWorlds.World,
+  worlds: NFTWorlds.World[],
   webContents: WebContents
 ) => {
   // @ts-expect-error Incorrect Typings

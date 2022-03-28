@@ -9,7 +9,8 @@ export const initHandlers = (webContents: WebContents) => {
     refresh(profile, webContents)
   )
 
-  ipcMain.handle('launch:launch', async (_, profile, options) =>
-    launch(profile, options, webContents)
+  // eslint-disable-next-line max-params
+  ipcMain.handle('launch:launch', async (_, profile, options, world, worlds) =>
+    launch(profile, options, world, worlds, webContents)
   )
 }

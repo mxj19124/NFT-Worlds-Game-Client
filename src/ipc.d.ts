@@ -9,6 +9,5 @@ declare namespace IPC {
     fullscreen?: boolean
 
     memory: LauncherOptions['memory']
-    server?: LauncherOptions['server']
   }
 }
