@@ -20,7 +20,7 @@ export const launch = async (
 
   // eslint-disable-next-line max-params
 ) => {
-  const root = joinPath(APP_ROOT, '.nftworlds')
+  const root = joinPath(APP_ROOT, '.minecraft')
   await mkdirp(root) // Ensure root directory exists
 
   const servers = worlds.map(world => worldToServer(world))
