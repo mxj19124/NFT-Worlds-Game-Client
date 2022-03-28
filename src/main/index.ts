@@ -2,6 +2,7 @@ import { app, BrowserWindow } from 'electron'
 import Store from 'electron-store'
 import { join as joinPath } from 'path'
 import process from 'process'
+import { initHandlers } from './ipc/handler'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 Store.initRenderer()
@@ -41,7 +42,8 @@ const createWindow = async () => {
 }
 
 void app.whenReady().then(async () => {
-  await createWindow()
+  const { webContents } = await createWindow()
+  initHandlers(webContents)
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
