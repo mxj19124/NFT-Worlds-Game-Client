@@ -4,17 +4,7 @@ import { getMCLC, type profile as Profile } from 'msmc'
 
 const launcher = new Client()
 
-export interface LaunchOptions {
-  version: string
-
-  width?: number
-  height?: number
-  fullscreen?: boolean
-
-  memory: ILauncherOptions['memory']
-  server?: ILauncherOptions['server']
-}
-
+export type LaunchOptions = IPC.LaunchOptions
 export const launch = async (
   profile: Profile,
   options: LaunchOptions,

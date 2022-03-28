@@ -1,22 +1,8 @@
 import { ipcRenderer } from 'electron'
 import { EventEmitter } from 'eventemitter3'
-import { type ILauncherOptions } from 'minecraft-launcher-core'
 import { profile as Profile } from 'msmc'
 
-// Ensure this is synced to the main process options
-// Sadly webpack doesn't like referencing the type in the main process
-export interface LaunchOptions {
-  version: string
-
-  width?: number
-  height?: number
-  fullscreen?: boolean
-
-  memory: ILauncherOptions['memory']
-  server?: ILauncherOptions['server']
-}
-
-export const launch = async (profile: Profile, options: LaunchOptions) => {
+export const launch = async (profile: Profile, options: IPC.LaunchOptions) => {
   await ipcRenderer.invoke('launch:launch', profile, options)
 }
 
