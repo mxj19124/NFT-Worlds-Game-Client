@@ -18,6 +18,7 @@ const createWindow = async () => {
     width: 1280,
     height: 720,
     title: 'NFT Worlds',
+    resizable: false,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
