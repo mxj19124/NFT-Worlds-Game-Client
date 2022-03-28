@@ -1,6 +1,12 @@
+import { Buffer } from 'buffer'
 import { type WebContents } from 'electron'
+import { writeFile } from 'fs/promises'
 import { Client, type ILauncherOptions } from 'minecraft-launcher-core'
+import mkdirp from 'mkdirp'
 import { getMCLC, type profile as Profile } from 'msmc'
+import { join as joinPath } from 'path'
+import { isDevelopment } from '../lib/env'
+import { generateServersFile, worldToServer } from '../lib/serversDat'
 
 const launcher = new Client()
 
@@ -11,15 +17,29 @@ export const launch = async (
   world: NFTWorlds.World,
   worlds: NFTWorlds.World[],
   webContents: WebContents
+
+  // eslint-disable-next-line max-params
 ) => {
   // @ts-expect-error Incorrect Typings
   const authorization = getMCLC().getAuth(profile)
+
+  // TODO: Change to AppData in prod
+  const root = isDevelopment ? './.minecraft' : './.minecraft'
+
+  // Ensure root directory exists
+  await mkdirp(root)
+
+  const servers = worlds.map(world => worldToServer(world))
+  const serversDatFile = generateServersFile(servers)
+
+  const serversPath = joinPath(root, 'servers.dat')
+  await writeFile(serversPath, Buffer.from(serversDatFile))
 
   const _options: ILauncherOptions = {
     clientPackage: undefined,
     // @ts-expect-error Incorrect Typings
     authorization,
-    root: './minecraft',
+    root,
     version: {
       number: options.version,
       type: 'release',
@@ -30,7 +50,10 @@ export const launch = async (
       fullscreen: options.fullscreen,
     },
     memory: options.memory,
-    server: options.server,
+    server: {
+      host: world.connection.address,
+      port: world.connection.port.toString(),
+    },
   }
 
   launcher.removeAllListeners()
