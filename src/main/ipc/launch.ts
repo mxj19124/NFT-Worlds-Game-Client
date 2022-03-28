@@ -1,5 +1,5 @@
 import { Buffer } from 'buffer'
-import { type WebContents } from 'electron'
+import { app, type WebContents } from 'electron'
 import { writeFile } from 'fs/promises'
 import { Client, type ILauncherOptions } from 'minecraft-launcher-core'
 import mkdirp from 'mkdirp'
@@ -20,11 +20,8 @@ export const launch = async (
 
   // eslint-disable-next-line max-params
 ) => {
-  // @ts-expect-error Incorrect Typings
-  const authorization = getMCLC().getAuth(profile)
-
-  // TODO: Change to AppData in prod
-  const root = isDevelopment ? './.minecraft' : './.minecraft'
+  const appData = app.getPath('appData')
+  const root = isDevelopment ? './.minecraft' : joinPath(appData, '.nftworlds')
 
   // Ensure root directory exists
   await mkdirp(root)
@@ -36,9 +33,8 @@ export const launch = async (
   await writeFile(serversPath, Buffer.from(serversDatFile))
 
   const _options: ILauncherOptions = {
-    clientPackage: undefined,
     // @ts-expect-error Incorrect Typings
-    authorization,
+    authorization: getMCLC().getAuth(profile),
     root,
     version: {
       number: options.version,
