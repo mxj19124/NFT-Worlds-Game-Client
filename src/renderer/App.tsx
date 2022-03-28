@@ -27,6 +27,14 @@ const GlobalStyles = createGlobalStyle`
     width: calc(100vw - var(--padding));
     height: calc(100vh - var(--padding));
   }
+
+  * {
+    user-select: none;
+  }
+
+  img {
+    -webkit-user-drag: none;
+  }
 `
 
 export const App: FC = () => {
