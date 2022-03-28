@@ -34,6 +34,7 @@
     "electron-store": "^8.0.1",
     "eventemitter3": "^4.0.7",
     "minecraft-launcher-core": "^3.16.12",
-    "msmc": "^3.0.6"
+    "msmc": "^3.0.6",
+    "nbt": "^0.8.1"
   }
 }
