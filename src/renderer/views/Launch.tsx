@@ -1,5 +1,6 @@
 import React, { type FC, useCallback } from 'react'
 import { useStore } from '../hooks/useStore'
+import { launch } from '../ipc/launch'
 import { type World } from '../lib/worlds'
 
 export const Launch: FC<{ children?: never }> = () => {
@@ -10,9 +11,19 @@ export const Launch: FC<{ children?: never }> = () => {
     throw new TypeError('Launch view rendered with worlds error')
   }
 
-  const launchWorld = useCallback((world: World) => {
-    console.log(world)
-  }, [])
+  const launchWorld = useCallback(
+    (world: World) => {
+      if (!state.user) throw new Error('Launch requested with no user')
+      if (!state.worlds) throw new Error('Launch requested with no worlds')
+      if (state.worlds instanceof Error) {
+        throw new TypeError('Launch requested with worlds error')
+      }
+
+      const options = { version: '1.18.2', memory: { max: '6G', min: '4G' } }
+      void launch(state.user, options, world, state.worlds)
+    },
+    [state]
+  )
 
   return (
     <div>
