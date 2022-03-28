@@ -1501,6 +1501,7 @@ __metadata:
     eslint-config-xo-react: ^0.27.0
     eslint-plugin-react: ^7.29.4
     eslint-plugin-react-hooks: ^4.3.0
+    eventemitter3: ^4.0.7
     fast-deep-equal: ^3.1.3
     msmc: ^3.0.6
     react: ^17.0.2
@@ -5464,7 +5465,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eventemitter3@npm:^4.0.0":
+"eventemitter3@npm:^4.0.0, eventemitter3@npm:^4.0.7":
   version: 4.0.7
   resolution: "eventemitter3@npm:4.0.7"
   checksum: 1875311c42fcfe9c707b2712c32664a245629b42bb0a5a84439762dd0fd637fc54d078155ea83c2af9e0323c9ac13687e03cfba79b03af9f40c89b4960099374
