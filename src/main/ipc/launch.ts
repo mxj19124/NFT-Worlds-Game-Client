@@ -47,6 +47,15 @@ export const launch = async (
       host: world.connection.address,
       port: world.connection.port.toString(),
     },
+
+    customArgs: [
+      '-XX:+UnlockExperimentalVMOptions',
+      '-XX:+UseG1GC',
+      '-XX:G1NewSizePercent=20',
+      '-XX:G1ReservePercent=20',
+      '-XX:MaxGCPauseMillis=50',
+      '-XX:G1HeapRegionSize=32M',
+    ],
   }
 
   launcher.removeAllListeners()
