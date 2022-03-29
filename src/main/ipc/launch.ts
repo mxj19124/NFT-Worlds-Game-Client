@@ -6,6 +6,7 @@ import mkdirp from 'mkdirp'
 import { getMCLC, type profile as Profile } from 'msmc'
 import { join as joinPath } from 'path'
 import { APP_ROOT } from '../lib/env'
+import { downloadFabric } from '../lib/fabric'
 import { generateServersFile, worldToServer } from '../lib/serversDat'
 
 const launcher = new Client()
@@ -29,13 +30,17 @@ export const launch = async (
   const serversPath = joinPath(root, 'servers.dat')
   await writeFile(serversPath, Buffer.from(serversDatFile))
 
+  const version = '1.18.2' as const
+  const fabricVersion = await downloadFabric(root, version)
+
   const _options: ILauncherOptions = {
     // @ts-expect-error Incorrect Typings
     authorization: getMCLC().getAuth(profile),
     root,
     version: {
-      number: '1.18.2',
+      number: version,
       type: 'release',
+      custom: fabricVersion,
     },
     window: {
       width: options.width,
