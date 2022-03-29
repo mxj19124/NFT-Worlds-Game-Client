@@ -1,5 +1,6 @@
 import React, { type FC, useEffect } from 'react'
 import { createGlobalStyle } from 'styled-components'
+import { Layout } from './components/Layout'
 import { useStore } from './hooks/useStore'
 import { init } from './state/init'
 import { Launch } from './views/Launch'
@@ -17,15 +18,12 @@ const GlobalStyles = createGlobalStyle`
     align-items: center;
 
     color: white;
-    background-color: #111;
     font-family: 'Open Sans';
   }
 
   #app {
-    --padding: 32px;
-
-    width: calc(100vw - var(--padding));
-    height: calc(100vh - var(--padding));
+    width: 100vw;
+    height: 100vh;
   }
 
   * {
@@ -50,7 +48,9 @@ export const App: FC = () => {
   return (
     <>
       <GlobalStyles />
-      <Router />
+      <Layout>
+        <Router />
+      </Layout>
     </>
   )
 }
