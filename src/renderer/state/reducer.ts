@@ -1,19 +1,18 @@
 import { type profile as Profile } from 'msmc'
 import { type Reducer } from 'react'
-import { World } from '../lib/worlds'
 
 type Status = 'init' | 'idle' | 'authenticating' | 'gameRunning'
 export interface State {
   status: Status
   user: Profile | undefined
-  worlds: World[] | Error | undefined
+  worlds: NFTWorlds.World[] | Error | undefined
 }
 
 export type Action =
   | { type: 'setStatus'; value: Status }
   | { type: 'setUser'; value: Profile }
   | { type: 'clearUser' }
-  | { type: 'setWorlds'; value: World[] | Error }
+  | { type: 'setWorlds'; value: NFTWorlds.World[] | Error }
   | { type: 'clearWorlds' }
 
 export const reducer: Reducer<State, Action> = (previousState, action) => {

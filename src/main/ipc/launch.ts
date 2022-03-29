@@ -34,7 +34,7 @@ export const launch = async (
     authorization: getMCLC().getAuth(profile),
     root,
     version: {
-      number: options.version,
+      number: '1.18.2',
       type: 'release',
     },
     window: {

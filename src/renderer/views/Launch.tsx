@@ -1,7 +1,20 @@
 import React, { type FC, useCallback, useEffect } from 'react'
+import styled from 'styled-components'
+import { World } from '../components/World'
 import { useStore } from '../hooks/useStore'
 import { launch, launchEvents } from '../ipc/launch'
-import { type World } from '../lib/worlds'
+
+const Worlds = styled.div`
+  margin-top: 20px;
+  padding: 0 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  gap: 10px;
+  overflow-y: scroll;
+  max-height: 100%;
+`
 
 export const Launch: FC<{ children?: never }> = () => {
   const { state, dispatch } = useStore()
@@ -25,7 +38,7 @@ export const Launch: FC<{ children?: never }> = () => {
   }, [onClose])
 
   const launchWorld = useCallback(
-    (world: World) => {
+    (world: NFTWorlds.World) => {
       if (!state.user) throw new Error('Launch requested with no user')
       if (!state.worlds) throw new Error('Launch requested with no worlds')
       if (state.worlds instanceof Error) {
@@ -33,7 +46,6 @@ export const Launch: FC<{ children?: never }> = () => {
       }
 
       const options: IPC.LaunchOptions = {
-        version: '1.18.2',
         width: 1280,
         height: 720,
         memory: { max: '6G', min: '4G' },
@@ -46,17 +58,16 @@ export const Launch: FC<{ children?: never }> = () => {
   )
 
   return (
-    <>
+    <Worlds>
       {state.worlds.map(world => (
-        <button
+        <World
           key={world.worldId}
-          type='button'
+          world={world}
+          offline={!world.javaOnline}
           disabled={state.status === 'gameRunning'}
-          onClick={() => launchWorld(world)}
-        >
-          Launch {world.name}
-        </button>
+          onLaunch={launchWorld}
+        />
       ))}
-    </>
+    </Worlds>
   )
 }

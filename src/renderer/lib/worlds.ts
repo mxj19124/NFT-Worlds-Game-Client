@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export type World = NFTWorlds.World
+type World = NFTWorlds.World
 export const fetchWorlds: () => Promise<World[] | Error> = async () => {
   try {
     const resp = await axios.get<World[]>(
