@@ -45,20 +45,35 @@ const SVGIcon = styled(FontAwesomeIcon)`
 interface IconProps {
   icon: IconProp
   href: string
+  title?: string
 }
 
-const Icon: FC<IconProps> = ({ icon, href }) => {
+const Icon: FC<IconProps> = ({ icon, href, title }) => {
   const onClick = useCallback(() => {
     void shell.openExternal(href)
   }, [href])
 
-  return <SVGIcon icon={icon} onClick={onClick} />
+  return <SVGIcon title={title} icon={icon} onClick={onClick} />
 }
 
 export const LayoutIcons: FC = () => (
   <IconsContainer>
-    <Icon href='https://www.instagram.com/nftworldsnft' icon={faInstagram} />
-    <Icon href='https://twitter.com/nftworldsNFT' icon={faTwitter} />
-    <Icon href='https://discord.com/invite/nft-worlds' icon={faDiscord} />
+    <Icon
+      title='Instagram'
+      href='https://www.instagram.com/nftworldsnft'
+      icon={faInstagram}
+    />
+
+    <Icon
+      title='Twitter'
+      href='https://twitter.com/nftworldsNFT'
+      icon={faTwitter}
+    />
+
+    <Icon
+      title='Discord'
+      href='https://discord.com/invite/nft-worlds'
+      icon={faDiscord}
+    />
   </IconsContainer>
 )
