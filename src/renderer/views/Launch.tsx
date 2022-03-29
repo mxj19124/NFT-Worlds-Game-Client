@@ -24,10 +24,6 @@ export const Launch: FC<{ children?: never }> = () => {
     }
   }, [onClose])
 
-  const handleLogout = useCallback(() => {
-    dispatch({ type: 'clearUser' })
-  }, [dispatch])
-
   const launchWorld = useCallback(
     (world: World) => {
       if (!state.user) throw new Error('Launch requested with no user')
@@ -50,12 +46,7 @@ export const Launch: FC<{ children?: never }> = () => {
   )
 
   return (
-    <div>
-      <h1>Logged in as {state.user.name}</h1>
-      <button type='button' onClick={handleLogout}>
-        Log Out
-      </button>
-
+    <>
       {state.worlds.map(world => (
         <button
           key={world.worldId}
@@ -66,6 +57,6 @@ export const Launch: FC<{ children?: never }> = () => {
           Launch {world.name}
         </button>
       ))}
-    </div>
+    </>
   )
 }
