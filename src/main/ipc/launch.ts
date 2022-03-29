@@ -5,6 +5,7 @@ import { Client, type ILauncherOptions } from 'minecraft-launcher-core'
 import mkdirp from 'mkdirp'
 import { getMCLC, type profile as Profile } from 'msmc'
 import { join as joinPath } from 'path'
+import { fetchAssets, syncAssets } from '../lib/assets'
 import { APP_ROOT } from '../lib/env'
 import { downloadFabric } from '../lib/fabric'
 import { generateServersFile, worldToServer } from '../lib/serversDat'
@@ -32,6 +33,9 @@ export const launch = async (
 
   const version = '1.18.2' as const
   const fabricVersion = await downloadFabric(root, version)
+
+  const assets = await fetchAssets()
+  await syncAssets(root, assets)
 
   const _options: ILauncherOptions = {
     // @ts-expect-error Incorrect Typings

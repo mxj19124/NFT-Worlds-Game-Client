@@ -21,7 +21,7 @@ export const downloadCachedAsset = async (
 ) => {
   await mkdirp(directory)
 
-  const { base } = parse(url)
+  const { base } = parse(decodeURIComponent(url))
   const filepath = joinPath(directory, filename ?? base)
 
   const fileExists = await exists(filepath)
