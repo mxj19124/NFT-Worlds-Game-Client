@@ -93,15 +93,15 @@ const LaunchButton = styled.button<{ disabled: boolean }>`
 
 interface Props {
   world: NFTWorlds.World
-  offline?: boolean
-  disabled?: boolean
+  offline: boolean
+  disabled: boolean
 
   onLaunch: (world: NFTWorlds.World) => void
 }
 
 export const World: FC<Props> = ({ world, offline, disabled, onLaunch }) => {
   const inactive = useMemo<boolean>(
-    () => offline ?? disabled ?? false,
+    () => offline || disabled,
     [offline, disabled]
   )
 
