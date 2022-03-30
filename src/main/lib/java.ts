@@ -46,15 +46,36 @@ const resolveArch: () => Arch = () => {
   return arch
 }
 
+const resolveJavaPath = (
+  root: string,
+  platform: Platform,
+  forceJava?: boolean
+) => {
+  switch (platform) {
+    case 'windows': {
+      const exe = forceJava ? 'java.exe' : 'javaw.exe'
+      return joinPath(root, 'bin', exe)
+    }
+
+    case 'mac':
+      return joinPath(root, 'Contents', 'Home', 'bin', 'java')
+
+    case 'linux':
+      return joinPath(root, 'bin', 'java')
+
+    default:
+      throw new Error('Unknown platform')
+  }
+}
+
 const checkGlobalJava: (
   platform: Platform
 ) => Promise<boolean> = async platform => {
-  try {
-    await execa('java', ['-version'])
-    if (platform === 'windows') {
-      await execa('javaw', ['-version'])
-    }
+  const javaPath = resolveJavaPath('', platform, true)
+  const { base: executable } = parse(javaPath)
 
+  try {
+    await execa(executable, ['-version'])
     return true
   } catch {
     return false
@@ -66,33 +87,12 @@ const checkLocalJava: (
   path: string
 ) => Promise<boolean> = async (platform, path) => {
   try {
-    const javaPath = resolveJavaPath(path, platform)
-    const { dir: binPath } = parse(javaPath)
-
-    await execa('java', ['-version'], { cwd: binPath })
-    if (platform === 'windows') {
-      await execa('javaw', ['-version'], { cwd: binPath })
-    }
+    const javaPath = resolveJavaPath(path, platform, true)
+    await execa(javaPath, ['-version'])
 
     return true
   } catch {
     return false
-  }
-}
-
-const resolveJavaPath = (root: string, platform: Platform) => {
-  switch (platform) {
-    case 'windows':
-      return joinPath(root, 'bin', 'javaw.exe')
-
-    case 'mac':
-      return joinPath(root, 'Contents', 'Home', 'bin', 'java')
-
-    case 'linux':
-      return joinPath(root, 'bin', 'java')
-
-    default:
-      throw new Error('Unknown platform')
   }
 }
 
