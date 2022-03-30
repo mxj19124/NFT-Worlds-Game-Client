@@ -3,10 +3,13 @@ import { type Buffer } from 'buffer'
 import { BrowserWindow, dialog, type WebContents } from 'electron'
 import execa from 'execa'
 import extract from 'extract-zip'
+import { createReadStream } from 'fs'
 import { unlink, writeFile } from 'fs/promises'
 import mkdirp from 'mkdirp'
 import { join as joinPath, parse } from 'path'
 import process from 'process'
+import tar from 'tar-fs'
+import { createGunzip } from 'zlib'
 import { APP_ROOT, APP_ROOT_ABSOLUTE } from './env'
 
 const checkGlobalJava: () => Promise<boolean> = async () => {
@@ -132,7 +135,16 @@ export const ensureJava: (
   if (platform === 'windows') {
     await extract(archivePath, { dir: APP_ROOT_ABSOLUTE })
   } else {
-    // TODO: Untar
+    const stream = createReadStream(archivePath)
+      .pipe(createGunzip())
+      .pipe(tar.extract(APP_ROOT_ABSOLUTE))
+
+    const end = new Promise<void>((resolve, reject) => {
+      stream.on('finish', () => resolve())
+      stream.on('error', error => reject(error))
+    })
+
+    await end
   }
 
   await unlink(archivePath)
