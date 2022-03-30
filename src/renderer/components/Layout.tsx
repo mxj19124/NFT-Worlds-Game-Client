@@ -2,7 +2,7 @@ import { shell } from '@electron/remote'
 import React, { type FC, useCallback } from 'react'
 import styled from 'styled-components'
 import LogoImage from '../assets/images/logo.png'
-import Background from '../assets/media/background.mp4'
+import { BackgroundVideo } from './BackgroundVideo'
 import { LayoutIcons } from './LayoutIcons'
 import { LayoutSettings } from './LayoutSettings'
 
@@ -40,29 +40,6 @@ const Children = styled.div`
   flex-grow: 1;
 `
 
-const VideoContainer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  overflow: hidden;
-  z-index: -1000;
-  pointer-events: none;
-`
-
-const BackgroundVideo = styled.video`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: brightness(0.45);
-`
-
 export const Layout: FC = ({ children }) => {
   const logoClicked = useCallback(() => {
     void shell.openExternal('https://nftworlds.com/')
@@ -84,9 +61,7 @@ export const Layout: FC = ({ children }) => {
         <Children>{children}</Children>
       </Container>
 
-      <VideoContainer>
-        <BackgroundVideo autoPlay loop src={Background} />
-      </VideoContainer>
+      <BackgroundVideo />
     </>
   )
 }
