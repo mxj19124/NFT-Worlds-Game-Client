@@ -12,7 +12,9 @@ const container = document.querySelector('#app')
 const root = createRoot(container!)
 
 root.render(
-  <Provider>
-    <App />
-  </Provider>
+  <React.StrictMode>
+    <Provider>
+      <App />
+    </Provider>
+  </React.StrictMode>
 )
