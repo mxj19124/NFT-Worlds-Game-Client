@@ -1575,6 +1575,7 @@ __metadata:
     "@types/react": ^17.0.43
     "@types/react-dom": ^17.0.14
     "@types/styled-components": ^5.1.24
+    "@types/tar-fs": ^2.0.1
     axios: ^0.26.1
     babel-plugin-styled-components: ^2.0.6
     electron: ^17.2.0
@@ -1587,6 +1588,8 @@ __metadata:
     eslint-plugin-react: ^7.29.4
     eslint-plugin-react-hooks: ^4.3.0
     eventemitter3: ^4.0.7
+    execa: ^5.1.1
+    extract-zip: ^2.0.1
     fast-deep-equal: ^3.1.3
     minecraft-launcher-core: ^3.16.12
     mkdirp: ^1.0.4
@@ -1596,6 +1599,7 @@ __metadata:
     react-dom: ^17.0.2
     source-map-support: ^0.5.21
     styled-components: ^5.3.5
+    tar-fs: ^2.1.1
     typescript: ^4.6.3
     webpack: ^4.46.0
     xo: ^0.48.0
@@ -1893,6 +1897,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/tar-fs@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "@types/tar-fs@npm:2.0.1"
+  dependencies:
+    "@types/node": "*"
+    "@types/tar-stream": "*"
+  checksum: 07042a5c850e1d4b4dd62224491d33a540a8842139d2abf5547ce8d7bda2a5c557beebe14f59b3ab018bd49b596e9e2b349fa4d17279cf3dc0f918642f2a7ef9
+  languageName: node
+  linkType: hard
+
+"@types/tar-stream@npm:*":
+  version: 2.2.2
+  resolution: "@types/tar-stream@npm:2.2.2"
+  dependencies:
+    "@types/node": "*"
+  checksum: 4b33bc0d53770e952d6e2e8acb8889190510326a3e255d0c6edd94136d6027ecae939a7b49188d1d02d774328d9a3742ff633d505709d1a1200b3413c88d793d
+  languageName: node
+  linkType: hard
+
 "@types/uglify-js@npm:*":
   version: 3.13.1
   resolution: "@types/uglify-js@npm:3.13.1"
@@ -1954,6 +1977,15 @@ __metadata:
   dependencies:
     "@types/yargs-parser": "*"
   checksum: f0673cbfc08e17239dc58952a88350d6c4db04a027a28a06fbad27d87b670e909f9cd9e66f9c64cebdd5071d1096261e33454a55868395f125297e5c50992ca8
+  languageName: node
+  linkType: hard
+
+"@types/yauzl@npm:^2.9.1":
+  version: 2.9.2
+  resolution: "@types/yauzl@npm:2.9.2"
+  dependencies:
+    "@types/node": "*"
+  checksum: dfb49abe82605615712fc694eaa4f7068fe30aa03f38c085e2c2e74408beaad30471d36da9654a811482ece2ea4405575fd99b19c0aa327ed2a9736b554bbf43
   languageName: node
   linkType: hard
 
@@ -3026,6 +3058,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"bl@npm:^4.0.3":
+  version: 4.1.0
+  resolution: "bl@npm:4.1.0"
+  dependencies:
+    buffer: ^5.5.0
+    inherits: ^2.0.4
+    readable-stream: ^3.4.0
+  checksum: 9e8521fa7e83aa9427c6f8ccdcba6e8167ef30cc9a22df26effcc5ab682ef91d2cbc23a239f945d099289e4bbcfae7a192e9c28c84c6202e710a0dfec3722662
+  languageName: node
+  linkType: hard
+
 "bluebird-lst@npm:^1.0.9":
   version: 1.0.9
   resolution: "bluebird-lst@npm:1.0.9"
@@ -3320,7 +3363,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"buffer@npm:^5.1.0":
+"buffer@npm:^5.1.0, buffer@npm:^5.5.0":
   version: 5.7.1
   resolution: "buffer@npm:5.7.1"
   dependencies:
@@ -5084,7 +5127,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"end-of-stream@npm:^1.0.0, end-of-stream@npm:^1.1.0":
+"end-of-stream@npm:^1.0.0, end-of-stream@npm:^1.1.0, end-of-stream@npm:^1.4.1":
   version: 1.4.4
   resolution: "end-of-stream@npm:1.4.4"
   dependencies:
@@ -5908,6 +5951,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"extract-zip@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "extract-zip@npm:2.0.1"
+  dependencies:
+    "@types/yauzl": ^2.9.1
+    debug: ^4.1.1
+    get-stream: ^5.1.0
+    yauzl: ^2.10.0
+  dependenciesMeta:
+    "@types/yauzl":
+      optional: true
+  bin:
+    extract-zip: cli.js
+  checksum: 8cbda9debdd6d6980819cc69734d874ddd71051c9fe5bde1ef307ebcedfe949ba57b004894b585f758b7c9eeeea0e3d87f2dda89b7d25320459c2c9643ebb635
+  languageName: node
+  linkType: hard
+
 "extsprintf@npm:1.3.0":
   version: 1.3.0
   resolution: "extsprintf@npm:1.3.0"
@@ -6277,6 +6337,13 @@ __metadata:
     inherits: ^2.0.1
     readable-stream: ^2.0.0
   checksum: 6080eba0793dce32f475141fb3d54cc15f84ee52e420ee22ac3ab0ad639dc95a1875bc6eb9c0e1140e94972a36a89dc5542491b85f1ab8df0c126241e0f1a61b
+  languageName: node
+  linkType: hard
+
+"fs-constants@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "fs-constants@npm:1.0.0"
+  checksum: 18f5b718371816155849475ac36c7d0b24d39a11d91348cfcb308b4494824413e03572c403c86d3a260e049465518c4f0d5bd00f0371cdfcad6d4f30a85b350d
   languageName: node
   linkType: hard
 
@@ -8906,6 +8973,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mkdirp-classic@npm:^0.5.2":
+  version: 0.5.3
+  resolution: "mkdirp-classic@npm:0.5.3"
+  checksum: 3f4e088208270bbcc148d53b73e9a5bd9eef05ad2cbf3b3d0ff8795278d50dd1d11a8ef1875ff5aea3fa888931f95bfcb2ad5b7c1061cfefd6284d199e6776ac
+  languageName: node
+  linkType: hard
+
 "mkdirp@npm:^0.5.1, mkdirp@npm:^0.5.3, mkdirp@npm:^0.5.4, mkdirp@npm:^0.5.5":
   version: 0.5.6
   resolution: "mkdirp@npm:0.5.6"
@@ -10535,7 +10609,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:^3.0.6, readable-stream@npm:^3.6.0":
+"readable-stream@npm:^3.0.6, readable-stream@npm:^3.1.1, readable-stream@npm:^3.4.0, readable-stream@npm:^3.6.0":
   version: 3.6.0
   resolution: "readable-stream@npm:3.6.0"
   dependencies:
@@ -11959,6 +12033,31 @@ __metadata:
   version: 1.1.3
   resolution: "tapable@npm:1.1.3"
   checksum: 53ff4e7c3900051c38cc4faab428ebfd7e6ad0841af5a7ac6d5f3045c5b50e88497bfa8295b4b3fbcadd94993c9e358868b78b9fb249a76cb8b018ac8dccafd7
+  languageName: node
+  linkType: hard
+
+"tar-fs@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "tar-fs@npm:2.1.1"
+  dependencies:
+    chownr: ^1.1.1
+    mkdirp-classic: ^0.5.2
+    pump: ^3.0.0
+    tar-stream: ^2.1.4
+  checksum: f5b9a70059f5b2969e65f037b4e4da2daf0fa762d3d232ffd96e819e3f94665dbbbe62f76f084f1acb4dbdcce16c6e4dac08d12ffc6d24b8d76720f4d9cf032d
+  languageName: node
+  linkType: hard
+
+"tar-stream@npm:^2.1.4":
+  version: 2.2.0
+  resolution: "tar-stream@npm:2.2.0"
+  dependencies:
+    bl: ^4.0.3
+    end-of-stream: ^1.4.1
+    fs-constants: ^1.0.0
+    inherits: ^2.0.3
+    readable-stream: ^3.1.1
+  checksum: 699831a8b97666ef50021c767f84924cfee21c142c2eb0e79c63254e140e6408d6d55a065a2992548e72b06de39237ef2b802b99e3ece93ca3904a37622a66f3
   languageName: node
   linkType: hard
 

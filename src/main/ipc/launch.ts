@@ -4,10 +4,11 @@ import { writeFile } from 'fs/promises'
 import { Client, type ILauncherOptions } from 'minecraft-launcher-core'
 import mkdirp from 'mkdirp'
 import { getMCLC, type profile as Profile } from 'msmc'
-import { join as joinPath } from 'path'
+import path, { join as joinPath } from 'path'
 import { fetchAssets, syncAssets } from '../lib/assets'
 import { APP_ROOT } from '../lib/env'
 import { downloadFabric } from '../lib/fabric'
+import { ensureJava } from '../lib/java'
 import { generateServersFile, worldToServer } from '../lib/serversDat'
 
 const launcher = new Client()
@@ -22,6 +23,13 @@ export const launch = async (
 
   // eslint-disable-next-line max-params
 ) => {
+  try {
+    const java = await ensureJava(webContents)
+    if (java === undefined) {
+      webContents.send('launch:@close', -1)
+      return
+    }
+
   const root = joinPath(APP_ROOT, '.minecraft')
   await mkdirp(root) // Ensure root directory exists
 
@@ -57,6 +65,7 @@ export const launch = async (
       port: world.connection.port.toString(),
     },
 
+      javaPath: java.type === 'global' ? 'java' : path.resolve(java.javaw),
     customArgs: [
       '-XX:+UnlockExperimentalVMOptions',
       '-XX:+UseG1GC',
@@ -69,9 +78,18 @@ export const launch = async (
 
   launcher.removeAllListeners()
   launcher.on('data', (...args) => webContents.send('launch:@data', ...args))
-  launcher.on('debug', (...args) => webContents.send('launch:@debug', ...args))
-  launcher.on('close', (...args) => webContents.send('launch:@close', ...args))
+    launcher.on('debug', (...args) =>
+      webContents.send('launch:@debug', ...args)
+    )
+
+    launcher.on('close', (...args) =>
+      webContents.send('launch:@close', ...args)
+    )
 
   await launcher.launch(_options)
   webContents.send('launch:@open')
+  } catch (error: unknown) {
+    webContents.send('launch:@close', -1)
+    throw error
+  }
 }

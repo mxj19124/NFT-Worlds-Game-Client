@@ -10,10 +10,11 @@ export const APP_ROOT = IS_DEV
   ? joinPath('.', dataDir)
   : joinPath(appData, dataDir)
 
+export const APP_ROOT_ABSOLUTE = path.resolve(APP_ROOT)
 const env: IPC.Environment = {
   isDev: IS_DEV,
   appRoot: APP_ROOT,
-  appRootAbsolute: path.resolve(APP_ROOT),
+  appRootAbsolute: APP_ROOT_ABSOLUTE,
 }
 
 // @ts-expect-error Global Assign
