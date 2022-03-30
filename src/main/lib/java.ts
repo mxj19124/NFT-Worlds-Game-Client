@@ -37,12 +37,7 @@ const checkLocalJava: (path: string) => Promise<boolean> = async path => {
 }
 
 type Platform = 'windows' | 'linux' | 'mac'
-type Arch = 'x64' | 'aarch64'
-
-const javaDownloadURL = (jdkVersion: string) => {
-  const encodedJDKVersion = encodeURI(jdkVersion)
-  const JRE_VERSION = jdkVersion.replace('+', '_')
-
+const resolvePlatform: () => Platform = () => {
   const platform: Platform | undefined =
     process.platform === 'win32'
       ? 'windows'
@@ -56,6 +51,11 @@ const javaDownloadURL = (jdkVersion: string) => {
     throw new Error(`Unsupported platform: '${process.platform}'`)
   }
 
+  return platform
+}
+
+type Arch = 'x64' | 'aarch64'
+const resolveArch: () => Arch = () => {
   const arch: Arch | undefined =
     process.arch === 'x64'
       ? 'x64'
@@ -67,6 +67,24 @@ const javaDownloadURL = (jdkVersion: string) => {
     throw new Error(`Unsupported architecture: '${process.arch}'`)
   }
 
+  return arch
+}
+
+const resolveJavaBin = (root: string, platform: Platform) => {
+  if (platform === 'mac') {
+    return joinPath(root, 'Contents', 'Home', 'bin')
+  }
+
+  return joinPath(root, 'bin')
+}
+
+const javaDownloadURL = (jdkVersion: string) => {
+  const encodedJDKVersion = encodeURI(jdkVersion)
+  const JRE_VERSION = jdkVersion.replace('+', '_')
+
+  const platform = resolvePlatform()
+  const arch = resolveArch()
+
   // JDK builds do not exist for ARM-based Windows
   if (platform === 'windows' && arch === 'aarch64') {
     throw new Error(`Unsupported architecture: '${process.arch}'`)
@@ -75,7 +93,7 @@ const javaDownloadURL = (jdkVersion: string) => {
   const ext = platform === 'windows' ? 'zip' : 'tar.gz'
   const url = `https://github.com/adoptium/temurin17-binaries/releases/download/jdk-${encodedJDKVersion}/OpenJDK17U-jre_${arch}_${platform}_hotspot_${JRE_VERSION}.${ext}`
 
-  return { url, platform, arch }
+  return url
 }
 
 interface GlobalJava {
@@ -105,12 +123,15 @@ export const ensureJava: (
   await mkdirp(APP_ROOT)
   const javaRoot = joinPath(APP_ROOT, `jdk-${JDK_VERSION}-jre`)
 
+  const platform = resolvePlatform()
+  const javaBin = resolveJavaBin(javaRoot, platform)
+
   const hasLocal = await checkLocalJava(javaRoot)
   if (hasLocal) {
     return {
       type: 'local',
       root: javaRoot,
-      javaw: joinPath(javaRoot, 'bin', 'javaw'),
+      javaw: joinPath(javaBin, 'javaw'),
     }
   }
 
@@ -127,7 +148,7 @@ export const ensureJava: (
   if (response === 1) return undefined
 
   webContents.send('launch:@update', 'Downloading Java', 1 / launchSteps)
-  const { url, platform } = javaDownloadURL(JDK_VERSION)
+  const url = javaDownloadURL(JDK_VERSION)
   const resp = await axios.get<Buffer>(url, { responseType: 'arraybuffer' })
 
   const { base: filename } = parse(url)
@@ -156,7 +177,7 @@ export const ensureJava: (
     return {
       type: 'local',
       root: javaRoot,
-      javaw: joinPath(javaRoot, 'bin', 'javaw'),
+      javaw: joinPath(javaBin, 'javaw'),
     }
   }
 
