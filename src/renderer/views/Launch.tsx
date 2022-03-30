@@ -55,6 +55,10 @@ export const Launch: FC<{ children?: never }> = () => {
     setStatus(message)
   }, [])
 
+  const onDataDebug = useCallback((message: string) => {
+    console.log(message)
+  }, [])
+
   const onClose = useCallback(() => {
     setProgress(undefined)
     setStatus(undefined)
@@ -65,14 +69,18 @@ export const Launch: FC<{ children?: never }> = () => {
   useEffect(() => {
     launchEvents.addListener('open', onOpen)
     launchEvents.addListener('update', onUpdate)
+    launchEvents.addListener('data', onDataDebug)
+    launchEvents.addListener('debug', onDataDebug)
     launchEvents.addListener('close', onClose)
 
     return () => {
       launchEvents.removeListener('open', onOpen)
       launchEvents.removeListener('update', onUpdate)
+      launchEvents.removeListener('data', onDataDebug)
+      launchEvents.removeListener('debug', onDataDebug)
       launchEvents.removeListener('close', onClose)
     }
-  }, [onOpen, onUpdate, onClose])
+  }, [onOpen, onUpdate, onDataDebug, onClose])
 
   const launchWorld = useCallback(
     (world: NFTWorlds.World) => {
