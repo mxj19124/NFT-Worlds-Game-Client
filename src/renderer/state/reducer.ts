@@ -1,7 +1,13 @@
 import { type profile as Profile } from 'msmc'
 import { type Reducer } from 'react'
 
-type Status = 'init' | 'idle' | 'authenticating' | 'gameRunning'
+type Status =
+  | 'init'
+  | 'idle'
+  | 'authenticating'
+  | 'gameLaunching'
+  | 'gameRunning'
+
 export interface State {
   status: Status
   user: Profile | undefined

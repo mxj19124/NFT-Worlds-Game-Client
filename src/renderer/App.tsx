@@ -83,6 +83,7 @@ const Router: FC = () => {
     case 'authenticating':
       return <Login />
 
+    case 'gameLaunching':
     case 'gameRunning':
       return <Launch />
 
