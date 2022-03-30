@@ -37,7 +37,8 @@ const Logo = styled.img`
 
 const Children = styled.div`
   width: 100%;
-  flex-grow: 1;
+  flex: 1;
+  overflow-y: hidden;
 `
 
 export const Layout: FC = ({ children }) => {

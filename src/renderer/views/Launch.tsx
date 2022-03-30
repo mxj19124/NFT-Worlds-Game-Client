@@ -5,15 +5,18 @@ import { useStore } from '../hooks/useStore'
 import { launch, launchEvents } from '../ipc/launch'
 
 const Worlds = styled.div`
-  margin-top: 20px;
-  padding: 0 20px;
+  --padding: 20px;
+
+  margin-top: var(--padding);
+  padding: var(--padding);
+  padding-top: 0;
+  max-height: calc(100% - var(--padding) * 2);
+  overflow-y: scroll;
+
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-
   gap: 10px;
-  overflow-y: scroll;
-  max-height: 100%;
 `
 
 export const Launch: FC<{ children?: never }> = () => {
