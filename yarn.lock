@@ -1574,6 +1574,7 @@ __metadata:
     "@types/node": ^17.0.23
     "@types/react": ^17.0.43
     "@types/react-dom": ^17.0.14
+    "@types/semver": ^7.3.9
     "@types/styled-components": ^5.1.24
     "@types/tar-fs": ^2.0.1
     axios: ^0.26.1
@@ -1597,6 +1598,7 @@ __metadata:
     nbt: ^0.8.1
     react: ^18.0.0
     react-dom: ^18.0.0
+    semver: ^7.3.5
     source-map-support: ^0.5.21
     styled-components: ^5.3.5
     tar-fs: ^2.1.1
@@ -1869,6 +1871,13 @@ __metadata:
   version: 0.16.2
   resolution: "@types/scheduler@npm:0.16.2"
   checksum: b6b4dcfeae6deba2e06a70941860fb1435730576d3689225a421280b7742318d1548b3d22c1f66ab68e414f346a9542f29240bc955b6332c5b11e561077583bc
+  languageName: node
+  linkType: hard
+
+"@types/semver@npm:^7.3.9":
+  version: 7.3.9
+  resolution: "@types/semver@npm:7.3.9"
+  checksum: 60bfcfdfa7f937be2c6f4b37ddb6714fb0f27b05fe4cbdfdd596a97d35ed95d13ee410efdd88e72a66449d0384220bf20055ab7d6b5df10de4990fbd20e5cbe0
   languageName: node
   linkType: hard
 

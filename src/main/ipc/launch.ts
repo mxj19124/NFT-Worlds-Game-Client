@@ -1,5 +1,5 @@
 import { Buffer } from 'buffer'
-import { type WebContents } from 'electron'
+import { BrowserWindow, dialog, type WebContents } from 'electron'
 import { writeFile } from 'fs/promises'
 import { Client, type ILauncherOptions } from 'minecraft-launcher-core'
 import mkdirp from 'mkdirp'
@@ -14,8 +14,9 @@ import { generateServersFile, worldToServer } from '../lib/serversDat'
 
 const launcher = new Client()
 
-const MINECRAFT_VERSION = '1.18.2' as const
 const LAUNCH_STEPS = 6
+const MINECRAFT_VERSION = '1.18.2' as const
+const MIN_JAVA_VERSION = 17 as const
 
 export type LaunchOptions = IPC.LaunchOptions
 export const launch = async (
@@ -27,9 +28,22 @@ export const launch = async (
 
   // eslint-disable-next-line max-params
 ) => {
+  const win = BrowserWindow.fromWebContents(webContents)!
+
   try {
     const java = await ensureJava(webContents, LAUNCH_STEPS)
     if (java === undefined) {
+      webContents.send('launch:@close', -1)
+      return
+    }
+
+    if (java.version < MIN_JAVA_VERSION) {
+      await dialog.showMessageBox(win, {
+        type: 'error',
+        title: win.title,
+        message: `Java version ${MIN_JAVA_VERSION} or higher is required to play Minecraft ${MINECRAFT_VERSION}`,
+      })
+
       webContents.send('launch:@close', -1)
       return
     }

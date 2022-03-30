@@ -8,6 +8,7 @@ import { unlink, writeFile } from 'fs/promises'
 import mkdirp from 'mkdirp'
 import { join as joinPath, parse } from 'path'
 import process from 'process'
+import { parse as parseVersion } from 'semver'
 import tar from 'tar-fs'
 import { createGunzip } from 'zlib'
 import { APP_ROOT, APP_ROOT_ABSOLUTE } from './env'
@@ -68,31 +69,51 @@ const resolveJavaPath = (
   }
 }
 
+const parseJavaVersion: (stdout: string) => number | undefined = stdout => {
+  if (stdout === '') return undefined
+  const lines = stdout.split('\n')
+
+  const first = lines[0]
+  if (!first) return undefined
+
+  const split = first.split(' ')
+  if (!split) return undefined
+
+  const quoted = split[2]
+  if (!quoted) return undefined
+
+  const raw = quoted.replace(/['"]+/g, '')
+  const version = parseVersion(raw)
+  if (!version) return undefined
+
+  return version.major
+}
+
 const checkGlobalJava: (
   platform: Platform
-) => Promise<boolean> = async platform => {
+) => Promise<number | undefined> = async platform => {
   const javaPath = resolveJavaPath('', platform, true)
   const { base: executable } = parse(javaPath)
 
   try {
-    await execa(executable, ['-version'])
-    return true
+    const { stderr } = await execa(executable, ['-version'])
+    return parseJavaVersion(stderr)
   } catch {
-    return false
+    return undefined
   }
 }
 
 const checkLocalJava: (
   platform: Platform,
   path: string
-) => Promise<boolean> = async (platform, path) => {
+) => Promise<number | undefined> = async (platform, path) => {
   try {
     const javaPath = resolveJavaPath(path, platform, true)
-    await execa(javaPath, ['-version'])
+    const { stderr } = await execa(javaPath, ['-version'])
 
-    return true
+    return parseJavaVersion(stderr)
   } catch {
-    return false
+    return undefined
   }
 }
 
@@ -116,10 +137,12 @@ const javaDownloadURL = (jdkVersion: string) => {
 
 interface GlobalJava {
   type: 'global'
+  version: number
 }
 
 interface LocalJava {
   type: 'local'
+  version: number
   root: string
   javaPath: string
 }
@@ -133,9 +156,9 @@ export const ensureJava: (
   const win = BrowserWindow.fromWebContents(webContents)!
 
   const platform = resolvePlatform()
-  const hasGlobal = await checkGlobalJava(platform)
-  if (hasGlobal) {
-    return { type: 'global' }
+  const globalVersion = await checkGlobalJava(platform)
+  if (globalVersion) {
+    return { type: 'global', version: globalVersion }
   }
 
   // Ensure download directory exists
@@ -143,10 +166,11 @@ export const ensureJava: (
   const javaRoot = joinPath(APP_ROOT, `jdk-${JDK_VERSION}-jre`)
 
   const javaPath = resolveJavaPath(javaRoot, platform)
-  const hasLocal = await checkLocalJava(platform, javaRoot)
-  if (hasLocal) {
+  const localVersion = await checkLocalJava(platform, javaRoot)
+  if (localVersion) {
     return {
       type: 'local',
+      version: localVersion,
       root: javaRoot,
       javaPath,
     }
@@ -189,10 +213,11 @@ export const ensureJava: (
   }
 
   await unlink(archivePath)
-  const hasDownloadedLocal = await checkLocalJava(platform, javaRoot)
-  if (hasDownloadedLocal) {
+  const downloadedVersion = await checkLocalJava(platform, javaRoot)
+  if (downloadedVersion) {
     return {
       type: 'local',
+      version: downloadedVersion,
       root: javaRoot,
       javaPath,
     }
