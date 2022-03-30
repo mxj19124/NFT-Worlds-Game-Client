@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { type Buffer } from 'buffer'
-import { type WebContents } from 'electron'
+import { BrowserWindow, dialog, type WebContents } from 'electron'
 import execa from 'execa'
 import extract from 'extract-zip'
 import { unlink, writeFile } from 'fs/promises'
@@ -90,6 +90,7 @@ export const ensureJava: (
   webContents: WebContents
 ) => Promise<JavaInstall | undefined> = async webContents => {
   const JDK_VERSION = '17.0.2+8'
+  const win = BrowserWindow.fromWebContents(webContents)!
 
   const hasGlobal = await checkGlobalJava()
   if (hasGlobal) {
@@ -109,7 +110,17 @@ export const ensureJava: (
     }
   }
 
-  // TODO: Add prompt to download
+  const { response } = await dialog.showMessageBox(win, {
+    type: 'warning',
+    title: win.title,
+    message:
+      'No Java installation was detected!\n' +
+      'Would you like to automatically download Java?',
+    buttons: ['Yes', 'No'],
+  })
+
+  // User selected 'No'
+  if (response === 1) return undefined
 
   const { url, platform } = javaDownloadURL(JDK_VERSION)
   const resp = await axios.get<Buffer>(url, { responseType: 'arraybuffer' })
@@ -121,7 +132,7 @@ export const ensureJava: (
   if (platform === 'windows') {
     await extract(archivePath, { dir: APP_ROOT_ABSOLUTE })
   } else {
-    // Untar
+    // TODO: Untar
   }
 
   await unlink(archivePath)
@@ -134,6 +145,13 @@ export const ensureJava: (
     }
   }
 
-  // TODO: Prompt to install manually
+  await dialog.showMessageBox(win, {
+    type: 'error',
+    title: win.title,
+    message:
+      'Java installation failed!\n' +
+      'Install Java manually to resolve this error.',
+  })
+
   return undefined
 }
