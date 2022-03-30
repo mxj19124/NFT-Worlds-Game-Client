@@ -1,4 +1,4 @@
-import React, { type FC } from 'react'
+import React, { type FC, useCallback, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import Background from '../assets/media/background.mp4'
 
@@ -25,8 +25,30 @@ const Video = styled.video`
   filter: brightness(0.45);
 `
 
-export const BackgroundVideo: FC<{ children?: never }> = () => (
-  <VideoContainer>
-    <Video autoPlay loop src={Background} />
-  </VideoContainer>
-)
+export const BackgroundVideo: FC<{ children?: never }> = () => {
+  const ref = useRef<HTMLVideoElement>(null)
+
+  const onFocus = useCallback(() => {
+    void ref.current?.play()
+  }, [])
+
+  const onFocusLost = useCallback(() => {
+    ref.current?.pause()
+  }, [])
+
+  useEffect(() => {
+    window.addEventListener('focus', onFocus)
+    window.addEventListener('blur', onFocusLost)
+
+    return () => {
+      window.removeEventListener('focus', onFocus)
+      window.removeEventListener('blur', onFocusLost)
+    }
+  }, [onFocus, onFocusLost])
+
+  return (
+    <VideoContainer>
+      <Video ref={ref} autoPlay loop src={Background} />
+    </VideoContainer>
+  )
+}
