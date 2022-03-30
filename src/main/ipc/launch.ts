@@ -5,16 +5,18 @@ import { Client, type ILauncherOptions } from 'minecraft-launcher-core'
 import mkdirp from 'mkdirp'
 import { getMCLC, type profile as Profile } from 'msmc'
 import path, { join as joinPath } from 'path'
+import process from 'process'
 import { fetchAssets, syncAssets } from '../lib/assets'
 import { APP_ROOT } from '../lib/env'
 import { downloadFabric } from '../lib/fabric'
 import { exists } from '../lib/http'
 import { ensureJava } from '../lib/java'
+import { patchM1Version } from '../lib/m1'
 import { generateServersFile, worldToServer } from '../lib/serversDat'
 
 const launcher = new Client()
 
-const LAUNCH_STEPS = 6
+const LAUNCH_STEPS = 8
 const MINECRAFT_VERSION = '1.18.2' as const
 const MIN_JAVA_VERSION = 17 as const
 
@@ -60,10 +62,21 @@ export const launch = async (
     webContents.send('launch:@update', 'Downloading Fabric', 3 / LAUNCH_STEPS)
     const fabricVersion = await downloadFabric(root, MINECRAFT_VERSION)
 
+    if (process.platform === 'darwin' && process.arch !== 'arm64') {
+      webContents.send(
+        'launch:@update',
+        'Patching Minecraft to work on Apple Silicon',
+        4 / LAUNCH_STEPS
+      )
+
+      const versionDir = joinPath(root, 'versions', fabricVersion)
+      await patchM1Version(MINECRAFT_VERSION, versionDir)
+    }
+
     webContents.send(
       'launch:@update',
       'Downloading Mods and Resources',
-      2 / LAUNCH_STEPS
+      5 / LAUNCH_STEPS
     )
 
     const assets = await fetchAssets()
@@ -124,12 +137,12 @@ export const launch = async (
       webContents.send(
         'launch:@update',
         'Downloading Minecraft',
-        4 / LAUNCH_STEPS
+        6 / LAUNCH_STEPS
       )
     }
 
     await launcher.launch(_options)
-    webContents.send('launch:@update', 'Launching Minecraft', 5 / LAUNCH_STEPS)
+    webContents.send('launch:@update', 'Launching Minecraft', 7 / LAUNCH_STEPS)
   } catch (error: unknown) {
     webContents.send('launch:@close', -1)
     throw error
