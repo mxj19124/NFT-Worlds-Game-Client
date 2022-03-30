@@ -12,30 +12,6 @@ import tar from 'tar-fs'
 import { createGunzip } from 'zlib'
 import { APP_ROOT, APP_ROOT_ABSOLUTE } from './env'
 
-const checkGlobalJava: () => Promise<boolean> = async () => {
-  try {
-    await execa('java', ['-version'])
-    await execa('javaw', ['-version'])
-
-    return true
-  } catch {
-    return false
-  }
-}
-
-const checkLocalJava: (path: string) => Promise<boolean> = async path => {
-  try {
-    const binPath = joinPath(path, 'bin')
-
-    await execa('java', ['-version'], { cwd: binPath })
-    await execa('javaw', ['-version'], { cwd: binPath })
-
-    return true
-  } catch {
-    return false
-  }
-}
-
 type Platform = 'windows' | 'linux' | 'mac'
 const resolvePlatform: () => Platform = () => {
   const platform: Platform | undefined =
@@ -70,12 +46,53 @@ const resolveArch: () => Arch = () => {
   return arch
 }
 
-const resolveJavaBin = (root: string, platform: Platform) => {
-  if (platform === 'mac') {
-    return joinPath(root, 'Contents', 'Home', 'bin')
-  }
+const checkGlobalJava: (
+  platform: Platform
+) => Promise<boolean> = async platform => {
+  try {
+    await execa('java', ['-version'])
+    if (platform === 'windows') {
+      await execa('javaw', ['-version'])
+    }
 
-  return joinPath(root, 'bin')
+    return true
+  } catch {
+    return false
+  }
+}
+
+const checkLocalJava: (
+  platform: Platform,
+  path: string
+) => Promise<boolean> = async (platform, path) => {
+  try {
+    const binPath = joinPath(path, 'bin')
+
+    await execa('java', ['-version'], { cwd: binPath })
+    if (platform === 'windows') {
+      await execa('javaw', ['-version'], { cwd: binPath })
+    }
+
+    return true
+  } catch {
+    return false
+  }
+}
+
+const resolveJavaPath = (root: string, platform: Platform) => {
+  switch (platform) {
+    case 'windows':
+      return joinPath(root, 'bin', 'javaw.exe')
+
+    case 'mac':
+      return joinPath(root, 'Contents', 'Home', 'bin', 'java')
+
+    case 'linux':
+      return joinPath(root, 'bin', 'java')
+
+    default:
+      throw new Error('Unknown platform')
+  }
 }
 
 const javaDownloadURL = (jdkVersion: string) => {
@@ -103,7 +120,7 @@ interface GlobalJava {
 interface LocalJava {
   type: 'local'
   root: string
-  javaw: string
+  javaPath: string
 }
 
 type JavaInstall = GlobalJava | LocalJava
@@ -114,7 +131,8 @@ export const ensureJava: (
   const JDK_VERSION = '17.0.2+8'
   const win = BrowserWindow.fromWebContents(webContents)!
 
-  const hasGlobal = await checkGlobalJava()
+  const platform = resolvePlatform()
+  const hasGlobal = await checkGlobalJava(platform)
   if (hasGlobal) {
     return { type: 'global' }
   }
@@ -123,15 +141,13 @@ export const ensureJava: (
   await mkdirp(APP_ROOT)
   const javaRoot = joinPath(APP_ROOT, `jdk-${JDK_VERSION}-jre`)
 
-  const platform = resolvePlatform()
-  const javaBin = resolveJavaBin(javaRoot, platform)
-
-  const hasLocal = await checkLocalJava(javaRoot)
+  const javaPath = resolveJavaPath(javaRoot, platform)
+  const hasLocal = await checkLocalJava(platform, javaRoot)
   if (hasLocal) {
     return {
       type: 'local',
       root: javaRoot,
-      javaw: joinPath(javaBin, 'javaw'),
+      javaPath,
     }
   }
 
@@ -172,12 +188,12 @@ export const ensureJava: (
   }
 
   await unlink(archivePath)
-  const hasDownloadedLocal = await checkLocalJava(javaRoot)
+  const hasDownloadedLocal = await checkLocalJava(platform, javaRoot)
   if (hasDownloadedLocal) {
     return {
       type: 'local',
       root: javaRoot,
-      javaw: joinPath(javaBin, 'javaw'),
+      javaPath,
     }
   }
 

@@ -75,7 +75,9 @@ export const launch = async (
         port: world.connection.port.toString(),
       },
 
-      javaPath: java.type === 'global' ? 'java' : path.resolve(java.javaw),
+      javaPath:
+        java.type === 'global' ? undefined : path.resolve(java.javaPath),
+
       customArgs: [
         '-XX:+UnlockExperimentalVMOptions',
         '-XX:+UseG1GC',
