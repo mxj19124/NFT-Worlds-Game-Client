@@ -36,6 +36,9 @@ const resolveArch: () => Arch = () => {
   const arch: Arch | undefined =
     process.arch === 'x64'
       ? 'x64'
+      : // FIXME: Ugly hack to let M1 macs work using Rosetta
+      process.platform === 'darwin' && process.arch === 'arm64'
+      ? 'x64'
       : process.arch === 'arm64'
       ? 'aarch64'
       : undefined
@@ -124,8 +127,8 @@ const javaDownloadURL = (jdkVersion: string) => {
   const platform = resolvePlatform()
   const arch = resolveArch()
 
-  // JDK builds do not exist for ARM-based Windows
-  if (platform === 'windows' && arch === 'aarch64') {
+  // ARM Builds are currently unsupported by Minecraft
+  if (arch === 'aarch64') {
     throw new Error(`Unsupported architecture: '${process.arch}'`)
   }
 
