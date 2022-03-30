@@ -66,7 +66,8 @@ const checkLocalJava: (
   path: string
 ) => Promise<boolean> = async (platform, path) => {
   try {
-    const binPath = joinPath(path, 'bin')
+    const javaPath = resolveJavaPath(path, platform)
+    const { dir: binPath } = parse(javaPath)
 
     await execa('java', ['-version'], { cwd: binPath })
     if (platform === 'windows') {
