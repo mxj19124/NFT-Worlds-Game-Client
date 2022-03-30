@@ -56,7 +56,7 @@ const Description = styled.p`
   margin-bottom: 14px;
 
   font-size: 12px;
-  font-weight: semibold;
+  font-weight: 600;
   text-align: center;
 
   text-overflow: ellipsis;
