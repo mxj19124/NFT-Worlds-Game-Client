@@ -13,6 +13,9 @@ import { generateServersFile, worldToServer } from '../lib/serversDat'
 
 const launcher = new Client()
 
+const MINECRAFT_VERSION = '1.18.2' as const
+const LAUNCH_STEPS = 5
+
 export type LaunchOptions = IPC.LaunchOptions
 export const launch = async (
   profile: Profile,
@@ -24,7 +27,7 @@ export const launch = async (
   // eslint-disable-next-line max-params
 ) => {
   try {
-    const java = await ensureJava(webContents)
+    const java = await ensureJava(webContents, LAUNCH_STEPS)
     if (java === undefined) {
       webContents.send('launch:@close', -1)
       return
@@ -39,8 +42,14 @@ export const launch = async (
     const serversPath = joinPath(root, 'servers.dat')
     await writeFile(serversPath, Buffer.from(serversDatFile))
 
-    const version = '1.18.2' as const
-    const fabricVersion = await downloadFabric(root, version)
+    webContents.send('launch:@update', 'Downloading Fabric', 3 / LAUNCH_STEPS)
+    const fabricVersion = await downloadFabric(root, MINECRAFT_VERSION)
+
+    webContents.send(
+      'launch:@update',
+      'Downloading Mods and Resources',
+      2 / LAUNCH_STEPS
+    )
 
     const assets = await fetchAssets()
     await syncAssets(root, assets)
@@ -50,7 +59,7 @@ export const launch = async (
       authorization: getMCLC().getAuth(profile),
       root,
       version: {
-        number: version,
+        number: MINECRAFT_VERSION,
         type: 'release',
         custom: fabricVersion,
       },
@@ -86,8 +95,20 @@ export const launch = async (
       webContents.send('launch:@close', ...args)
     )
 
+    launcher.on('data', (message: string) => {
+      if (message.includes('Hardware information:')) {
+        webContents.send('launch:@open')
+      }
+    })
+
+    webContents.send(
+      'launch:@update',
+      'Downloading Minecraft',
+      4 / LAUNCH_STEPS
+    )
+
     await launcher.launch(_options)
-    webContents.send('launch:@open')
+    webContents.send('launch:@update', 'Launching Minecraft', 5 / LAUNCH_STEPS)
   } catch (error: unknown) {
     webContents.send('launch:@close', -1)
     throw error

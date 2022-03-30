@@ -90,8 +90,9 @@ interface LocalJava {
 
 type JavaInstall = GlobalJava | LocalJava
 export const ensureJava: (
-  webContents: WebContents
-) => Promise<JavaInstall | undefined> = async webContents => {
+  webContents: WebContents,
+  launchSteps: number
+) => Promise<JavaInstall | undefined> = async (webContents, launchSteps) => {
   const JDK_VERSION = '17.0.2+8'
   const win = BrowserWindow.fromWebContents(webContents)!
 
@@ -125,6 +126,7 @@ export const ensureJava: (
   // User selected 'No'
   if (response === 1) return undefined
 
+  webContents.send('launch:@update', 'Downloading Java', 1 / launchSteps)
   const { url, platform } = javaDownloadURL(JDK_VERSION)
   const resp = await axios.get<Buffer>(url, { responseType: 'arraybuffer' })
 
@@ -132,6 +134,7 @@ export const ensureJava: (
   const archivePath = joinPath(APP_ROOT, filename)
   await writeFile(archivePath, resp.data)
 
+  webContents.send('launch:@update', 'Extracting Java', 2 / launchSteps)
   if (platform === 'windows') {
     await extract(archivePath, { dir: APP_ROOT_ABSOLUTE })
   } else {

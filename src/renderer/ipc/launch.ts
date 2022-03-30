@@ -17,6 +17,7 @@ interface Events {
   close: [code: number]
   data: [message: string]
   debug: [message: string]
+  update: [message: string, percentage: number]
 }
 
 class LaunchEvents extends EventEmitter<Events> {
@@ -27,6 +28,9 @@ class LaunchEvents extends EventEmitter<Events> {
     ipcRenderer.on('launch:@close', (_, code) => this.emit('close', code))
     ipcRenderer.on('launch:@data', (_, message) => this.emit('data', message))
     ipcRenderer.on('launch:@debug', (_, message) => this.emit('debug', message))
+    ipcRenderer.on('launch:@update', (_, message, percentage) =>
+      this.emit('update', message, percentage)
+    )
   }
 }
 
