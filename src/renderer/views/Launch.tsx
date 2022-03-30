@@ -1,23 +1,7 @@
-import React, { type FC, useCallback, useEffect } from 'react'
-import styled from 'styled-components'
-import { World } from '../components/World'
+import React, { type FC, useCallback, useEffect, useMemo } from 'react'
+import { Worlds } from '../components/Worlds'
 import { useStore } from '../hooks/useStore'
 import { launch, launchEvents } from '../ipc/launch'
-
-const Worlds = styled.div`
-  --padding: 20px;
-
-  margin-top: var(--padding);
-  padding: var(--padding);
-  padding-top: 0;
-  max-height: calc(100% - var(--padding) * 2);
-  overflow-y: scroll;
-
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-`
 
 export const Launch: FC<{ children?: never }> = () => {
   const { state, dispatch } = useStore()
@@ -27,8 +11,12 @@ export const Launch: FC<{ children?: never }> = () => {
     throw new TypeError('Launch view rendered with worlds error')
   }
 
+  const disabled = useMemo<boolean>(
+    () => state.status === 'gameRunning' || state.status === 'gameLaunching',
+    [state]
+  )
+
   const onClose = useCallback(() => {
-    console.log('close')
     dispatch({ type: 'setStatus', value: 'idle' })
   }, [dispatch])
 
@@ -61,16 +49,10 @@ export const Launch: FC<{ children?: never }> = () => {
   )
 
   return (
-    <Worlds>
-      {state.worlds.map(world => (
-        <World
-          key={world.worldId}
-          world={world}
-          offline={!world.javaOnline}
-          disabled={state.status === 'gameRunning'}
-          onLaunch={launchWorld}
-        />
-      ))}
-    </Worlds>
+    <Worlds
+      worlds={state.worlds}
+      disabled={disabled}
+      launchWorld={launchWorld}
+    />
   )
 }
