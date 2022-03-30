@@ -95,6 +95,9 @@ const parseJavaVersion: (stdout: string) => number | undefined = stdout => {
 const checkGlobalJava: (
   platform: Platform
 ) => Promise<number | undefined> = async platform => {
+  // FIXME: Ugly hack to ensure M1 macs always download x64 Java
+  if (platform === 'mac' && process.arch === 'arm64') return undefined
+
   const javaPath = resolveJavaPath('', platform, true)
   const { base: executable } = parse(javaPath)
 
