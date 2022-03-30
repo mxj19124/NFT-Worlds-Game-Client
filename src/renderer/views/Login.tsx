@@ -22,6 +22,7 @@ const Container = styled.div`
 `
 
 const Status = styled.p`
+  color: rgba(255, 255, 255, 0.8);
   font-weight: 600;
   margin: 8px 0;
 `
@@ -77,7 +78,9 @@ export const Login: FC<{ children?: never }> = () => {
         <LoginMicrosoftButton disabled={disabled} onClick={handleLogin} />
       </LoginButton>
 
-      {progress && <LoadBar colour='white' percent={progress} />}
+      {progress && (
+        <LoadBar colour='rgba(255, 255, 255, 0.5)' percent={progress} />
+      )}
     </Container>
   )
 }
