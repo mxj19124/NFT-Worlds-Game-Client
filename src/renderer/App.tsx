@@ -1,6 +1,7 @@
 import React, { type FC, useEffect } from 'react'
 import { createGlobalStyle } from 'styled-components'
 import { Layout } from './components/Layout'
+import { Scrollbar } from './components/Scrollbar'
 import { useStore } from './hooks/useStore'
 import { init } from './state/init'
 import { Launch } from './views/Launch'
@@ -48,6 +49,8 @@ export const App: FC = () => {
   return (
     <>
       <GlobalStyles />
+      <Scrollbar />
+
       <Layout>
         <Router />
       </Layout>
