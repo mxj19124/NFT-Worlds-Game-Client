@@ -14,7 +14,7 @@ import { login, loginEvents } from '../ipc/auth'
 
 const Container = styled.div`
   width: 100%;
-  height: calc(100% - 40px);
+  height: calc(100% - 25px);
   display: flex;
   flex-direction: column;
   align-items: center;
