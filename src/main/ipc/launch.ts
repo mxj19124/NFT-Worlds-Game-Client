@@ -30,54 +30,54 @@ export const launch = async (
       return
     }
 
-  const root = joinPath(APP_ROOT, '.minecraft')
-  await mkdirp(root) // Ensure root directory exists
+    const root = joinPath(APP_ROOT, '.minecraft')
+    await mkdirp(root) // Ensure root directory exists
 
-  const servers = worlds.map(world => worldToServer(world))
-  const serversDatFile = generateServersFile(servers)
+    const servers = worlds.map(world => worldToServer(world))
+    const serversDatFile = generateServersFile(servers)
 
-  const serversPath = joinPath(root, 'servers.dat')
-  await writeFile(serversPath, Buffer.from(serversDatFile))
+    const serversPath = joinPath(root, 'servers.dat')
+    await writeFile(serversPath, Buffer.from(serversDatFile))
 
-  const version = '1.18.2' as const
-  const fabricVersion = await downloadFabric(root, version)
+    const version = '1.18.2' as const
+    const fabricVersion = await downloadFabric(root, version)
 
-  const assets = await fetchAssets()
-  await syncAssets(root, assets)
+    const assets = await fetchAssets()
+    await syncAssets(root, assets)
 
-  const _options: ILauncherOptions = {
-    // @ts-expect-error Incorrect Typings
-    authorization: getMCLC().getAuth(profile),
-    root,
-    version: {
-      number: version,
-      type: 'release',
-      custom: fabricVersion,
-    },
-    window: {
-      width: options.width,
-      height: options.height,
-      fullscreen: options.fullscreen,
-    },
-    memory: options.memory,
-    server: {
-      host: world.connection.address,
-      port: world.connection.port.toString(),
-    },
+    const _options: ILauncherOptions = {
+      // @ts-expect-error Incorrect Typings
+      authorization: getMCLC().getAuth(profile),
+      root,
+      version: {
+        number: version,
+        type: 'release',
+        custom: fabricVersion,
+      },
+      window: {
+        width: options.width,
+        height: options.height,
+        fullscreen: options.fullscreen,
+      },
+      memory: options.memory,
+      server: {
+        host: world.connection.address,
+        port: world.connection.port.toString(),
+      },
 
       javaPath: java.type === 'global' ? 'java' : path.resolve(java.javaw),
-    customArgs: [
-      '-XX:+UnlockExperimentalVMOptions',
-      '-XX:+UseG1GC',
-      '-XX:G1NewSizePercent=20',
-      '-XX:G1ReservePercent=20',
-      '-XX:MaxGCPauseMillis=50',
-      '-XX:G1HeapRegionSize=32M',
-    ],
-  }
+      customArgs: [
+        '-XX:+UnlockExperimentalVMOptions',
+        '-XX:+UseG1GC',
+        '-XX:G1NewSizePercent=20',
+        '-XX:G1ReservePercent=20',
+        '-XX:MaxGCPauseMillis=50',
+        '-XX:G1HeapRegionSize=32M',
+      ],
+    }
 
-  launcher.removeAllListeners()
-  launcher.on('data', (...args) => webContents.send('launch:@data', ...args))
+    launcher.removeAllListeners()
+    launcher.on('data', (...args) => webContents.send('launch:@data', ...args))
     launcher.on('debug', (...args) =>
       webContents.send('launch:@debug', ...args)
     )
@@ -86,8 +86,8 @@ export const launch = async (
       webContents.send('launch:@close', ...args)
     )
 
-  await launcher.launch(_options)
-  webContents.send('launch:@open')
+    await launcher.launch(_options)
+    webContents.send('launch:@open')
   } catch (error: unknown) {
     webContents.send('launch:@close', -1)
     throw error
