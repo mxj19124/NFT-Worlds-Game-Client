@@ -3,6 +3,7 @@ import { createGlobalStyle } from 'styled-components'
 import { Layout } from './components/Layout'
 import { Scrollbar } from './components/Scrollbar'
 import { useStore } from './hooks/useStore'
+import { fetchWorlds } from './lib/worlds'
 import { init } from './state/init'
 import { Launch } from './views/Launch'
 import { Login } from './views/Login'
@@ -44,6 +45,19 @@ export const App: FC = () => {
     void init(state, dispatch)
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      void fetchWorlds().then(result => {
+        if (!(result instanceof Error))
+          dispatch({ type: 'setWorlds', value: result })
+      })
+    }, 30 * 1000)
+
+    return () => {
+      clearInterval(interval)
+    }
   }, [dispatch])
 
   return (
