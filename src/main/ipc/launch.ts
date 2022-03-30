@@ -8,13 +8,14 @@ import path, { join as joinPath } from 'path'
 import { fetchAssets, syncAssets } from '../lib/assets'
 import { APP_ROOT } from '../lib/env'
 import { downloadFabric } from '../lib/fabric'
+import { exists } from '../lib/http'
 import { ensureJava } from '../lib/java'
 import { generateServersFile, worldToServer } from '../lib/serversDat'
 
 const launcher = new Client()
 
 const MINECRAFT_VERSION = '1.18.2' as const
-const LAUNCH_STEPS = 5
+const LAUNCH_STEPS = 6
 
 export type LaunchOptions = IPC.LaunchOptions
 export const launch = async (
@@ -101,11 +102,15 @@ export const launch = async (
       }
     })
 
-    webContents.send(
-      'launch:@update',
-      'Downloading Minecraft',
-      4 / LAUNCH_STEPS
-    )
+    const libsDir = joinPath(root, 'libraries')
+    const libsExists = await exists(libsDir)
+    if (!libsExists) {
+      webContents.send(
+        'launch:@update',
+        'Downloading Minecraft',
+        4 / LAUNCH_STEPS
+      )
+    }
 
     await launcher.launch(_options)
     webContents.send('launch:@update', 'Launching Minecraft', 5 / LAUNCH_STEPS)

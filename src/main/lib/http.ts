@@ -5,7 +5,7 @@ import { access, writeFile } from 'fs/promises'
 import mkdirp from 'mkdirp'
 import { join as joinPath, parse } from 'path'
 
-const exists = async (path: PathLike) => {
+export const exists = async (path: PathLike) => {
   try {
     await access(path)
     return true
