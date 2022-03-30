@@ -1,3 +1,5 @@
+import 'source-map-support/register'
+
 import * as remote from '@electron/remote/main'
 import { app, BrowserWindow } from 'electron'
 import Store from 'electron-store'
