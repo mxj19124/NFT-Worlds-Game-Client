@@ -50,9 +50,13 @@ const WorldID = styled.h2`
   color: #aaa;
 `
 
+const PlayerCount = styled(WorldID)`
+  margin-top: 1px;
+`
+
 const Description = styled.p`
   margin: 0;
-  margin-top: 8px;
+  margin-top: 6px;
   margin-bottom: 14px;
 
   font-size: 12px;
@@ -121,6 +125,7 @@ export const World: FC<Props> = ({ world, offline, disabled, onLaunch }) => {
 
       <WorldName>{world.name}</WorldName>
       <WorldID>World #{world.worldId}</WorldID>
+      <PlayerCount>{world.playersOnline} Players Online</PlayerCount>
       <Description>{world.description}</Description>
 
       <LaunchButton type='button' disabled={inactive} onClick={onClick}>
