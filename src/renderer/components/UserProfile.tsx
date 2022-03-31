@@ -24,6 +24,9 @@ const Name = styled.p`
   margin-right: 10px;
   transition: color 0.1s ease, transform 0.1s ease;
 
+  min-width: 100px;
+  text-align: right;
+
   *:hover > & {
     transform: translateY(-100%);
     color: rgba(255, 255, 255, 0);
@@ -37,6 +40,9 @@ const Name = styled.p`
     transform: translateY(100%);
     color: rgba(255, 255, 255, 0);
     transition: color 0.1s ease, transform 0.1s ease;
+
+    width: 100%;
+    text-align: right;
 
     *:hover > & {
       color: white;
