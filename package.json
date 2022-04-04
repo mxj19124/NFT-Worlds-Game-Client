@@ -23,7 +23,7 @@
     "@types/styled-components": "^5.1.24",
     "@types/tar-fs": "^2.0.1",
     "babel-plugin-styled-components": "^2.0.6",
-    "electron": "^18.0.0",
+    "electron": "^18.0.1",
     "electron-builder": "^22.14.13",
     "electron-webpack": "^2.8.2",
     "electron-webpack-ts": "^4.0.1",
