@@ -14,7 +14,7 @@ const PlayerHead = styled.img`
   height: 42px;
   image-rendering: pixelated;
   border-radius: 50%;
-  border: 2px white solid;
+  border: 2px #ebebeb solid;
 `
 
 const Name = styled.p`
