@@ -29,6 +29,7 @@ export type Action =
   | { type: 'clearUser' }
   | { type: 'setWorlds'; value: NFTWorlds.World[] | Error }
   | { type: 'clearWorlds' }
+  | { type: 'toggleSettings' }
 
 export const reducer: Reducer<State, Action> = (previousState, action) => {
   switch (action.type) {
@@ -49,6 +50,9 @@ export const reducer: Reducer<State, Action> = (previousState, action) => {
 
     case 'clearWorlds':
       return { ...previousState, worlds: undefined }
+
+    case 'toggleSettings':
+      return { ...previousState, showSettings: !previousState.showSettings }
 
     default:
       throw new Error('Invalid Action')

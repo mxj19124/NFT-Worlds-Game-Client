@@ -7,6 +7,7 @@ import { fetchWorlds } from './lib/worlds'
 import { init } from './state/init'
 import { Launch } from './views/Launch'
 import { Login } from './views/Login'
+import { Settings } from './views/Settings'
 
 const GlobalStyles = createGlobalStyle`
   body {
@@ -75,7 +76,10 @@ export const App: FC = () => {
 const Router: FC = () => {
   const { state } = useStore()
 
-  // TODO: Ensure each state has a valid view
+  if (state.status !== 'init' && state.showSettings) {
+    return <Settings />
+  }
+
   switch (state.status) {
     case 'init':
       return null
