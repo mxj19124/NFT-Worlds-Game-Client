@@ -13,5 +13,6 @@ declare namespace IPC {
     isDev: boolean
     appRoot: string
     appRootAbsolute: string
+    maxMemoryGB: number
   }
 }

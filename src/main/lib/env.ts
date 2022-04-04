@@ -1,5 +1,6 @@
 import { app } from 'electron'
 import isDev from 'electron-is-dev'
+import { totalmem } from 'os'
 import path, { join as joinPath } from 'path'
 
 export const IS_DEV = isDev
@@ -15,6 +16,7 @@ const env: IPC.Environment = {
   isDev: IS_DEV,
   appRoot: APP_ROOT,
   appRootAbsolute: APP_ROOT_ABSOLUTE,
+  maxMemoryGB: Math.round(totalmem() / 1024 ** 3),
 }
 
 // @ts-expect-error Global Assign
