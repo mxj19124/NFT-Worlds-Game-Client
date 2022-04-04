@@ -19,8 +19,8 @@ export interface State {
   launchHeight: NonNullable<IPC.LaunchOptions['height']>
   launchFullscreen: NonNullable<IPC.LaunchOptions['fullscreen']>
 
-  maxMemory: IPC.LaunchOptions['memory']['max']
-  minMemory: IPC.LaunchOptions['memory']['min']
+  maxMemoryGB: number
+  minMemoryGB: number
 }
 
 export type Action =
@@ -34,8 +34,8 @@ export type Action =
   | { type: 'setHeight'; value: number }
   | { type: 'setFullscreen'; value: boolean }
   | { type: 'toggleFullscreen' }
-  | { type: 'setMaxMemory'; value: string }
-  | { type: 'setMinMemory'; value: string }
+  | { type: 'setMaxMemory'; value: number }
+  | { type: 'setMinMemory'; value: number }
 
 export const reducer: Reducer<State, Action> = (previousState, action) => {
   switch (action.type) {
@@ -76,10 +76,10 @@ export const reducer: Reducer<State, Action> = (previousState, action) => {
       }
 
     case 'setMaxMemory':
-      return { ...previousState, maxMemory: action.value }
+      return { ...previousState, maxMemoryGB: action.value }
 
     case 'setMinMemory':
-      return { ...previousState, minMemory: action.value }
+      return { ...previousState, minMemoryGB: action.value }
 
     default:
       throw new Error('Invalid Action')
@@ -97,6 +97,6 @@ export const initialState: State = {
   launchHeight: 720,
   launchFullscreen: false,
 
-  maxMemory: '2G',
-  minMemory: '1G',
+  maxMemoryGB: 2,
+  minMemoryGB: 1,
 }

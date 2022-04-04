@@ -1,6 +1,8 @@
 import React, { type ChangeEventHandler, type FC, useCallback } from 'react'
 import styled from 'styled-components'
 import { useStore } from '../hooks/useStore'
+import { convertMemory } from '../ipc/launch'
+import { MAX_MEMORY_GB } from '../lib/env'
 
 type ChangeHandler = ChangeEventHandler<HTMLInputElement>
 
@@ -33,6 +35,28 @@ export const Settings: FC = () => {
     [dispatch]
   )
 
+  const onMaxMemoryChange = useCallback<ChangeHandler>(
+    ev => {
+      const lowerBound = state.minMemoryGB + 1
+      const value = Number.parseInt(ev.target.value, 10)
+
+      const constrained = Math.max(lowerBound, value)
+      dispatch({ type: 'setMaxMemory', value: constrained })
+    },
+    [state, dispatch]
+  )
+
+  const onMinMemoryChange = useCallback<ChangeHandler>(
+    ev => {
+      const upperBound = state.maxMemoryGB - 1
+      const value = Number.parseInt(ev.target.value, 10)
+
+      const constrained = Math.min(upperBound, value)
+      dispatch({ type: 'setMinMemory', value: constrained })
+    },
+    [state, dispatch]
+  )
+
   return (
     <Container>
       <h1>Window Options</h1>
@@ -57,6 +81,27 @@ export const Settings: FC = () => {
       />
 
       <h1>Memory Options</h1>
+      <input
+        type='range'
+        min={0}
+        max={MAX_MEMORY_GB}
+        step={1}
+        value={state.maxMemoryGB}
+        onChange={onMaxMemoryChange}
+      />
+
+      <p>Max Memory: {convertMemory(state.maxMemoryGB)}</p>
+
+      <input
+        type='range'
+        min={0}
+        max={MAX_MEMORY_GB}
+        step={1}
+        value={state.minMemoryGB}
+        onChange={onMinMemoryChange}
+      />
+
+      <p>Min Memory: {convertMemory(state.minMemoryGB)}</p>
     </Container>
   )
 }

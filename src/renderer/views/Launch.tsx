@@ -9,7 +9,7 @@ import styled from 'styled-components'
 import { LoadBar } from '../components/LoadBar'
 import { Worlds } from '../components/Worlds'
 import { useStore } from '../hooks/useStore'
-import { launch, launchEvents } from '../ipc/launch'
+import { convertMemory, launch, launchEvents } from '../ipc/launch'
 
 const StatusOverlay = styled.div`
   position: absolute;
@@ -96,8 +96,8 @@ export const Launch: FC<{ children?: never }> = () => {
         fullscreen: state.launchFullscreen,
 
         memory: {
-          max: state.maxMemory,
-          min: state.minMemory,
+          max: convertMemory(state.maxMemoryGB),
+          min: convertMemory(state.minMemoryGB),
         },
       }
 

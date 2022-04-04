@@ -2,6 +2,11 @@ import { ipcRenderer } from 'electron'
 import { EventEmitter } from 'eventemitter3'
 import { profile as Profile } from 'msmc'
 
+export const convertMemory = (gb: number) => {
+  if (gb === 0) return '512M'
+  return `${gb}G`
+}
+
 export const launch = async (
   profile: Profile,
   options: IPC.LaunchOptions,
