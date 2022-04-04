@@ -19,20 +19,25 @@ interface PersistentSettings {
 
   maxMemoryGB: State['maxMemoryGB']
   minMemoryGB: State['minMemoryGB']
+
+  shaders: State['launchShaders']
 }
 
 export const initState: (initialState: State) => State = initialState => {
+  const settings = store.get('settings')
+
   return {
     ...initialState,
     user: store.get('user') ?? initialState.user,
 
-    launchWidth: store.get('settings')?.width ?? initialState.launchWidth,
-    launchHeight: store.get('settings')?.height ?? initialState.launchHeight,
-    launchFullscreen:
-      store.get('settings')?.fullscreen ?? initialState.launchFullscreen,
+    launchWidth: settings?.width ?? initialState.launchWidth,
+    launchHeight: settings?.height ?? initialState.launchHeight,
+    launchFullscreen: settings?.fullscreen ?? initialState.launchFullscreen,
 
-    maxMemoryGB: store.get('settings')?.maxMemoryGB ?? initialState.maxMemoryGB,
-    minMemoryGB: store.get('settings')?.minMemoryGB ?? initialState.minMemoryGB,
+    maxMemoryGB: settings?.maxMemoryGB ?? initialState.maxMemoryGB,
+    minMemoryGB: settings?.minMemoryGB ?? initialState.minMemoryGB,
+
+    launchShaders: settings?.shaders ?? initialState.launchShaders,
   }
 }
 
@@ -47,6 +52,8 @@ export const persist = (state: State) => {
 
     maxMemoryGB: state.maxMemoryGB,
     minMemoryGB: state.minMemoryGB,
+
+    shaders: state.launchShaders,
   }
 
   store.set('settings', settings)

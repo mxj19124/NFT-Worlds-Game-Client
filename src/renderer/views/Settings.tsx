@@ -57,6 +57,14 @@ export const Settings: FC = () => {
     [state, dispatch]
   )
 
+  const onShadersChange = useCallback<ChangeHandler>(
+    ev => {
+      const value = ev.target.checked
+      dispatch({ type: 'setShaders', value })
+    },
+    [dispatch]
+  )
+
   return (
     <Container>
       <h1>Window Options</h1>
@@ -102,6 +110,13 @@ export const Settings: FC = () => {
       />
 
       <p>Min Memory: {convertMemory(state.minMemoryGB)}</p>
+
+      <h1>Resource Options</h1>
+      <input
+        type='checkbox'
+        checked={state.launchShaders}
+        onChange={onShadersChange}
+      />
     </Container>
   )
 }

@@ -80,7 +80,7 @@ export const launch = async (
     )
 
     const assets = await fetchAssets()
-    await syncAssets(root, assets)
+    await syncAssets(root, assets, options)
 
     const _options: ILauncherOptions = {
       // @ts-expect-error Incorrect Typings

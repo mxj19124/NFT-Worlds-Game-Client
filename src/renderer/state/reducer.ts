@@ -21,6 +21,8 @@ export interface State {
 
   maxMemoryGB: number
   minMemoryGB: number
+
+  launchShaders: boolean
 }
 
 export type Action =
@@ -36,6 +38,7 @@ export type Action =
   | { type: 'toggleFullscreen' }
   | { type: 'setMaxMemory'; value: number }
   | { type: 'setMinMemory'; value: number }
+  | { type: 'setShaders'; value: boolean }
 
 export const reducer: Reducer<State, Action> = (previousState, action) => {
   switch (action.type) {
@@ -81,6 +84,9 @@ export const reducer: Reducer<State, Action> = (previousState, action) => {
     case 'setMinMemory':
       return { ...previousState, minMemoryGB: action.value }
 
+    case 'setShaders':
+      return { ...previousState, launchShaders: action.value }
+
     default:
       throw new Error('Invalid Action')
   }
@@ -99,4 +105,6 @@ export const initialState: State = {
 
   maxMemoryGB: 2,
   minMemoryGB: 1,
+
+  launchShaders: true,
 }

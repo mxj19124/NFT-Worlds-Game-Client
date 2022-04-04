@@ -99,6 +99,8 @@ export const Launch: FC<{ children?: never }> = () => {
           max: convertMemory(state.maxMemoryGB),
           min: convertMemory(state.minMemoryGB),
         },
+
+        enableShaders: state.launchShaders,
       }
 
       dispatch({ type: 'setStatus', value: 'gameLaunching' })

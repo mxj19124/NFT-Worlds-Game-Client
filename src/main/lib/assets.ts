@@ -1,8 +1,8 @@
-import { copyFile } from 'fs/promises'
+import { copyFile, readFile, writeFile } from 'fs/promises'
 import mkdirp from 'mkdirp'
 import { join as joinPath, parse } from 'path'
 import { APP_ROOT } from './env'
-import { downloadCachedAsset } from './http'
+import { downloadCachedAsset, exists } from './http'
 
 export type AssetType = typeof assetTypes[number]
 const assetTypes = ['mod', 'resourcepack', 'shaderpack'] as const
@@ -11,7 +11,7 @@ export type Asset = readonly [type: AssetType, url: string]
 export interface CachedAsset {
   filename: string
   cachedPath: string
-  type: string
+  type: AssetType
 }
 
 const assets: readonly Asset[] = [
@@ -51,12 +51,49 @@ export const fetchAssets = async () =>
     })
   )
 
+const syncShaderPack: (
+  root: string,
+  pack: string | undefined
+) => Promise<void> = async (root, pack) => {
+  const configFile = joinPath(root, 'config', 'iris.properties')
+  const configExists = await exists(configFile)
+
+  const targetLine = 'shaderPack='
+  const newLine = pack ? `${targetLine}${pack}` : targetLine
+
+  const newLines: string[] = []
+  if (configExists) {
+    const text = await readFile(configFile, 'utf-8')
+    const lines = text.split('\n')
+
+    let replaced = false
+    for (const line of lines) {
+      if (!line.startsWith(targetLine)) {
+        newLines.push(line)
+        continue
+      }
+
+      newLines.push(newLine)
+      replaced = true
+    }
+
+    if (!replaced) {
+      newLines.push(newLine)
+    }
+  } else {
+    newLines.push(newLine)
+  }
+
+  const data = newLines.join('\n')
+  await writeFile(configFile, data)
+}
+
 export const syncAssets = async (
   root: string,
-  assets: readonly CachedAsset[]
+  assets: readonly CachedAsset[],
+  options: IPC.LaunchOptions
 ) => {
   // TODO: Cleanup old mods
-  // TODO: Select shaderpack if applicable
   // TODO: Select resourcepack if applicable
 
   await Promise.all(
@@ -68,4 +105,10 @@ export const syncAssets = async (
       await copyFile(cachedPath, filepath)
     })
   )
+
+  const shaderPack = options.enableShaders
+    ? assets.find(x => x.type === 'shaderpack')?.filename
+    : undefined
+
+  await syncShaderPack(root, shaderPack)
 }

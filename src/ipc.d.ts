@@ -7,6 +7,8 @@ declare namespace IPC {
     fullscreen?: boolean
 
     memory: LauncherOptions['memory']
+
+    enableShaders: boolean
   }
 
   export interface Environment {
