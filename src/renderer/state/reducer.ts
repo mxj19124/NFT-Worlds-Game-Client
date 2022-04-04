@@ -10,8 +10,17 @@ type Status =
 
 export interface State {
   status: Status
+  showSettings: boolean
+
   user: Profile | undefined
   worlds: NFTWorlds.World[] | Error | undefined
+
+  launchWidth: NonNullable<IPC.LaunchOptions['width']>
+  launchHeight: NonNullable<IPC.LaunchOptions['height']>
+  launchFullscreen: NonNullable<IPC.LaunchOptions['fullscreen']>
+
+  maxMemory: IPC.LaunchOptions['memory']['max']
+  minMemory: IPC.LaunchOptions['memory']['min']
 }
 
 export type Action =
@@ -48,6 +57,15 @@ export const reducer: Reducer<State, Action> = (previousState, action) => {
 
 export const initialState: State = {
   status: 'init',
+  showSettings: false,
+
   user: undefined,
   worlds: undefined,
+
+  launchWidth: 1280,
+  launchHeight: 720,
+  launchFullscreen: false,
+
+  maxMemory: '2G',
+  minMemory: '1G',
 }

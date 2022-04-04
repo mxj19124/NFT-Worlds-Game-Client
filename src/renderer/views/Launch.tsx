@@ -91,9 +91,14 @@ export const Launch: FC<{ children?: never }> = () => {
       }
 
       const options: IPC.LaunchOptions = {
-        width: 1280,
-        height: 720,
-        memory: { max: '6G', min: '4G' },
+        width: state.launchWidth,
+        height: state.launchHeight,
+        fullscreen: state.launchFullscreen,
+
+        memory: {
+          max: state.maxMemory,
+          min: state.minMemory,
+        },
       }
 
       dispatch({ type: 'setStatus', value: 'gameLaunching' })
