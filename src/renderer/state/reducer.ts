@@ -30,6 +30,12 @@ export type Action =
   | { type: 'setWorlds'; value: NFTWorlds.World[] | Error }
   | { type: 'clearWorlds' }
   | { type: 'toggleSettings' }
+  | { type: 'setWidth'; value: number }
+  | { type: 'setHeight'; value: number }
+  | { type: 'setFullscreen'; value: boolean }
+  | { type: 'toggleFullscreen' }
+  | { type: 'setMaxMemory'; value: string }
+  | { type: 'setMinMemory'; value: string }
 
 export const reducer: Reducer<State, Action> = (previousState, action) => {
   switch (action.type) {
@@ -53,6 +59,27 @@ export const reducer: Reducer<State, Action> = (previousState, action) => {
 
     case 'toggleSettings':
       return { ...previousState, showSettings: !previousState.showSettings }
+
+    case 'setWidth':
+      return { ...previousState, launchWidth: action.value }
+
+    case 'setHeight':
+      return { ...previousState, launchHeight: action.value }
+
+    case 'setFullscreen':
+      return { ...previousState, launchFullscreen: action.value }
+
+    case 'toggleFullscreen':
+      return {
+        ...previousState,
+        launchFullscreen: !previousState.launchFullscreen,
+      }
+
+    case 'setMaxMemory':
+      return { ...previousState, maxMemory: action.value }
+
+    case 'setMinMemory':
+      return { ...previousState, minMemory: action.value }
 
     default:
       throw new Error('Invalid Action')
