@@ -13,7 +13,42 @@ import { useStore } from '../hooks/useStore'
 import { convertMemory } from '../ipc/launch'
 import { MAX_MEMORY_GB } from '../lib/env'
 
-const Container = styled.div``
+const Container = styled.div`
+  --spacing: 20px;
+  --margin-top: 18px;
+
+  margin: var(--spacing) auto;
+  padding: var(--spacing);
+  margin-top: var(--margin-top);
+
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+  width: fit-content;
+`
+
+const Header = styled.h1`
+  margin: 0;
+  margin-top: -4px;
+
+  text-align: center;
+`
+
+const Heading = styled.h2`
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+
+  &:nth-child(2) {
+    margin-top: 6px;
+  }
+`
+
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr fit-content(400px);
+  column-gap: 10px;
+`
 
 export const Settings: FC = () => {
   const { state, dispatch } = useStore()
@@ -50,28 +85,35 @@ export const Settings: FC = () => {
 
   return (
     <Container>
-      <h1>Window Options</h1>
-      <NumberInput
-        label='Window Width'
-        min={800}
-        value={state.launchWidth}
-        onChange={onWidthChange}
-      />
+      <Header>Settings</Header>
 
-      <NumberInput
-        label='Window Height'
-        min={600}
-        value={state.launchHeight}
-        onChange={onHeightChange}
-      />
+      <Heading>Minecraft Window Size</Heading>
+      <Grid>
+        <NumberInput
+          label='Width'
+          id='width'
+          min={800}
+          value={state.launchWidth}
+          onChange={onWidthChange}
+        />
 
-      <Checkbox
-        label='Launch Fullscreen'
-        value={state.launchFullscreen}
-        onChange={onFullscreenChange}
-      />
+        <NumberInput
+          label='Height'
+          id='height'
+          min={600}
+          value={state.launchHeight}
+          onChange={onHeightChange}
+        />
 
-      <h1>Memory Options</h1>
+        <Checkbox
+          label='Launch Fullscreen'
+          id='fullscreen'
+          value={state.launchFullscreen}
+          onChange={onFullscreenChange}
+        />
+      </Grid>
+
+      <Heading>Java Memory Allocation</Heading>
       <DoubleSlider
         min={0}
         max={MAX_MEMORY_GB}
@@ -82,15 +124,19 @@ export const Settings: FC = () => {
         onMaxChange={onMaxMemoryChange}
       />
 
-      <p>Max Memory: {convertMemory(state.maxMemoryGB)}</p>
-      <p>Min Memory: {convertMemory(state.minMemoryGB)}</p>
+      <span>Min Memory: {convertMemory(state.minMemoryGB)}</span>
+      <br />
+      <span>Max Memory: {convertMemory(state.maxMemoryGB)}</span>
 
-      <h1>Resource Options</h1>
-      <Checkbox
-        label='Enable Shaders'
-        value={state.launchShaders}
-        onChange={onShadersChange}
-      />
+      <Heading>Enabled Resources</Heading>
+      <Grid>
+        <Checkbox
+          label='Enable Shaders'
+          id='shaders'
+          value={state.launchShaders}
+          onChange={onShadersChange}
+        />
+      </Grid>
     </Container>
   )
 }

@@ -1,11 +1,16 @@
 import React, { type ChangeEventHandler, type FC, useCallback } from 'react'
 import styled from 'styled-components'
 
-const Input = styled.input``
+const Input = styled.input`
+  max-width: 100px;
+`
+
+const Label = styled.label``
 
 export type NumberChangeHandler = (newValue: number) => void
 interface Props {
   label: string
+  id: string
 
   min?: number
   max?: number
@@ -16,6 +21,7 @@ interface Props {
 
 export const NumberInput: FC<Props> = ({
   label,
+  id,
   min,
   max,
   value,
@@ -32,12 +38,17 @@ export const NumberInput: FC<Props> = ({
   )
 
   return (
-    <Input
-      type='number'
-      min={min}
-      max={max}
-      value={value}
-      onChange={handleChange}
-    />
+    <>
+      <Label htmlFor={id}>{label}</Label>
+
+      <Input
+        type='number'
+        id={id}
+        min={min}
+        max={max}
+        value={value}
+        onChange={handleChange}
+      />
+    </>
   )
 }
