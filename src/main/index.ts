@@ -3,6 +3,7 @@ import 'source-map-support/register'
 import * as remote from '@electron/remote/main'
 import { app, BrowserWindow } from 'electron'
 import Store from 'electron-store'
+import { autoUpdater } from 'electron-updater'
 import { join as joinPath } from 'path'
 import process from 'process'
 import { initHandlers } from './ipc/handler'
@@ -54,6 +55,8 @@ const createWindow = async () => {
 }
 
 void app.whenReady().then(async () => {
+  await autoUpdater.checkForUpdatesAndNotify()
+
   const { webContents } = await createWindow()
   initHandlers(webContents)
 
