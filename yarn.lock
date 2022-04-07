@@ -1593,6 +1593,7 @@ __metadata:
     electron-builder: ^22.14.13
     electron-is-dev: ^2.0.0
     electron-store: ^8.0.1
+    electron-updater: ^4.6.5
     electron-webpack: ^2.8.2
     electron-webpack-ts: ^4.0.1
     eslint-config-xo-react: ^0.27.0
@@ -1608,6 +1609,7 @@ __metadata:
     nbt: ^0.8.1
     react: ^18.0.0
     react-dom: ^18.0.0
+    rimraf: ^3.0.2
     semver: ^7.3.5
     source-map-support: ^0.5.21
     styled-components: ^5.3.5
@@ -1884,7 +1886,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/semver@npm:^7.3.9":
+"@types/semver@npm:^7.3.6, @types/semver@npm:^7.3.9":
   version: 7.3.9
   resolution: "@types/semver@npm:7.3.9"
   checksum: 60bfcfdfa7f937be2c6f4b37ddb6714fb0f27b05fe4cbdfdd596a97d35ed95d13ee410efdd88e72a66449d0384220bf20055ab7d6b5df10de4990fbd20e5cbe0
@@ -5012,6 +5014,22 @@ __metadata:
   version: 1.4.96
   resolution: "electron-to-chromium@npm:1.4.96"
   checksum: 6a7f97c5fc7080b8739df269a9da0047aee9153807af99e72138dc416ea1dd8ccc167812c66c49d3bb83a55098cd8669ef075515d999aad13b266da72bc98cee
+  languageName: node
+  linkType: hard
+
+"electron-updater@npm:^4.6.5":
+  version: 4.6.5
+  resolution: "electron-updater@npm:4.6.5"
+  dependencies:
+    "@types/semver": ^7.3.6
+    builder-util-runtime: 8.9.2
+    fs-extra: ^10.0.0
+    js-yaml: ^4.1.0
+    lazy-val: ^1.0.5
+    lodash.escaperegexp: ^4.1.2
+    lodash.isequal: ^4.5.0
+    semver: ^7.3.5
+  checksum: 06b34490fa6213f5c6a01de6f7b3d96eba4e1b7d27e8346747d8b094b9591684f55f92c703e2ee3407c562a240518c0eede699462cc333fcfe2983141941fe98
   languageName: node
   linkType: hard
 
@@ -8431,6 +8449,20 @@ __metadata:
   version: 4.0.8
   resolution: "lodash.debounce@npm:4.0.8"
   checksum: a3f527d22c548f43ae31c861ada88b2637eb48ac6aa3eb56e82d44917971b8aa96fbb37aa60efea674dc4ee8c42074f90f7b1f772e9db375435f6c83a19b3bc6
+  languageName: node
+  linkType: hard
+
+"lodash.escaperegexp@npm:^4.1.2":
+  version: 4.1.2
+  resolution: "lodash.escaperegexp@npm:4.1.2"
+  checksum: 6d99452b1cfd6073175a9b741a9b09ece159eac463f86f02ea3bee2e2092923fce812c8d2bf446309cc52d1d61bf9af51c8118b0d7421388e6cead7bd3798f0f
+  languageName: node
+  linkType: hard
+
+"lodash.isequal@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "lodash.isequal@npm:4.5.0"
+  checksum: da27515dc5230eb1140ba65ff8de3613649620e8656b19a6270afe4866b7bd461d9ba2ac8a48dcc57f7adac4ee80e1de9f965d89d4d81a0ad52bb3eec2609644
   languageName: node
   linkType: hard
 
