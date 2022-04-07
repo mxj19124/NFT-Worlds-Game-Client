@@ -8,7 +8,8 @@
     "build": "electron-builder",
     "dist": "yarn run compile && yarn run build",
     "dist:bare": "yarn run dist --dir -c.compression=store -c.mac.identity=null",
-    "lint": "xo ./src"
+    "lint": "xo ./src",
+    "test": "yarn run compile && yarn run lint"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.16.7",
