@@ -1,20 +1,31 @@
 import 'source-map-support/register'
 
 import * as remote from '@electron/remote/main'
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, Notification } from 'electron'
+import log from 'electron-log'
 import Store from 'electron-store'
 import { autoUpdater } from 'electron-updater'
 import { join as joinPath } from 'path'
 import process from 'process'
 import { initHandlers } from './ipc/handler'
-import { IS_DEV } from './lib/env'
-
-remote.initialize()
-Store.initRenderer()
+import { APP_ROOT, IS_DEV } from './lib/env'
 
 if (!IS_DEV && module.hot) {
   module.hot.accept()
 }
+
+if (process.platform === 'win32') {
+  app.setAppUserModelId('NFT Worlds Client')
+}
+
+Object.assign(console, log.functions)
+log.transports.file.resolvePath = () => joinPath(APP_ROOT, 'logs', 'main.log')
+
+autoUpdater.autoDownload = false
+autoUpdater.logger = log
+
+remote.initialize()
+Store.initRenderer()
 
 const createWindow = async () => {
   const win = new BrowserWindow({
@@ -54,11 +65,36 @@ const createWindow = async () => {
   return win
 }
 
-void app.whenReady().then(async () => {
-  await autoUpdater.checkForUpdatesAndNotify()
+const checkForUpdates = async () => {
+  if (IS_DEV) return false
 
-  const { webContents } = await createWindow()
-  initHandlers(webContents)
+  const updates = await autoUpdater.checkForUpdates()
+  return updates.cancellationToken !== undefined
+}
+
+void app.whenReady().then(async () => {
+  const updateCheckJob = checkForUpdates()
+
+  const win = await createWindow()
+  initHandlers(win.webContents)
+
+  autoUpdater.on('download-progress', ({ percent }) => {
+    win.setProgressBar(percent / 100, { mode: 'normal' })
+  })
+
+  autoUpdater.on('update-downloaded', () => {
+    win.setProgressBar(-1)
+
+    const notification = new Notification({
+      title: win.title,
+      body: 'An update is available! Restart the client to install.',
+    })
+
+    notification.show()
+  })
+
+  const hasUpdate = await updateCheckJob
+  if (hasUpdate) void autoUpdater.downloadUpdate()
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
