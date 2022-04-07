@@ -4,22 +4,27 @@ import {
   faInstagram,
   faTwitter,
 } from '@fortawesome/free-brands-svg-icons'
+import { faCheck, faGear } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { shell } from 'electron'
-import React, { type FC, useCallback } from 'react'
+import React, { type CSSProperties, type FC, useCallback } from 'react'
 import styled from 'styled-components'
+import { useStore } from '../hooks/useStore'
 
 const IconsContainer = styled.div`
   flex: 1;
   display: flex;
   align-items: center;
   margin-left: 40px;
+
+  --icon-width: 24px;
+  --icon-margin: 24px;
 `
 
 const SVGIcon = styled(FontAwesomeIcon)`
-  height: 24px;
+  height: var(--icon-width);
   width: auto;
-  margin: 0 30px;
+  margin: 0 var(--icon-margin);
   cursor: pointer;
 
   transition: opacity 0.1s ease;
@@ -42,38 +47,127 @@ const SVGIcon = styled(FontAwesomeIcon)`
   }
 `
 
-interface IconProps {
+interface CommonIconProps {
   icon: IconProp
-  href: string
   title?: string
+
+  style?: CSSProperties
+  className?: string
 }
 
-const Icon: FC<IconProps> = ({ icon, href, title }) => {
-  const onClick = useCallback(() => {
-    void shell.openExternal(href)
-  }, [href])
+interface LinkIconProps extends CommonIconProps {
+  type: 'link'
 
-  return <SVGIcon title={title} icon={icon} onClick={onClick} />
+  href: string
+  onClick?: never
 }
 
-export const LayoutIcons: FC = () => (
-  <IconsContainer>
-    <Icon
-      title='Instagram'
-      href='https://www.instagram.com/nftworldsnft'
-      icon={faInstagram}
-    />
+interface ClickIconProps extends CommonIconProps {
+  type: 'click'
 
-    <Icon
-      title='Twitter'
-      href='https://twitter.com/nftworldsNFT'
-      icon={faTwitter}
-    />
+  href?: never
+  onClick: () => void
+}
 
-    <Icon
-      title='Discord'
-      href='https://discord.com/invite/nft-worlds'
-      icon={faDiscord}
+type IconProps = LinkIconProps | ClickIconProps
+const Icon: FC<IconProps> = ({
+  icon,
+  title,
+  type,
+  href,
+  onClick,
+  style,
+  className,
+}) => {
+  const handleClick = useCallback(() => {
+    if (type === 'link') void shell.openExternal(href)
+    else onClick()
+  }, [type, href, onClick])
+
+  return (
+    <SVGIcon
+      title={title}
+      icon={icon}
+      style={style}
+      className={className}
+      onClick={handleClick}
     />
-  </IconsContainer>
-)
+  )
+}
+
+const SettingsIconsContainer = styled.div`
+  position: relative;
+  height: var(--icon-width);
+  width: var(--icon-width);
+  margin: 0 var(--icon-margin);
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+`
+
+interface SettingsIconProps {
+  active: boolean
+}
+
+const SettingsIcon = styled(Icon)<SettingsIconProps>`
+  position: absolute;
+  margin: 0;
+
+  pointer-events: ${props => (props.active ? 'initial' : 'none')};
+  opacity: ${props => (props.active ? '0.65' : '0')};
+`
+
+export const LayoutIcons: FC = () => {
+  const { state, dispatch } = useStore()
+  const handleSettingsToggle = useCallback(() => {
+    dispatch({ type: 'toggleSettings' })
+  }, [dispatch])
+
+  return (
+    <IconsContainer>
+      <SettingsIconsContainer>
+        <SettingsIcon
+          type='click'
+          title='Settings'
+          active={!state.showSettings}
+          icon={faGear}
+          onClick={handleSettingsToggle}
+        />
+
+        <SettingsIcon
+          type='click'
+          title='Hide Settings'
+          active={state.showSettings}
+          icon={faCheck}
+          onClick={handleSettingsToggle}
+        />
+      </SettingsIconsContainer>
+
+      <Icon
+        type='link'
+        title='Instagram'
+        href='https://www.instagram.com/nftworldsnft'
+        icon={faInstagram}
+      />
+
+      <Icon
+        type='link'
+        title='Twitter'
+        href='https://twitter.com/nftworldsNFT'
+        icon={faTwitter}
+      />
+
+      <Icon
+        type='link'
+        title='Discord'
+        href='https://discord.com/invite/nft-worlds'
+        icon={faDiscord}
+      />
+    </IconsContainer>
+  )
+}

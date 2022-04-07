@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import LogoImage from '../assets/images/logo.png'
 import { BackgroundVideo } from './BackgroundVideo'
 import { LayoutIcons } from './LayoutIcons'
-import { LayoutSettings } from './LayoutSettings'
+import { LayoutUserProfile } from './LayoutUserProfile'
 
 const Container = styled.div`
   width: 100%;
@@ -56,7 +56,7 @@ export const Layout: FC = ({ children }) => {
             <Logo src={LogoImage} onClick={logoClicked} />
           </LogoContainer>
 
-          <LayoutSettings />
+          <LayoutUserProfile />
         </TopBar>
 
         <Children>{children}</Children>
