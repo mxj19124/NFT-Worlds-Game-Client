@@ -5,6 +5,7 @@ import SVG from '../assets/svg/microsoft-login.svg'
 const Image = styled.img<Props>`
   width: 100%;
   box-shadow: 0 4px 8px 0px #000000a6;
+  border-radius: 5px;
   transition: transform 0.2s ease;
 
   opacity: ${props => (props.disabled ? '0.7' : '1')};
