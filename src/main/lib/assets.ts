@@ -31,6 +31,10 @@ const assets: readonly Asset[] = [
     'mod',
     'https://cdn.modrinth.com/data/AANobbMI/versions/mc1.18.2-0.4.1/sodium-fabric-mc1.18.2-0.4.1%2Bbuild.15.jar',
   ],
+  [
+    'mod',
+    'https://media.forgecdn.net/files/3672/241/3dskinlayers-fabric-1.4.2-mc1.18.2.jar',
+  ],
 
   ['shaderpack', 'https://media.forgecdn.net/files/3608/184/BSL_v8.1.02.1.zip'],
 ]
