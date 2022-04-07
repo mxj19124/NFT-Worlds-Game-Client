@@ -16,7 +16,7 @@ if (!IS_DEV && module.hot) {
 }
 
 if (process.platform === 'win32') {
-  app.setAppUserModelId('NFT Worlds Client')
+  app.setAppUserModelId('NFT Worlds')
 }
 
 Object.assign(console, log.functions)
@@ -91,8 +91,8 @@ void app.whenReady().then(async () => {
     win.setProgressBar(-1)
 
     const notification = new Notification({
-      title: win.title,
-      body: 'An update is available! Restart the client to install.',
+      title: 'Update Available',
+      body: 'An update has been downloaded, restart the client to finish installing.',
     })
 
     notification.show()
