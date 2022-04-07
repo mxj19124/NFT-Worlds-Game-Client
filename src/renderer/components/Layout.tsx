@@ -1,5 +1,5 @@
 import { shell } from '@electron/remote'
-import React, { type FC, useCallback } from 'react'
+import React, { type FC, type PropsWithChildren, useCallback } from 'react'
 import styled from 'styled-components'
 import LogoImage from '../assets/images/logo.png'
 import { BackgroundVideo } from './BackgroundVideo'
@@ -41,7 +41,7 @@ const Children = styled.div`
   overflow-y: hidden;
 `
 
-export const Layout: FC = ({ children }) => {
+export const Layout: FC<PropsWithChildren<unknown>> = ({ children }) => {
   const logoClicked = useCallback(() => {
     void shell.openExternal('https://nftworlds.com/')
   }, [])

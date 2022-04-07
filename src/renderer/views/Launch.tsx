@@ -27,7 +27,7 @@ const StatusOverlay = styled.div`
   font-weight: 600;
 `
 
-export const Launch: FC<{ children?: never }> = () => {
+export const Launch: FC = () => {
   const { state, dispatch } = useStore()
   if (!state.user) throw new Error('Launch view rendered with no user')
   if (!state.worlds) throw new Error('Launch view rendered with no worlds')

@@ -1,6 +1,7 @@
 import deepEqual from 'fast-deep-equal/es6'
 import React, {
   type FC,
+  type PropsWithChildren,
   type Reducer,
   useEffect,
   useMemo,
@@ -16,7 +17,7 @@ import {
 } from '../state/reducer'
 import { store } from '../state/store'
 
-export const Provider: FC = ({ children }) => {
+export const Provider: FC<PropsWithChildren<unknown>> = ({ children }) => {
   const [state, dispatch] = useReducer<Reducer<State, Action>, State>(
     reducer,
     initialState,

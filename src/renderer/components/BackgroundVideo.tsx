@@ -25,7 +25,7 @@ const Video = styled.video`
   filter: brightness(0.45);
 `
 
-export const BackgroundVideo: FC<{ children?: never }> = () => {
+export const BackgroundVideo: FC = () => {
   const ref = useRef<HTMLVideoElement>(null)
 
   const onFocus = useCallback(() => {

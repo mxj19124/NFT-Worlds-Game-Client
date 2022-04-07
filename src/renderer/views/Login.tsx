@@ -31,7 +31,7 @@ const LoginButton = styled.div`
   width: 340px;
 `
 
-export const Login: FC<{ children?: never }> = () => {
+export const Login: FC = () => {
   const { state, dispatch } = useStore()
   const disabled = useMemo<boolean>(
     () => state.status === 'authenticating',

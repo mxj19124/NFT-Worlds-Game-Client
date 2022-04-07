@@ -19,8 +19,6 @@ const Image = styled.img<Props>`
 interface Props {
   disabled?: boolean
   onClick: () => void
-
-  children?: never
 }
 
 export const LoginMicrosoftButton: FC<Props> = ({ disabled, onClick }) => {

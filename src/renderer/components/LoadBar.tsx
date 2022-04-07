@@ -15,8 +15,6 @@ interface Props {
   percent: number
   height?: number
   colour?: string
-
-  children?: never
 }
 
 export const LoadBar: FC<Props> = ({ ...props }) => <Progress {...props} />
