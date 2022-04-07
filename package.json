@@ -27,6 +27,7 @@
     "@types/styled-components": "^5.1.24",
     "@types/tar-fs": "^2.0.1",
     "babel-plugin-styled-components": "^2.0.6",
+    "copy-webpack-plugin": "^6.4.1",
     "electron": "^18.0.1",
     "electron-builder": "^22.14.13",
     "electron-webpack": "^2.8.2",
@@ -59,5 +60,10 @@
     "semver": "^7.3.5",
     "source-map-support": "^0.5.21",
     "tar-fs": "^2.1.1"
+  },
+  "electronWebpack": {
+    "main": {
+      "webpackConfig": "webpack.main.js"
+    }
   }
 }
