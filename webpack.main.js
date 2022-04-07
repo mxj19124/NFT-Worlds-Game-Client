@@ -1,8 +1,6 @@
 /* eslint-disable */
 const CopyPlugin = require('copy-webpack-plugin')
 
-console.log(process.env.NODE_ENV)
-
 module.exports = config => {
   const isDev = config.mode !== 'production'
 
