@@ -9,6 +9,7 @@ import { join as joinPath } from 'path'
 import process from 'process'
 import { initHandlers } from './ipc/handler'
 import { APP_ROOT, IS_DEV } from './lib/env'
+import { exists } from './lib/http'
 
 if (!IS_DEV && module.hot) {
   module.hot.accept()
@@ -67,6 +68,10 @@ const createWindow = async () => {
 
 const checkForUpdates = async () => {
   if (IS_DEV) return false
+
+  const noUpdateFile = joinPath(APP_ROOT, '.noupdate')
+  const noUpdate = await exists(noUpdateFile)
+  if (noUpdate) return false
 
   const updates = await autoUpdater.checkForUpdates()
   return updates.cancellationToken !== undefined
