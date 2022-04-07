@@ -1,18 +1,10 @@
 import { ipcRenderer } from 'electron'
 import { EventEmitter } from 'eventemitter3'
-import msmc, {
-  type profile as Profile,
-  type result as Result,
-  type update as Update,
-} from 'msmc'
+import { type profile as Profile, type update as Update } from 'msmc'
 
 export const login = async () => {
-  const result = (await ipcRenderer.invoke('auth:login')) as Result
-  if (msmc.errorCheck(result)) {
-    throw new Error(result.reason)
-  }
-
-  return result.profile!
+  const result = (await ipcRenderer.invoke('auth:login')) as IPC.AuthResult
+  return result
 }
 
 export const validate = async (profile: Profile) => {
@@ -21,12 +13,12 @@ export const validate = async (profile: Profile) => {
 }
 
 export const refresh = async (profile: Profile) => {
-  const result = (await ipcRenderer.invoke('auth:refresh', profile)) as Result
-  if (msmc.errorCheck(result)) {
-    throw new Error(result.reason)
-  }
+  const result = (await ipcRenderer.invoke(
+    'auth:refresh',
+    profile
+  )) as IPC.AuthResult
 
-  return result.profile!
+  return result
 }
 
 interface Events {

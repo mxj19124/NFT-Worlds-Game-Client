@@ -12,7 +12,7 @@ export const init = async (state: State, dispatch: Dispatch<Action>) => {
     if (!isValid) {
       dispatch({ type: 'setStatus', value: 'authenticating' })
       try {
-        const profile = await refresh(state.user)
+        const { profile } = await refresh(state.user)
         dispatch({ type: 'setUser', value: profile })
       } catch {
         dispatch({ type: 'clearUser' })

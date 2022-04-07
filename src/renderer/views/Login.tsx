@@ -58,7 +58,7 @@ export const Login: FC<{ children?: never }> = () => {
     dispatch({ type: 'setStatus', value: 'authenticating' })
 
     void login()
-      .then(profile => {
+      .then(({ profile }) => {
         dispatch({ type: 'setUser', value: profile })
       })
       .catch(console.error)

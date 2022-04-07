@@ -1,5 +1,11 @@
 declare namespace IPC {
+  type Profile = import('msmc').profile
   type LauncherOptions = import('minecraft-launcher-core').ILauncherOptions
+
+  export interface AuthResult {
+    token: string
+    profile: Profile
+  }
 
   export interface LaunchOptions {
     width?: number
