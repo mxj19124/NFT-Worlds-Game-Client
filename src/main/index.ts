@@ -19,6 +19,9 @@ if (process.platform === 'win32') {
   app.setAppUserModelId('NFT Worlds')
 }
 
+const instanceLock = app.requestSingleInstanceLock()
+if (!instanceLock) app.quit()
+
 Object.assign(console, log.functions)
 log.transports.file.resolvePath = () => joinPath(APP_ROOT, 'logs', 'main.log')
 
