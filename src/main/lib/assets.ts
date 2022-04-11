@@ -1,4 +1,5 @@
-import { copyFile, readFile, writeFile } from 'fs/promises'
+import { createHash } from 'crypto'
+import { copyFile, readdir, readFile, unlink, writeFile } from 'fs/promises'
 import mkdirp from 'mkdirp'
 import { join as joinPath, parse } from 'path'
 import { APP_ROOT } from './env'
@@ -115,7 +116,6 @@ export const syncAssets = async (
   assets: readonly CachedAsset[],
   options: IPC.LaunchOptions
 ) => {
-  // TODO: Cleanup old mods
   // TODO: Select resourcepack if applicable
 
   await Promise.all(
@@ -125,6 +125,30 @@ export const syncAssets = async (
 
       const filepath = joinPath(dir, filename)
       await copyFile(cachedPath, filepath)
+    })
+  )
+
+  const hashes = new Set(assets.map(({ sha1 }) => sha1))
+  await Promise.all(
+    assetTypes.map(async type => {
+      const dir = joinPath(root, `${type}s`)
+      await mkdirp(dir)
+
+      const files = await readdir(dir)
+      await Promise.all(
+        files.map(async file => {
+          const path = joinPath(dir, file)
+          const hash = createHash('sha1')
+
+          const data = await readFile(path)
+          hash.update(data)
+
+          const digest = hash.digest('hex')
+          const keep = hashes.has(digest)
+
+          if (!keep) await unlink(path)
+        })
+      )
     })
   )
 
