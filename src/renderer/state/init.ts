@@ -1,5 +1,6 @@
 import { type Dispatch } from 'react'
 import { refresh, validate } from '../ipc/auth'
+import { authGetWallets } from '../ipc/nftw'
 import { fetchWorlds } from '../lib/worlds'
 import { type Action, type State } from './reducer'
 
@@ -9,7 +10,13 @@ export const init = async (state: State, dispatch: Dispatch<Action>) => {
 
   if (state.user) {
     const isValid = await validate(state.user)
-    if (!isValid) {
+    if (isValid) {
+      // @ts-expect-error Untyped Property
+      const token = state.user._msmc.mcToken as string
+      const wallets = await authGetWallets(token)
+
+      dispatch({ type: 'setWallets', value: wallets })
+    } else {
       dispatch({ type: 'setStatus', value: 'authenticating' })
       try {
         const { profile, wallets } = await refresh(state.user)
