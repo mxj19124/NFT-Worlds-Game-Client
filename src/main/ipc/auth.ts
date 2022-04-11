@@ -28,14 +28,17 @@ export const login: (
     })
   }, 5000)
 
-  const nftWorldToken = await authorize(token)
-  const wallets = await getWallets(nftWorldToken)
+  const nftwToken = await authorize(token)
+  const wallets = await getWallets(nftwToken)
 
   clearTimeout(timeout)
   const authResult: IPC.AuthResult = {
     token,
     profile,
-    wallets,
+    wallets: {
+      ...wallets,
+      nftwToken,
+    },
   }
 
   return authResult
@@ -61,13 +64,16 @@ export const refresh: (
   const token = result.access_token!
   const newProfile = result.profile!
 
-  const nftWorldToken = await authorize(token)
-  const wallets = await getWallets(nftWorldToken)
+  const nftwToken = await authorize(token)
+  const wallets = await getWallets(nftwToken)
 
   const authResult: IPC.AuthResult = {
     token,
     profile: newProfile,
-    wallets,
+    wallets: {
+      ...wallets,
+      nftwToken,
+    },
   }
 
   return authResult

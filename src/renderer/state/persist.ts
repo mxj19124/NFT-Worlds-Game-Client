@@ -11,6 +11,7 @@ const store = new Store<PersistentStore>({
 
 interface PersistentStore {
   user: State['user']
+  wallets: State['wallets']
   settings: PersistentSettings
 }
 
@@ -31,6 +32,7 @@ export const initState: (initialState: State) => State = initialState => {
   return {
     ...initialState,
     user: store.get('user') ?? initialState.user,
+    wallets: store.get('wallets') ?? initialState.wallets,
 
     launchWidth: settings?.width ?? initialState.launchWidth,
     launchHeight: settings?.height ?? initialState.launchHeight,
@@ -46,6 +48,9 @@ export const initState: (initialState: State) => State = initialState => {
 export const persist = (state: State) => {
   if (state.user) store.set('user', state.user)
   else store.delete('user')
+
+  if (state.wallets) store.set('wallets', state.wallets)
+  else store.delete('wallets')
 
   const settings: PersistentSettings = {
     width: state.launchWidth,

@@ -13,7 +13,7 @@ export interface State {
   showSettings: boolean
 
   user: Profile | undefined
-  wallets: NFTWorlds.PlayerWallets | undefined
+  wallets: IPC.WalletInfo | undefined
   worlds: NFTWorlds.World[] | Error | undefined
 
   launchWidth: NonNullable<IPC.LaunchOptions['width']>
@@ -30,7 +30,7 @@ export type Action =
   | { type: 'setStatus'; value: Status }
   | { type: 'setUser'; value: Profile }
   | { type: 'clearUser' }
-  | { type: 'setWallets'; value: NFTWorlds.PlayerWallets }
+  | { type: 'setWallets'; value: IPC.WalletInfo }
   | { type: 'clearWallets' }
   | { type: 'setWorlds'; value: NFTWorlds.World[] | Error }
   | { type: 'clearWorlds' }

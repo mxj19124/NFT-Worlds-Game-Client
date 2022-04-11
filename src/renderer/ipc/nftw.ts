@@ -1,10 +1,11 @@
 import { ipcRenderer } from 'electron'
 
-export const authGetWallets = async (token: string) => {
+export const authGetWallets = async (mcToken: string, nftwToken?: string) => {
   const wallets = (await ipcRenderer.invoke(
     'nftw:authGetWallets',
-    token
-  )) as NFTWorlds.PlayerWallets
+    mcToken,
+    nftwToken
+  )) as IPC.WalletInfo
 
   return wallets
 }

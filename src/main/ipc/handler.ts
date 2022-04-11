@@ -15,7 +15,7 @@ export const initHandlers = (webContents: WebContents) => {
     launch(profile, options, world, worlds, webContents)
   )
 
-  ipcMain.handle('nftw:authGetWallets', async (_, token) =>
-    authGetWallets(token)
+  ipcMain.handle('nftw:authGetWallets', async (_, nftwToken, mcToken) =>
+    authGetWallets(nftwToken, mcToken)
   )
 }

@@ -13,7 +13,7 @@ export const init = async (state: State, dispatch: Dispatch<Action>) => {
     if (isValid) {
       // @ts-expect-error Untyped Property
       const token = state.user._msmc.mcToken as string
-      const wallets = await authGetWallets(token)
+      const wallets = await authGetWallets(token, state.wallets?.nftwToken)
 
       dispatch({ type: 'setWallets', value: wallets })
     } else {
