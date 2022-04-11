@@ -20,7 +20,6 @@ export const LayoutProfile: FC = () => {
       if (!state.user) return
       if (!state.wallets) return
 
-      console.log('updating wallet info')
       // @ts-expect-error Untyped Property
       const mcToken = state.user._msmc.mcToken as string
       const wallets = await authGetWallets(mcToken, state.wallets?.nftwToken)
