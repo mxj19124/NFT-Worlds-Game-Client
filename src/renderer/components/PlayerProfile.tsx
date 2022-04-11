@@ -54,7 +54,7 @@ interface Props {
   profile: Profile
 }
 
-export const UserProfile: FC<Props> = ({ profile }) => {
+export const PlayerProfile: FC<Props> = ({ profile }) => {
   const { dispatch } = useStore()
   const playerHead = useMemo<string>(
     () =>

@@ -1,7 +1,7 @@
 import React, { type FC } from 'react'
 import styled from 'styled-components'
 import { useStore } from '../hooks/useStore'
-import { UserProfile } from './UserProfile'
+import { PlayerProfile } from './PlayerProfile'
 
 const SettingsContainer = styled.div`
   flex: 1;
@@ -11,12 +11,12 @@ const SettingsContainer = styled.div`
   margin-right: 30px;
 `
 
-export const LayoutUserProfile: FC = () => {
+export const LayoutProfile: FC = () => {
   const { state } = useStore()
 
   return (
     <SettingsContainer>
-      {state.user && <UserProfile profile={state.user} />}
+      {state.user && <PlayerProfile profile={state.user} />}
     </SettingsContainer>
   )
 }
