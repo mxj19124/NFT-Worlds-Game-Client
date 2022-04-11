@@ -59,7 +59,10 @@ const syncShaderPack: (
   root: string,
   pack: string | undefined
 ) => Promise<void> = async (root, pack) => {
-  const configFile = joinPath(root, 'config', 'iris.properties')
+  const configDir = joinPath(root, 'config')
+  await mkdirp(configDir)
+
+  const configFile = joinPath(configDir, 'iris.properties')
   const configExists = await exists(configFile)
 
   const targetLine = 'shaderPack='
