@@ -16,9 +16,22 @@ export const login: (
   const token = result.access_token!
   const profile = result.profile!
 
+  webContents.send('auth:@update', {
+    data: 'Authenticating with NFT Worlds',
+    percent: 100,
+  })
+
+  const timeout = setTimeout(() => {
+    webContents.send('auth:@update', {
+      data: 'Your NFT Worlds account is being set up. Please wait...',
+      percent: 100,
+    })
+  }, 5000)
+
   const nftWorldToken = await authorize(token)
   const wallets = await getWallets(nftWorldToken)
 
+  clearTimeout(timeout)
   const authResult: IPC.AuthResult = {
     token,
     profile,
