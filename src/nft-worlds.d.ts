@@ -27,4 +27,19 @@ declare namespace NFTWorlds {
     port: string | number
     consolePort: number
   }
+
+  export interface PlayerAuth {
+    id: string
+    nftwId: string
+    name: string
+    accountType: 'java' | 'bedrock'
+    accessToken: string
+    managedWalletAddress: string
+  }
+
+  export interface PlayerWallets {
+    primaryWalletAddress: string
+    secondaryWalletAddresses: string
+    wrldBalance: number
+  }
 }

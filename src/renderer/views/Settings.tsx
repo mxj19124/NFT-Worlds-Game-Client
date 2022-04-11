@@ -52,6 +52,7 @@ const Grid = styled.div`
 
 export const Settings: FC = () => {
   const { state, dispatch } = useStore()
+  console.log(state)
 
   const onWidthChange = useCallback<NumberChangeHandler>(
     value => dispatch({ type: 'setWidth', value }),

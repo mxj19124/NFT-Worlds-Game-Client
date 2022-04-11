@@ -5,6 +5,7 @@ declare namespace IPC {
   export interface AuthResult {
     token: string
     profile: Profile
+    wallets: NFTWorlds.PlayerWallets
   }
 
   export interface LaunchOptions {

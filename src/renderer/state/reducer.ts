@@ -13,6 +13,7 @@ export interface State {
   showSettings: boolean
 
   user: Profile | undefined
+  wallets: NFTWorlds.PlayerWallets | undefined
   worlds: NFTWorlds.World[] | Error | undefined
 
   launchWidth: NonNullable<IPC.LaunchOptions['width']>
@@ -29,6 +30,8 @@ export type Action =
   | { type: 'setStatus'; value: Status }
   | { type: 'setUser'; value: Profile }
   | { type: 'clearUser' }
+  | { type: 'setWallets'; value: NFTWorlds.PlayerWallets }
+  | { type: 'clearWallets' }
   | { type: 'setWorlds'; value: NFTWorlds.World[] | Error }
   | { type: 'clearWorlds' }
   | { type: 'toggleSettings' }
@@ -42,20 +45,23 @@ export type Action =
 
 export const reducer: Reducer<State, Action> = (previousState, action) => {
   switch (action.type) {
-    case 'setStatus': {
+    case 'setStatus':
       return { ...previousState, status: action.value }
-    }
 
-    case 'setUser': {
+    case 'setUser':
       return { ...previousState, user: action.value }
-    }
 
     case 'clearUser':
       return { ...previousState, user: undefined }
 
-    case 'setWorlds': {
+    case 'setWallets':
+      return { ...previousState, wallets: action.value }
+
+    case 'clearWallets':
+      return { ...previousState, wallets: undefined }
+
+    case 'setWorlds':
       return { ...previousState, worlds: action.value }
-    }
 
     case 'clearWorlds':
       return { ...previousState, worlds: undefined }
@@ -97,6 +103,7 @@ export const initialState: State = {
   showSettings: false,
 
   user: undefined,
+  wallets: undefined,
   worlds: undefined,
 
   launchWidth: 1280,

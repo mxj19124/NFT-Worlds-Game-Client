@@ -58,8 +58,9 @@ export const Login: FC = () => {
     dispatch({ type: 'setStatus', value: 'authenticating' })
 
     void login()
-      .then(({ profile }) => {
+      .then(({ profile, wallets }) => {
         dispatch({ type: 'setUser', value: profile })
+        dispatch({ type: 'setWallets', value: wallets })
       })
       .catch(console.error)
       .finally(() => {

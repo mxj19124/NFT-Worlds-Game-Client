@@ -1,5 +1,6 @@
 import { type WebContents } from 'electron'
 import msmc, { type profile as Profile } from 'msmc'
+import { authorize, getWallets } from '../lib/playerAPI'
 
 export const login: (
   webContents: WebContents
@@ -15,9 +16,13 @@ export const login: (
   const token = result.access_token!
   const profile = result.profile!
 
+  const nftWorldToken = await authorize(token)
+  const wallets = await getWallets(nftWorldToken)
+
   const authResult: IPC.AuthResult = {
     token,
     profile,
+    wallets,
   }
 
   return authResult
@@ -43,9 +48,13 @@ export const refresh: (
   const token = result.access_token!
   const newProfile = result.profile!
 
+  const nftWorldToken = await authorize(token)
+  const wallets = await getWallets(nftWorldToken)
+
   const authResult: IPC.AuthResult = {
     token,
     profile: newProfile,
+    wallets,
   }
 
   return authResult
