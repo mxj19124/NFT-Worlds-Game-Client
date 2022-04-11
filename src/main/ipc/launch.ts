@@ -1,5 +1,5 @@
 import { Buffer } from 'buffer'
-import { BrowserWindow, dialog, type WebContents } from 'electron'
+import { type WebContents } from 'electron'
 import { writeFile } from 'fs/promises'
 import { Client, type ILauncherOptions } from 'minecraft-launcher-core'
 import mkdirp from 'mkdirp'
@@ -30,24 +30,15 @@ export const launch = async (
 
   // eslint-disable-next-line max-params
 ) => {
-  const win = BrowserWindow.fromWebContents(webContents)!
-
   try {
-    const java = await ensureJava(webContents, LAUNCH_STEPS)
+    const java = await ensureJava(webContents, MIN_JAVA_VERSION, LAUNCH_STEPS)
     if (java === undefined) {
       webContents.send('launch:@close', -1)
       return
     }
 
     if (java.version < MIN_JAVA_VERSION) {
-      await dialog.showMessageBox(win, {
-        type: 'error',
-        title: win.title,
-        message: `Java version ${MIN_JAVA_VERSION} or higher is required to play Minecraft ${MINECRAFT_VERSION}`,
-      })
-
-      webContents.send('launch:@close', -1)
-      return
+      throw new Error('incompatible java version')
     }
 
     const root = joinPath(APP_ROOT, '.minecraft')

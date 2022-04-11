@@ -156,15 +156,25 @@ interface LocalJava {
 type JavaInstall = GlobalJava | LocalJava
 export const ensureJava: (
   webContents: WebContents,
+  minJavaVersion: number,
   launchSteps: number
-) => Promise<JavaInstall | undefined> = async (webContents, launchSteps) => {
+) => Promise<JavaInstall | undefined> = async (
+  webContents,
+  minJavaVersion,
+  launchSteps
+) => {
   const JDK_VERSION = '17.0.2+8'
   const win = BrowserWindow.fromWebContents(webContents)!
+  let hadInstall = false
 
   const platform = resolvePlatform()
   const globalVersion = await checkGlobalJava(platform)
   if (globalVersion) {
-    return { type: 'global', version: globalVersion }
+    hadInstall = true
+
+    if (globalVersion >= minJavaVersion) {
+      return { type: 'global', version: globalVersion }
+    }
   }
 
   // Ensure download directory exists
@@ -174,20 +184,28 @@ export const ensureJava: (
   const javaPath = resolveJavaPath(javaRoot, platform)
   const localVersion = await checkLocalJava(platform, javaRoot)
   if (localVersion) {
-    return {
-      type: 'local',
-      version: localVersion,
-      root: javaRoot,
-      javaPath,
+    hadInstall = true
+
+    if (localVersion >= minJavaVersion) {
+      return {
+        type: 'local',
+        version: localVersion,
+        root: javaRoot,
+        javaPath,
+      }
     }
   }
+
+  const message = hadInstall
+    ? `Java version ${minJavaVersion} or higher is required!`
+    : 'No Java installation was detected!'
 
   const { response } = await dialog.showMessageBox(win, {
     type: 'warning',
     title: win.title,
     message:
-      'No Java installation was detected!\n' +
-      'Would you like to automatically download Java?',
+      message +
+      `\nWould you like to automatically download Java ${minJavaVersion}?`,
     buttons: ['Yes', 'No'],
   })
 
