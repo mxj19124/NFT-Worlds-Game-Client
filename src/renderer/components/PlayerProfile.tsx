@@ -10,25 +10,30 @@ const Container = styled.div`
 `
 
 const PlayerHead = styled.img`
-  width: 42px;
-  height: 42px;
+  --size: 44px;
+
+  width: var(--size);
+  height: var(--size);
   image-rendering: pixelated;
   border-radius: 50%;
   border: 2px #ebebeb solid;
 `
 
-const Name = styled.p`
+const TextContainer = styled.p`
   position: relative;
-  font-size: 20px;
-  font-weight: 600;
+
+  height: 100%;
+  min-width: 100px;
   margin-right: 10px;
+
+  display: flex;
+  flex-direction: column;
+
+  --translation: 30%;
   transition: color 0.1s ease, transform 0.1s ease;
 
-  min-width: 100px;
-  text-align: right;
-
   *:hover > & {
-    transform: translateY(-100%);
+    transform: translateY(calc(-1 * var(--translation)));
     color: rgba(255, 255, 255, 0);
   }
 
@@ -36,13 +41,18 @@ const Name = styled.p`
     content: 'Log Out';
     position: absolute;
     top: 0;
-    left: 0;
-    transform: translateY(100%);
-    color: rgba(255, 255, 255, 0);
-    transition: color 0.1s ease, transform 0.1s ease;
+    right: 0;
+    bottom: 0;
 
-    width: 100%;
-    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    color: rgba(255, 255, 255, 0);
+    transform: translateY(var(--translation));
+
+    font-size: 20px;
+    font-weight: 600;
 
     *:hover > & {
       color: white;
@@ -50,12 +60,35 @@ const Name = styled.p`
   }
 `
 
+const Text = styled.span`
+  margin: 0;
+  text-align: right;
+`
+
+const Name = styled(Text)`
+  font-size: 18px;
+  font-weight: 600;
+`
+
+const Balance = styled(Text)`
+  font-size: 12px;
+  font-weight: 600;
+  color: rgb(230, 230, 230);
+
+  *:hover > * > & {
+    color: rgba(255, 255, 255, 0);
+  }
+`
+
 interface Props {
   profile: Profile
+  balance: number
 }
 
-export const PlayerProfile: FC<Props> = ({ profile }) => {
+export const PlayerProfile: FC<Props> = ({ profile, balance: rawBalance }) => {
   const { dispatch } = useStore()
+  const balance = useMemo<string>(() => rawBalance.toFixed(2), [rawBalance])
+
   const playerHead = useMemo<string>(
     () =>
       `https://crafatar.com/avatars/${profile.id}?size=32&default=MHF_Steve&overlay`,
@@ -68,7 +101,10 @@ export const PlayerProfile: FC<Props> = ({ profile }) => {
 
   return (
     <Container onClick={handleLogout}>
-      <Name>{profile.name}</Name>
+      <TextContainer>
+        <Name>{profile.name}</Name>
+        <Balance>{balance} $WRLD</Balance>
+      </TextContainer>
       <PlayerHead src={playerHead} />
     </Container>
   )

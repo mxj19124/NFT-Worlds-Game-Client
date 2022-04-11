@@ -13,10 +13,16 @@ const SettingsContainer = styled.div`
 
 export const LayoutProfile: FC = () => {
   const { state } = useStore()
+  console.log(state)
 
   return (
     <SettingsContainer>
-      {state.user && <PlayerProfile profile={state.user} />}
+      {state.user && state.wallets && (
+        <PlayerProfile
+          profile={state.user}
+          balance={state.wallets.wrldBalance}
+        />
+      )}
     </SettingsContainer>
   )
 }
