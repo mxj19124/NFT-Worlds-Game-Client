@@ -8,7 +8,7 @@ import { unlink, writeFile } from 'fs/promises'
 import mkdirp from 'mkdirp'
 import { join as joinPath, parse } from 'path'
 import process from 'process'
-import { parse as parseVersion } from 'semver'
+import { coerce as coerceVersion } from 'semver'
 import tar from 'tar-fs'
 import { createGunzip } from 'zlib'
 import { APP_ROOT, APP_ROOT_ABSOLUTE } from './env'
@@ -86,7 +86,7 @@ const parseJavaVersion: (stdout: string) => number | undefined = stdout => {
   if (!quoted) return undefined
 
   const raw = quoted.replace(/['"]+/g, '')
-  const version = parseVersion(raw)
+  const version = coerceVersion(raw)
   if (!version) return undefined
 
   return version.major
