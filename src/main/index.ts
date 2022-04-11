@@ -8,6 +8,7 @@ import { autoUpdater } from 'electron-updater'
 import { join as joinPath } from 'path'
 import process from 'process'
 import { initHandlers } from './ipc/handler'
+import { getSecureKey } from './lib/encryption'
 import { APP_ROOT, IS_DEV } from './lib/env'
 import { exists } from './lib/http'
 
@@ -82,6 +83,9 @@ const checkForUpdates = async () => {
 
 void app.whenReady().then(async () => {
   const updateCheckJob = checkForUpdates()
+
+  // @ts-expect-error Global Assign
+  global.__SECURE_STORE_KEY = getSecureKey()
 
   const win = await createWindow()
   initHandlers(win.webContents)

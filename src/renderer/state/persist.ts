@@ -1,10 +1,12 @@
 import Store from 'electron-store'
-import { APP_ROOT_ABSOLUTE } from '../lib/env'
+import { APP_ROOT_ABSOLUTE, STORE_KEY } from '../lib/env'
 import { type State } from './reducer'
 
 const store = new Store<PersistentStore>({
-  name: 'state',
+  name: 'store',
   cwd: APP_ROOT_ABSOLUTE,
+  fileExtension: (STORE_KEY && 'json.enc') || 'json',
+  encryptionKey: STORE_KEY,
 })
 
 interface PersistentStore {
