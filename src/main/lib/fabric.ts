@@ -8,6 +8,6 @@ export const downloadFabric = async (root: string, version: string) => {
   const launcherID = `${version}-fabric-${LOADER_VERSION}`
   const dir = join(root, 'versions', launcherID)
 
-  await downloadCachedAsset(dir, url, `${launcherID}.json`)
+  await downloadCachedAsset(dir, url, undefined, `${launcherID}.json`)
   return launcherID
 }

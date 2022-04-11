@@ -7,48 +7,63 @@ import { downloadCachedAsset, exists } from './http'
 export type AssetType = typeof assetTypes[number]
 const assetTypes = ['mod', 'resourcepack', 'shaderpack'] as const
 
-export type Asset = readonly [type: AssetType, url: string]
+export interface Asset {
+  type: AssetType
+  url: string
+  sha1: string
+}
+
 export interface CachedAsset {
+  type: AssetType
   filename: string
   cachedPath: string
-  type: AssetType
+  sha1: string
 }
 
 const assets: readonly Asset[] = [
-  [
-    'mod',
-    'https://cdn.modrinth.com/data/P7dR8mSH/versions/0.48.0+1.18.2/fabric-api-0.48.0%2B1.18.2.jar',
-  ],
-  [
-    'mod',
-    'https://cdn.modrinth.com/data/gvQqBUqZ/versions/mc1.18.2-0.7.9/lithium-fabric-mc1.18.2-0.7.9.jar',
-  ],
-  [
-    'mod',
-    'https://cdn.modrinth.com/data/YL57xq9U/versions/1.18.x-v1.2.2/iris-mc1.18.2-1.2.2-build.32.jar',
-  ],
-  [
-    'mod',
-    'https://cdn.modrinth.com/data/AANobbMI/versions/mc1.18.2-0.4.1/sodium-fabric-mc1.18.2-0.4.1%2Bbuild.15.jar',
-  ],
-  [
-    'mod',
-    'https://media.forgecdn.net/files/3672/241/3dskinlayers-fabric-1.4.2-mc1.18.2.jar',
-  ],
-
-  ['shaderpack', 'https://media.forgecdn.net/files/3608/184/BSL_v8.1.02.1.zip'],
+  {
+    type: 'mod',
+    url: 'https://cdn.modrinth.com/data/P7dR8mSH/versions/0.50.0+1.18.2/fabric-api-0.50.0+1.18.2.jar',
+    sha1: '994c82605fb3fd247791456a8271abd3e6f17a6f',
+  },
+  {
+    type: 'mod',
+    url: 'https://cdn.modrinth.com/data/gvQqBUqZ/versions/mc1.18.2-0.7.9/lithium-fabric-mc1.18.2-0.7.9.jar',
+    sha1: '2f0298476ba54e8fc640c9bfe132a193db45b92b',
+  },
+  {
+    type: 'mod',
+    url: 'https://cdn.modrinth.com/data/YL57xq9U/versions/1.18.x-v1.2.2/iris-mc1.18.2-1.2.2-build.32.jar',
+    sha1: '4f414abe310173ea7e270e26dafec8e6c442b9d4',
+  },
+  {
+    type: 'mod',
+    url: 'https://cdn.modrinth.com/data/AANobbMI/versions/mc1.18.2-0.4.1/sodium-fabric-mc1.18.2-0.4.1+build.15.jar',
+    sha1: 'f839863a6be7014b8d80058ea1f361521148d049',
+  },
+  {
+    type: 'mod',
+    url: 'https://media.forgecdn.net/files/3739/537/3dskinlayers-fabric-1.4.3-mc1.18.2.jar',
+    sha1: 'e9696fdbbe0306913134baff0c1cd6a49eeffc68',
+  },
+  {
+    type: 'shaderpack',
+    url: 'https://media.forgecdn.net/files/3726/264/BSL_v8.1.02.2.zip',
+    sha1: '6fe6b8c743ed3b29642e1c712bd47954466a13d5',
+  },
 ]
 
 const assetCache = joinPath(APP_ROOT, '.assetcache')
 export const fetchAssets = async () =>
   Promise.all(
-    assets.map(async ([type, url]) => {
-      const cachedPath = await downloadCachedAsset(assetCache, url)
+    assets.map(async ({ type, url, sha1 }) => {
+      const cachedPath = await downloadCachedAsset(assetCache, url, sha1)
 
       const asset: CachedAsset = {
+        type,
         filename: parse(cachedPath).base,
         cachedPath,
-        type,
+        sha1,
       }
 
       return asset

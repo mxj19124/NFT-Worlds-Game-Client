@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { type Buffer } from 'buffer'
+import { createHash } from 'crypto'
 import { type PathLike } from 'fs'
 import { access, writeFile } from 'fs/promises'
 import mkdirp from 'mkdirp'
@@ -17,6 +18,7 @@ export const exists = async (path: PathLike) => {
 export const downloadCachedAsset = async (
   directory: string,
   url: string,
+  sha1: string | undefined,
   filename?: string
 ) => {
   await mkdirp(directory)
@@ -27,8 +29,20 @@ export const downloadCachedAsset = async (
   const fileExists = await exists(filepath)
   if (fileExists) return filepath
 
-  const resp = await axios.get<Buffer>(url, { responseType: 'arraybuffer' })
-  await writeFile(filepath, resp.data)
+  const { data } = await axios.get<Buffer>(url, { responseType: 'arraybuffer' })
 
+  if (sha1 !== undefined) {
+    const hash = createHash('sha1')
+    hash.update(data)
+
+    const digest = hash.digest('hex')
+    if (sha1 !== digest) {
+      throw new Error(
+        `hash mismatch for ${url}\nexpected: ${sha1}\nactual: ${digest}`
+      )
+    }
+  }
+
+  await writeFile(filepath, data)
   return filepath
 }
