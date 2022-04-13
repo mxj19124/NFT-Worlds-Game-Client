@@ -1,6 +1,7 @@
 import { safeStorage } from 'electron'
 import isDev from 'electron-is-dev'
 import { existsSync, readFileSync, writeFileSync } from 'fs'
+import { sync as mkdirpSync } from 'mkdirp'
 import { nanoid } from 'nanoid'
 import { join } from 'path'
 import { APP_ROOT } from './env'
@@ -17,7 +18,9 @@ export const getSecureKey: () => string | undefined = () => {
   const canEncrypt = safeStorage.isEncryptionAvailable()
   if (!canEncrypt) return undefined
 
+  mkdirpSync(APP_ROOT)
   const keyFile = join(APP_ROOT, KEY_FILENAME)
+
   const keyFileExists = existsSync(keyFile)
   if (!keyFileExists) {
     const key = generateKey()
