@@ -67,5 +67,8 @@
     "main": {
       "webpackConfig": "webpack.main.js"
     }
+  },
+  "build": {
+    "appId": "com.nftworlds.launcher"
   }
 }
