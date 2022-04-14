@@ -8,6 +8,6 @@ For purposes of the foregoing, “Sell” means practicing any or all of the rig
 
 Software: NFT Worlds Game Client
 
-License: http://www.apache.org/licenses/LICENSE-2.0
+License: [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
 Licensor: NFT Worlds
