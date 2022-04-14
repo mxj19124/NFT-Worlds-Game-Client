@@ -78,6 +78,8 @@ const checkForUpdates = async () => {
   if (noUpdate) return false
 
   const updates = await autoUpdater.checkForUpdates()
+  if (updates === null) return false
+
   return updates.cancellationToken !== undefined
 }
 
