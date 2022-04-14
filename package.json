@@ -69,6 +69,8 @@
     }
   },
   "build": {
-    "appId": "com.nftworlds.launcher"
+    "appId": "com.nftworlds.launcher",
+    "productName": "NFT Worlds",
+    "copyright": "Copyright 2022 NFT Worlds LLC"
   }
 }
