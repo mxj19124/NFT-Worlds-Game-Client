@@ -1,3 +1,9 @@
 productName: NFT Worlds
 publish:
   - github
+mac:
+  target:
+    - target: default
+      arch:
+        - x64
+        - arm64
