@@ -129,8 +129,10 @@ export const syncAssets = async (
   )
 
   const hashes = new Set(assets.map(({ sha1 }) => sha1))
+  const shouldClean: readonly AssetType[] = ['mod']
+
   await Promise.all(
-    assetTypes.map(async type => {
+    shouldClean.map(async type => {
       const dir = joinPath(root, `${type}s`)
       await mkdirp(dir)
 
