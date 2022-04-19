@@ -7,7 +7,7 @@ import {
 import { faCheck, faGear } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { shell } from 'electron'
-import React, { type CSSProperties, type FC, useCallback } from 'react'
+import React, { type CSSProperties, type FC, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { useStore } from '../hooks/useStore'
 
@@ -112,21 +112,32 @@ const SettingsIconsContainer = styled.div`
 
 interface SettingsIconProps {
   active: boolean
+  disabled: boolean
 }
 
 const SettingsIcon = styled(Icon)<SettingsIconProps>`
   position: absolute;
   margin: 0;
 
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
   pointer-events: ${props => (props.active ? 'initial' : 'none')};
-  opacity: ${props => (props.active ? '0.65' : '0')};
+  opacity: ${props => (props.active ? (props.disabled ? '0.3' : '0.65') : '0')};
+
+  &:hover {
+    ${props => (props.disabled ? 'opacity: 0.3;' : '')}
+  }
 `
 
 export const LayoutIcons: FC = () => {
   const { state, dispatch } = useStore()
+  const enableSettings = useMemo<boolean>(
+    () => state.status === 'idle',
+    [state.status]
+  )
+
   const handleSettingsToggle = useCallback(() => {
-    dispatch({ type: 'toggleSettings' })
-  }, [dispatch])
+    if (enableSettings) dispatch({ type: 'toggleSettings' })
+  }, [enableSettings, dispatch])
 
   return (
     <IconsContainer>
@@ -135,6 +146,7 @@ export const LayoutIcons: FC = () => {
           type='click'
           title='Settings'
           active={!state.showSettings}
+          disabled={!enableSettings}
           icon={faGear}
           onClick={handleSettingsToggle}
         />
@@ -143,6 +155,7 @@ export const LayoutIcons: FC = () => {
           type='click'
           title='Hide Settings'
           active={state.showSettings}
+          disabled={!enableSettings}
           icon={faCheck}
           onClick={handleSettingsToggle}
         />
