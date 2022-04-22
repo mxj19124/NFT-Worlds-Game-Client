@@ -2,7 +2,7 @@ import React, { FC, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 const Container = styled.div<{ inactive: boolean }>`
-  width: 240px;
+  width: 250px;
   padding: 14px;
 
   display: flex;
