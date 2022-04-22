@@ -15,6 +15,8 @@ const Container = styled.div<{ inactive: boolean }>`
 
   & > * {
     opacity: ${props => (props.inactive ? '0.5' : 'initial')};
+    --grayscale: ${props => (props.inactive ? '90%' : '0%')};
+    --brightness: ${props => (props.inactive ? '70%' : '100%')};
   }
 `
 
@@ -25,6 +27,9 @@ const Banner = styled.img`
 
   border-radius: 8px;
   border: 2px #333333 solid;
+
+  opacity: 1;
+  filter: grayscale(var(--grayscale)) brightness(var(--brightness));
 `
 
 const Icon = styled.img`
@@ -36,6 +41,9 @@ const Icon = styled.img`
 
   border-radius: 50%;
   border: 2px #333333 solid;
+
+  opacity: 1;
+  filter: grayscale(var(--grayscale)) brightness(var(--brightness));
 `
 
 const WorldName = styled.h1`
