@@ -27,6 +27,10 @@ const StatusOverlay = styled.div`
   font-weight: 600;
 `
 
+const Task = styled.span`
+  text-transform: capitalize;
+`
+
 export const Launch: FC = () => {
   const { state, dispatch } = useStore()
   if (!state.user) throw new Error('Launch view rendered with no user')
@@ -37,6 +41,7 @@ export const Launch: FC = () => {
 
   const [progress, setProgress] = useState<number | undefined>()
   const [status, setStatus] = useState<string | undefined>()
+  const [task, setTask] = useState<string | undefined>()
 
   const disabled = useMemo<boolean>(
     () => state.status === 'gameRunning' || state.status === 'gameLaunching',
@@ -46,6 +51,7 @@ export const Launch: FC = () => {
   const onOpen = useCallback(() => {
     setProgress(undefined)
     setStatus('Game is running')
+    setTask(undefined)
 
     dispatch({ type: 'setStatus', value: 'gameRunning' })
   }, [dispatch])
@@ -53,7 +59,16 @@ export const Launch: FC = () => {
   const onUpdate = useCallback((message: string, percentage: number) => {
     setProgress(percentage * 100)
     setStatus(message)
+    setTask(undefined)
   }, [])
+
+  const onProgress = useCallback(
+    (type: string, task: number, total: number) => {
+      if (status !== 'Downloading Minecraft') return
+      setTask(`${type} [${task} / ${total}]`)
+    },
+    [status]
+  )
 
   const onDataDebug = useCallback((message: string) => {
     console.log(message)
@@ -62,6 +77,7 @@ export const Launch: FC = () => {
   const onClose = useCallback(() => {
     setProgress(undefined)
     setStatus(undefined)
+    setTask(undefined)
 
     dispatch({ type: 'setStatus', value: 'idle' })
   }, [dispatch])
@@ -69,6 +85,7 @@ export const Launch: FC = () => {
   useEffect(() => {
     launchEvents.addListener('open', onOpen)
     launchEvents.addListener('update', onUpdate)
+    launchEvents.addListener('progress', onProgress)
     launchEvents.addListener('data', onDataDebug)
     launchEvents.addListener('debug', onDataDebug)
     launchEvents.addListener('close', onClose)
@@ -76,11 +93,12 @@ export const Launch: FC = () => {
     return () => {
       launchEvents.removeListener('open', onOpen)
       launchEvents.removeListener('update', onUpdate)
+      launchEvents.removeListener('progress', onProgress)
       launchEvents.removeListener('data', onDataDebug)
       launchEvents.removeListener('debug', onDataDebug)
       launchEvents.removeListener('close', onClose)
     }
-  }, [onOpen, onUpdate, onDataDebug, onClose])
+  }, [onOpen, onUpdate, onProgress, onDataDebug, onClose])
 
   const launchWorld = useCallback(
     (world: NFTWorlds.World) => {
@@ -117,7 +135,18 @@ export const Launch: FC = () => {
         launchWorld={launchWorld}
       />
 
-      {status && <StatusOverlay>{status}</StatusOverlay>}
+      {status && (
+        <StatusOverlay>
+          {status}
+
+          {task && (
+            <>
+              {' - '}
+              <Task>{task}</Task>
+            </>
+          )}
+        </StatusOverlay>
+      )}
       {progress && (
         <LoadBar colour='rgba(255, 255, 255, 0.5)' percent={progress} />
       )}
