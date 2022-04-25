@@ -112,6 +112,16 @@ export const launch = async (
       webContents.send('launch:@debug', ...args)
     )
 
+    launcher.on(
+      'progress',
+      (data: { type: string; task: number; total: number }) => {
+        const type = data.type.replace(/-/g, ' ')
+        const { task, total } = data
+
+        webContents.send('launch:@progress', type, task, total)
+      }
+    )
+
     launcher.on('close', (...args) =>
       webContents.send('launch:@close', ...args)
     )

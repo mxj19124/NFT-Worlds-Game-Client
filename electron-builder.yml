@@ -1,3 +1,11 @@
 productName: NFT Worlds
+appId: com.nftworlds.launcher
+copyright: Copyright 2022 NFT Worlds LLC
 publish:
   - github
+mac:
+  target:
+    - target: default
+      arch:
+        - x64
+        - arm64

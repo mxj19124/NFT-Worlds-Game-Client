@@ -1,3 +1,4 @@
+import { dialog, getCurrentWindow } from '@electron/remote'
 import { type update as Update } from 'msmc'
 import React, {
   type FC,
@@ -62,7 +63,18 @@ export const Login: FC = () => {
         dispatch({ type: 'setUser', value: profile })
         dispatch({ type: 'setWallets', value: wallets })
       })
-      .catch(console.error)
+      .catch((error: Error) => {
+        const win = getCurrentWindow()
+        void dialog.showMessageBox(win, {
+          title: win.title,
+          type: 'error',
+          message: 'Login Failed',
+          detail:
+            'Make sure your Microsoft account owns a copy of Minecraft: Java Edition.',
+        })
+
+        console.error(error)
+      })
       .finally(() => {
         setProgress(undefined)
         setStatus(undefined)

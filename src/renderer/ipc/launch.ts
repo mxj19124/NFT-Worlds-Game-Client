@@ -23,6 +23,7 @@ interface Events {
   data: [message: string]
   debug: [message: string]
   update: [message: string, percentage: number]
+  progress: [type: string, task: number, total: number]
 }
 
 class LaunchEvents extends EventEmitter<Events> {
@@ -35,6 +36,10 @@ class LaunchEvents extends EventEmitter<Events> {
     ipcRenderer.on('launch:@debug', (_, message) => this.emit('debug', message))
     ipcRenderer.on('launch:@update', (_, message, percentage) =>
       this.emit('update', message, percentage)
+    )
+
+    ipcRenderer.on('launch:@progress', (_, type, task, total) =>
+      this.emit('progress', type, task, total)
     )
   }
 }

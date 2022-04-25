@@ -24,8 +24,8 @@ export interface CachedAsset {
 const assets: readonly Asset[] = [
   {
     type: 'mod',
-    url: 'https://cdn.modrinth.com/data/P7dR8mSH/versions/0.50.0+1.18.2/fabric-api-0.50.0+1.18.2.jar',
-    sha1: '994c82605fb3fd247791456a8271abd3e6f17a6f',
+    url: 'https://cdn.modrinth.com/data/P7dR8mSH/versions/0.51.1+1.18.2/fabric-api-0.51.1+1.18.2.jar',
+    sha1: 'fe3c0fcd92a46632a69e5d17cc0f2b7a37c877f4',
   },
   {
     type: 'mod',
@@ -129,8 +129,10 @@ export const syncAssets = async (
   )
 
   const hashes = new Set(assets.map(({ sha1 }) => sha1))
+  const shouldClean: readonly AssetType[] = ['mod']
+
   await Promise.all(
-    assetTypes.map(async type => {
+    shouldClean.map(async type => {
       const dir = joinPath(root, `${type}s`)
       await mkdirp(dir)
 
