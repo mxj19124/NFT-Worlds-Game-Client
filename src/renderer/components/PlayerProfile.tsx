@@ -1,5 +1,5 @@
 import { type profile as Profile } from 'msmc'
-import React, { type FC, useCallback, useMemo } from 'react'
+import React, { type FC, useCallback, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 import { useStore } from '../hooks/useStore'
 
@@ -9,7 +9,7 @@ const Container = styled.div`
   cursor: pointer;
 `
 
-const PlayerHead = styled.img`
+const PlayerHead = styled.canvas`
   --size: 44px;
 
   width: var(--size);
@@ -85,15 +85,59 @@ interface Props {
   balance: number
 }
 
+interface Skin {
+  id: string
+  state: string
+  url: string
+  variant: string
+}
+
 export const PlayerProfile: FC<Props> = ({ profile, balance: rawBalance }) => {
   const { dispatch } = useStore()
   const balance = useMemo<string>(() => rawBalance.toFixed(2), [rawBalance])
 
-  const playerHead = useMemo<string>(
+  const ref = useRef<HTMLCanvasElement>(null)
+  const skins = profile.skins as readonly Skin[] | undefined
+  const skinURL = useMemo<string>(
     () =>
-      `https://crafatar.com/avatars/${profile.id}?size=32&default=MHF_Steve&overlay`,
-    [profile.id]
+      skins
+        ?.find(x => x.state === 'ACTIVE')
+        ?.url?.replace('http://', 'https://') ?? 'aaa',
+    [skins]
   )
+
+  const avatar = useMemo<HTMLImageElement>(() => {
+    const img = new Image()
+    img.src = skinURL
+
+    return img
+  }, [skinURL])
+
+  const renderPlayerHead = useCallback(
+    (ctx: CanvasRenderingContext2D, avatar: HTMLImageElement) => {
+      console.log(avatar.complete)
+      ctx.drawImage(avatar, 8, 8, 8, 8, 0, 0, 8, 8)
+      ctx.drawImage(avatar, 40, 8, 8, 8, 0, 0, 8, 8)
+    },
+    []
+  )
+
+  useEffect(() => {
+    const ctx = ref.current?.getContext('2d')
+    if (!ctx) return
+
+    if (avatar.complete) {
+      renderPlayerHead(ctx, avatar)
+      return
+    }
+
+    const listener = () => renderPlayerHead(ctx, avatar)
+    avatar.addEventListener('load', listener)
+
+    return () => {
+      avatar.removeEventListener('load', listener)
+    }
+  }, [ref, avatar, renderPlayerHead])
 
   const handleLogout = useCallback(() => {
     dispatch({ type: 'clearUser' })
@@ -105,7 +149,7 @@ export const PlayerProfile: FC<Props> = ({ profile, balance: rawBalance }) => {
         <Name>{profile.name}</Name>
         <Balance>{balance} $WRLD</Balance>
       </TextContainer>
-      <PlayerHead src={playerHead} />
+      <PlayerHead ref={ref} width={8} height={8} />
     </Container>
   )
 }
