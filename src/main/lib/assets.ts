@@ -48,6 +48,11 @@ const assets: readonly Asset[] = [
     sha1: 'e9696fdbbe0306913134baff0c1cd6a49eeffc68',
   },
   {
+    type: 'mod',
+    url: 'https://github.com/WorldQL/server-transfer-fabric-spigot/releases/download/1.18.2/ServerTransferMod-1.18.2.jar',
+    sha1: '3de11cd8a65f46507a39410a3aee68bb1d13bc5d',
+  },
+  {
     type: 'shaderpack',
     url: 'https://media.forgecdn.net/files/3726/264/BSL_v8.1.02.2.zip',
     sha1: '6fe6b8c743ed3b29642e1c712bd47954466a13d5',
