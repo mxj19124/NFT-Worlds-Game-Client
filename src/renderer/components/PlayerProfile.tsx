@@ -115,7 +115,6 @@ export const PlayerProfile: FC<Props> = ({ profile, balance: rawBalance }) => {
 
   const renderPlayerHead = useCallback(
     (ctx: CanvasRenderingContext2D, avatar: HTMLImageElement) => {
-      console.log(avatar.complete)
       ctx.drawImage(avatar, 8, 8, 8, 8, 0, 0, 8, 8)
       ctx.drawImage(avatar, 40, 8, 8, 8, 0, 0, 8, 8)
     },
