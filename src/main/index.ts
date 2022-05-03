@@ -50,24 +50,26 @@ const createWindow = async () => {
   win.removeMenu()
   remote.enable(win.webContents)
 
-  if (IS_DEV) {
-    const port = process.env.ELECTRON_WEBPACK_WDS_PORT
-    if (!port) {
-      throw new Error('Webpack Port is undefined!')
+  const load = async () => {
+    if (IS_DEV) {
+      const port = process.env.ELECTRON_WEBPACK_WDS_PORT
+      if (!port) {
+        throw new Error('Webpack Port is undefined!')
+      }
+
+      await win.loadURL(`http://localhost:${port}`)
+    } else {
+      const path = joinPath(__dirname, 'index.html')
+      await win.loadURL(`file://${path}`)
     }
 
-    await win.loadURL(`http://localhost:${port}`)
-  } else {
-    const path = joinPath(__dirname, 'index.html')
-    await win.loadURL(`file://${path}`)
+    win.focus()
+    if (IS_DEV) {
+      win.webContents.openDevTools()
+    }
   }
 
-  win.focus()
-  if (IS_DEV) {
-    win.webContents.openDevTools()
-  }
-
-  return win
+  return { win, load }
 }
 
 const checkForUpdates = async () => {
@@ -89,8 +91,9 @@ void app.whenReady().then(async () => {
   // @ts-expect-error Global Assign
   global.__SECURE_STORE_KEY = getSecureKey()
 
-  const win = await createWindow()
+  const { win, load } = await createWindow()
   initHandlers(win.webContents)
+  await load()
 
   autoUpdater.on('download-progress', ({ percent }) => {
     win.setProgressBar(percent / 100, { mode: 'normal' })
