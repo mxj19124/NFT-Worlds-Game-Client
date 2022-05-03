@@ -24,6 +24,7 @@ interface PersistentSettings {
   minMemoryGB: State['minMemoryGB']
 
   shaders: State['launchShaders']
+  overrideDisableShaders: State['overrideDisableShaders']
 }
 
 export const initState: (initialState: State) => State = initialState => {
@@ -42,6 +43,8 @@ export const initState: (initialState: State) => State = initialState => {
     minMemoryGB: settings?.minMemoryGB ?? initialState.minMemoryGB,
 
     launchShaders: settings?.shaders ?? initialState.launchShaders,
+    overrideDisableShaders:
+      settings?.overrideDisableShaders ?? initialState.overrideDisableShaders,
   }
 }
 
@@ -61,6 +64,7 @@ export const persist = (state: State) => {
     minMemoryGB: state.minMemoryGB,
 
     shaders: state.launchShaders,
+    overrideDisableShaders: state.overrideDisableShaders,
   }
 
   store.set('settings', settings)

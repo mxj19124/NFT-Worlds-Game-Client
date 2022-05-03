@@ -24,6 +24,8 @@ export interface State {
   minMemoryGB: number
 
   launchShaders: boolean
+  disableShaders: string | undefined
+  overrideDisableShaders: boolean
 }
 
 export type Action =
@@ -42,6 +44,8 @@ export type Action =
   | { type: 'setMaxMemory'; value: number }
   | { type: 'setMinMemory'; value: number }
   | { type: 'setShaders'; value: boolean }
+  | { type: 'setDisableShaders'; value: string | undefined }
+  | { type: 'setOverrideDisableShaders'; value: boolean }
 
 export const reducer: Reducer<State, Action> = (previousState, action) => {
   switch (action.type) {
@@ -93,6 +97,12 @@ export const reducer: Reducer<State, Action> = (previousState, action) => {
     case 'setShaders':
       return { ...previousState, launchShaders: action.value }
 
+    case 'setDisableShaders':
+      return { ...previousState, disableShaders: action.value }
+
+    case 'setOverrideDisableShaders':
+      return { ...previousState, overrideDisableShaders: action.value }
+
     default:
       throw new Error('Invalid Action')
   }
@@ -114,4 +124,6 @@ export const initialState: State = {
   minMemoryGB: 1,
 
   launchShaders: true,
+  disableShaders: undefined,
+  overrideDisableShaders: false,
 }
