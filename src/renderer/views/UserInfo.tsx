@@ -1,5 +1,6 @@
-import React, { type FC } from 'react'
+import React, { type FC, useCallback } from 'react'
 import styled from 'styled-components'
+import { useStore } from '../hooks/useStore'
 
 const Container = styled.div`
   --spacing: 20px;
@@ -23,9 +24,18 @@ const Header = styled.h1`
 `
 
 export const UserInfo: FC = () => {
+  const { dispatch } = useStore()
+  const handleLogout = useCallback(() => {
+    dispatch({ type: 'clearUser' })
+    dispatch({ type: 'toggleUserInfo' })
+  }, [dispatch])
+
   return (
     <Container>
       <Header>Profile</Header>
+      <button type='button' onClick={handleLogout}>
+        Log Out
+      </button>
     </Container>
   )
 }
