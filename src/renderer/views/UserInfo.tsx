@@ -23,8 +23,33 @@ const Header = styled.h1`
   text-align: center;
 `
 
+const Heading = styled.h2`
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+
+  &:nth-child(2) {
+    margin-top: 6px;
+  }
+`
+
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr fit-content(400px);
+  column-gap: 10px;
+  align-items: baseline;
+`
+
+const Mono = styled.code<{ lower?: boolean }>`
+  font-size: 0.9rem;
+  text-transform: ${props => (props.lower ? 'lowercase' : 'initial')};
+`
+
 export const UserInfo: FC = () => {
-  const { dispatch } = useStore()
+  const { state, dispatch } = useStore()
+  if (!state.user) throw new Error('user is undefined')
+  if (!state.wallets) throw new Error('wallets is undefined')
+
   const handleLogout = useCallback(() => {
     dispatch({ type: 'clearUser' })
     dispatch({ type: 'toggleUserInfo' })
@@ -33,6 +58,17 @@ export const UserInfo: FC = () => {
   return (
     <Container>
       <Header>Profile</Header>
+
+      <Heading>Wallet</Heading>
+      <Grid>
+        <span>Primary Address</span>
+        <Mono lower>{state.wallets.primaryWalletAddress}</Mono>
+
+        <span>Balance</span>
+        <Mono>{state.wallets.wrldBalance.toFixed(2)} $WRLD</Mono>
+      </Grid>
+
+      <br />
       <button type='button' onClick={handleLogout}>
         Log Out
       </button>
