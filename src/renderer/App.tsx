@@ -25,6 +25,10 @@ const GlobalStyles = createGlobalStyle`
     font-family: 'Open Sans';
   }
 
+  code, pre {
+    font-family: 'Fira Mono';
+  }
+
   #app {
     width: 100vw;
     height: 100vh;

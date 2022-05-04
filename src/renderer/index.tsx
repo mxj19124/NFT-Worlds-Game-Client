@@ -2,6 +2,7 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { App } from './App'
 import { Provider } from './components/Store'
+import './assets/fonts/FiraMono.css'
 import './assets/fonts/OpenSans.css'
 
 if (module.hot) {
