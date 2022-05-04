@@ -19,11 +19,11 @@ const PlayerHead = styled.canvas`
   border: 2px #ebebeb solid;
 `
 
-const TextContainer = styled.p`
+const TextContainer = styled.p<{ profileActive: boolean }>`
   position: relative;
 
   height: 100%;
-  min-width: 100px;
+  min-width: 120px;
   margin-right: 10px;
 
   display: flex;
@@ -38,7 +38,7 @@ const TextContainer = styled.p`
   }
 
   &::after {
-    content: 'Log Out';
+    content: '${props => (props.profileActive ? 'Hide Profile' : 'Profile')}';
     position: absolute;
     top: 0;
     right: 0;
@@ -93,7 +93,7 @@ interface Skin {
 }
 
 export const PlayerProfile: FC<Props> = ({ profile, balance: rawBalance }) => {
-  const { dispatch } = useStore()
+  const { state, dispatch } = useStore()
   const balance = useMemo<string>(() => rawBalance.toFixed(2), [rawBalance])
 
   const ref = useRef<HTMLCanvasElement>(null)
@@ -139,12 +139,12 @@ export const PlayerProfile: FC<Props> = ({ profile, balance: rawBalance }) => {
   }, [ref, avatar, renderPlayerHead])
 
   const handleLogout = useCallback(() => {
-    dispatch({ type: 'clearUser' })
+    dispatch({ type: 'toggleUserInfo' })
   }, [dispatch])
 
   return (
     <Container onClick={handleLogout}>
-      <TextContainer>
+      <TextContainer profileActive={state.showUserInfo}>
         <Name>{profile.name}</Name>
         <Balance>{balance} $WRLD</Balance>
       </TextContainer>

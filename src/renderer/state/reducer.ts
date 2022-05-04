@@ -11,6 +11,7 @@ type Status =
 export interface State {
   status: Status
   showSettings: boolean
+  showUserInfo: boolean
 
   user: Profile | undefined
   wallets: IPC.WalletInfo | undefined
@@ -37,6 +38,7 @@ export type Action =
   | { type: 'setWorlds'; value: NFTWorlds.World[] | Error }
   | { type: 'clearWorlds' }
   | { type: 'toggleSettings' }
+  | { type: 'toggleUserInfo' }
   | { type: 'setWidth'; value: number }
   | { type: 'setHeight'; value: number }
   | { type: 'setFullscreen'; value: boolean }
@@ -47,6 +49,7 @@ export type Action =
   | { type: 'setDisableShaders'; value: string | undefined }
   | { type: 'setOverrideDisableShaders'; value: boolean }
 
+// eslint-disable-next-line complexity
 export const reducer: Reducer<State, Action> = (previousState, action) => {
   switch (action.type) {
     case 'setStatus':
@@ -70,8 +73,23 @@ export const reducer: Reducer<State, Action> = (previousState, action) => {
     case 'clearWorlds':
       return { ...previousState, worlds: undefined }
 
-    case 'toggleSettings':
-      return { ...previousState, showSettings: !previousState.showSettings }
+    case 'toggleSettings': {
+      const newValue = !previousState.showSettings
+      if (newValue && previousState.showUserInfo) {
+        return { ...previousState, showSettings: newValue, showUserInfo: false }
+      }
+
+      return { ...previousState, showSettings: newValue }
+    }
+
+    case 'toggleUserInfo': {
+      const newValue = !previousState.showUserInfo
+      if (newValue && previousState.showSettings) {
+        return { ...previousState, showUserInfo: newValue, showSettings: false }
+      }
+
+      return { ...previousState, showUserInfo: newValue }
+    }
 
     case 'setWidth':
       return { ...previousState, launchWidth: action.value }
@@ -111,6 +129,7 @@ export const reducer: Reducer<State, Action> = (previousState, action) => {
 export const initialState: State = {
   status: 'init',
   showSettings: false,
+  showUserInfo: false,
 
   user: undefined,
   wallets: undefined,
