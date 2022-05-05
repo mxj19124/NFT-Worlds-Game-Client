@@ -164,7 +164,24 @@ const syncShaderPack: (
   // #endregion
 
   // #region Apply Shader Settings
-  // TODO
+  if (pack !== undefined) {
+    const shadersDir = joinPath(root, 'shaderpacks')
+    await mkdirp(shadersDir)
+
+    const settingsFile = joinPath(shadersDir, `${pack.filename}.txt`)
+    const settingsExists = await exists(settingsFile)
+
+    // Only write settings if the user hasn't changed it themselves
+    if (settingsExists) return
+
+    const lines: string[] = []
+    for (const [key, value] of Object.entries(pack.settings)) {
+      lines.push(`${key}=${value}`)
+    }
+
+    const data = lines.join('\n') + '\n'
+    await writeFile(settingsFile, data)
+  }
   // #endregion
 }
 
