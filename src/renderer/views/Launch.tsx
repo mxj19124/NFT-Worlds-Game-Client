@@ -118,7 +118,10 @@ export const Launch: FC = () => {
           min: convertMemory(state.minMemoryGB),
         },
 
-        enableShaders: state.launchShaders,
+        enableShaders:
+          state.disableShaders && !state.overrideDisableShaders
+            ? false
+            : state.launchShaders,
       }
 
       dispatch({ type: 'setStatus', value: 'gameLaunching' })

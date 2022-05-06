@@ -1,4 +1,5 @@
-import React, { type FC, useCallback } from 'react'
+import { dialog, getCurrentWindow } from '@electron/remote'
+import React, { type FC, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { Checkbox, type CheckboxChangeHandler } from '../components/Checkbox'
 import {
@@ -52,6 +53,13 @@ const Grid = styled.div`
 
 export const Settings: FC = () => {
   const { state, dispatch } = useStore()
+  const shadersEnabled = useMemo<boolean>(
+    () =>
+      state.disableShaders && !state.overrideDisableShaders
+        ? false
+        : state.launchShaders,
+    [state.disableShaders, state.overrideDisableShaders, state.launchShaders]
+  )
 
   const onWidthChange = useCallback<NumberChangeHandler>(
     value => dispatch({ type: 'setWidth', value }),
@@ -79,8 +87,31 @@ export const Settings: FC = () => {
   )
 
   const onShadersChange = useCallback<CheckboxChangeHandler>(
-    value => dispatch({ type: 'setShaders', value }),
-    [dispatch]
+    async value => {
+      if (state.disableShaders && !state.overrideDisableShaders) {
+        const message =
+          'Shaders have been automatically disabled for the following reason:\n' +
+          `${state.disableShaders}\n\n` +
+          'Enabling shaders may cause your game to fail to load, use at your own risk.\n' +
+          'Would you like to enable shaders anyway?'
+
+        const win = getCurrentWindow()
+        const { response } = await dialog.showMessageBox(win, {
+          type: 'warning',
+          title: win.title,
+          message,
+          buttons: ['OK', 'Cancel'],
+        })
+
+        if (response === 0) {
+          dispatch({ type: 'setShaders', value: true })
+          dispatch({ type: 'setOverrideDisableShaders', value: true })
+        }
+      } else {
+        dispatch({ type: 'setShaders', value })
+      }
+    },
+    [state.disableShaders, state.overrideDisableShaders, dispatch]
   )
 
   return (
@@ -133,7 +164,7 @@ export const Settings: FC = () => {
         <Checkbox
           label='Enable Shaders'
           id='shaders'
-          value={state.launchShaders}
+          value={shadersEnabled}
           onChange={onShadersChange}
         />
       </Grid>

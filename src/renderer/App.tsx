@@ -8,6 +8,7 @@ import { init } from './state/init'
 import { Launch } from './views/Launch'
 import { Login } from './views/Login'
 import { Settings } from './views/Settings'
+import { UserInfo } from './views/UserInfo'
 
 const GlobalStyles = createGlobalStyle`
   body {
@@ -22,6 +23,10 @@ const GlobalStyles = createGlobalStyle`
 
     color: white;
     font-family: 'Open Sans';
+  }
+
+  code, pre {
+    font-family: 'Fira Mono';
   }
 
   #app {
@@ -78,6 +83,10 @@ const Router: FC = () => {
 
   if (state.status !== 'init' && state.showSettings) {
     return <Settings />
+  }
+
+  if (state.status !== 'init' && state.showUserInfo) {
+    return <UserInfo />
   }
 
   switch (state.status) {

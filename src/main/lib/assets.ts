@@ -8,17 +8,47 @@ import { downloadCachedAsset, exists } from './http'
 export type AssetType = typeof assetTypes[number]
 const assetTypes = ['mod', 'resourcepack', 'shaderpack'] as const
 
-export interface Asset {
-  type: AssetType
+type Asset = ModAsset | ResourcePackAsset | ShaderPackAsset
+interface AssetCommon {
   url: string
   sha1: string
 }
 
-export interface CachedAsset {
-  type: AssetType
+interface ModAsset extends AssetCommon {
+  type: 'mod'
+}
+
+interface ResourcePackAsset extends AssetCommon {
+  type: 'resourcepack'
+}
+
+interface ShaderPackAsset extends AssetCommon {
+  type: 'shaderpack'
+  settings: Record<string, string>
+}
+
+type CachedAsset =
+  | CachedModAsset
+  | CachedResourcePackAsset
+  | CachedShaderPackAsset
+
+interface CachedAssetCommon {
   filename: string
   cachedPath: string
   sha1: string
+}
+
+interface CachedModAsset extends CachedAssetCommon {
+  type: 'mod'
+}
+
+interface CachedResourcePackAsset extends CachedAssetCommon {
+  type: 'resourcepack'
+}
+
+interface CachedShaderPackAsset extends CachedAssetCommon {
+  type: 'shaderpack'
+  settings: Record<string, string>
 }
 
 const assets: readonly Asset[] = [
@@ -48,33 +78,55 @@ const assets: readonly Asset[] = [
     sha1: 'e9696fdbbe0306913134baff0c1cd6a49eeffc68',
   },
   {
+    type: 'mod',
+    url: 'https://github.com/WorldQL/server-transfer-fabric-spigot/releases/download/v0.1.0/server-transfer-mod-0.1.0.jar',
+    sha1: '65286443723b6608393e3cd307e21a88fbeaabdd',
+  },
+  {
     type: 'shaderpack',
     url: 'https://media.forgecdn.net/files/3726/264/BSL_v8.1.02.2.zip',
     sha1: '6fe6b8c743ed3b29642e1c712bd47954466a13d5',
+    settings: {
+      BLOOM: 'false',
+    },
   },
 ]
 
 const assetCache = joinPath(APP_ROOT, '.assetcache')
 export const fetchAssets = async () =>
   Promise.all(
-    assets.map(async ({ type, url, sha1 }) => {
-      const cachedPath = await downloadCachedAsset(assetCache, url, sha1)
+    assets.map(async asset => {
+      const cachedPath = await downloadCachedAsset(
+        assetCache,
+        asset.url,
+        asset.sha1
+      )
 
-      const asset: CachedAsset = {
-        type,
-        filename: parse(cachedPath).base,
-        cachedPath,
-        sha1,
-      }
+      const cached: CachedAsset =
+        asset.type === 'shaderpack'
+          ? {
+              type: asset.type,
+              filename: parse(cachedPath).base,
+              cachedPath,
+              sha1: asset.sha1,
+              settings: asset.settings,
+            }
+          : {
+              type: asset.type,
+              filename: parse(cachedPath).base,
+              cachedPath,
+              sha1: asset.sha1,
+            }
 
-      return asset
+      return cached
     })
   )
 
 const syncShaderPack: (
   root: string,
-  pack: string | undefined
+  pack: CachedShaderPackAsset | undefined
 ) => Promise<void> = async (root, pack) => {
+  // #region Sync Enabled Shaders
   const configDir = joinPath(root, 'config')
   await mkdirp(configDir)
 
@@ -82,7 +134,7 @@ const syncShaderPack: (
   const configExists = await exists(configFile)
 
   const targetLine = 'shaderPack='
-  const newLine = pack ? `${targetLine}${pack}` : targetLine
+  const newLine = pack ? `${targetLine}${pack.filename}` : targetLine
 
   const newLines: string[] = []
   if (configExists) {
@@ -109,6 +161,28 @@ const syncShaderPack: (
 
   const data = newLines.join('\n')
   await writeFile(configFile, data)
+  // #endregion
+
+  // #region Apply Shader Settings
+  if (pack !== undefined) {
+    const shadersDir = joinPath(root, 'shaderpacks')
+    await mkdirp(shadersDir)
+
+    const settingsFile = joinPath(shadersDir, `${pack.filename}.txt`)
+    const settingsExists = await exists(settingsFile)
+
+    // Only write settings if the user hasn't changed it themselves
+    if (settingsExists) return
+
+    const lines: string[] = []
+    for (const [key, value] of Object.entries(pack.settings)) {
+      lines.push(`${key}=${value}`)
+    }
+
+    const data = lines.join('\n') + '\n'
+    await writeFile(settingsFile, data)
+  }
+  // #endregion
 }
 
 export const syncAssets = async (
@@ -155,7 +229,7 @@ export const syncAssets = async (
   )
 
   const shaderPack = options.enableShaders
-    ? assets.find(x => x.type === 'shaderpack')?.filename
+    ? assets.find((x): x is CachedShaderPackAsset => x.type === 'shaderpack')
     : undefined
 
   await syncShaderPack(root, shaderPack)

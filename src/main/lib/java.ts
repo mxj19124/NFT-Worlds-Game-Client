@@ -205,6 +205,7 @@ export const ensureJava: (
     title: win.title,
     message:
       message +
+      `\nIf you already have Java installed and it wasn't detected properly, please use the provided Java download.` +
       `\nWould you like to automatically download Java ${minJavaVersion}?`,
     buttons: ['Yes', 'No'],
   })
