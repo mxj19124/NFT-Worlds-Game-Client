@@ -12,3 +12,11 @@ Both will output the result to the `dist` directory.
 
 ## Developing
 To run the HMR dev server, run `yarn run dev`
+
+## Publishing a Release
+1. Bump the `package.json` version and commit the change
+2. Tag the commit in the format `v0.0.0`
+3. Push the commit and the tag to GitHub with `git push && git push --tags`
+4. Wait for the [Publish Workflow](https://github.com/NFT-Worlds/NFT-Worlds-Game-Client/actions/workflows/publish.yml) to complete
+5. Find the newly created draft release under the [Releases](https://github.com/NFT-Worlds/NFT-Worlds-Game-Client/releases) section
+6. Fill in the release title and description and publish!
