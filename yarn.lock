@@ -9329,6 +9329,7 @@ __metadata:
     nbt: ^0.8.1
     react: ^18.1.0
     react-dom: ^18.1.0
+    react-konami-code: ^2.3.0
     rimraf: ^3.0.2
     semver: ^7.3.7
     source-map-support: ^0.5.21
@@ -10728,6 +10729,18 @@ __metadata:
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: f7a19ac3496de32ca9ae12aa030f00f14a3d45374f1ceca0af707c831b2a6098ef0d6bdae51bd437b0a306d7f01d4677fcc8de7c0d331eb47ad0f46130e53c5f
+  languageName: node
+  linkType: hard
+
+"react-konami-code@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "react-konami-code@npm:2.3.0"
+  dependencies:
+    prop-types: ^15.8.1
+  peerDependencies:
+    react: ">= 16.8.0"
+    react-dom: ">= 16.8.0"
+  checksum: 9cdaa1e7466b0e22474b00dbcd895b7b0aa82a12f07ac870a833b84b328b0e712f5cfa46596fec70d5833bc75de2b666ed630d8fdbf9518dd530841a569e6364
   languageName: node
   linkType: hard
 

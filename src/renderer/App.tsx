@@ -1,4 +1,6 @@
+import { getCurrentWebContents } from '@electron/remote'
 import React, { type FC, useEffect } from 'react'
+import { useKonami } from 'react-konami-code'
 import { createGlobalStyle } from 'styled-components'
 import { Layout } from './components/Layout'
 import { Scrollbar } from './components/Scrollbar'
@@ -43,6 +45,11 @@ const GlobalStyles = createGlobalStyle`
   }
 `
 
+const toggleDevTools = () => {
+  const webContents = getCurrentWebContents()
+  webContents.toggleDevTools()
+}
+
 export const App: FC = () => {
   const { state, dispatch } = useStore()
 
@@ -65,6 +72,9 @@ export const App: FC = () => {
       clearInterval(interval)
     }
   }, [dispatch])
+
+  // Allow opening DevTools on prod
+  useKonami(toggleDevTools)
 
   return (
     <>
