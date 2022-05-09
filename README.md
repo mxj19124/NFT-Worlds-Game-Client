@@ -20,3 +20,9 @@ To run the HMR dev server, run `yarn run dev`
 4. Wait for the [Publish Workflow](https://github.com/NFT-Worlds/NFT-Worlds-Game-Client/actions/workflows/publish.yml) to complete
 5. Find the newly created draft release under the [Releases](https://github.com/NFT-Worlds/NFT-Worlds-Game-Client/releases) section
 6. Fill in the release title and description and publish!
+
+## Troubleshooting
+These steps should help reset the launcher and clear out any state-related issues. If you've tried everything listed here then please [file an issue](https://github.com/NFT-Worlds/NFT-Worlds-Game-Client/issues/new).
+This is not a comprehensive list and more troubleshooting steps may be added in the future.
+
+* Clear your `.nftworlds` directory. On Windows this is in `%appdata%`, on macOS this is in `~/Library/Application Support`.
