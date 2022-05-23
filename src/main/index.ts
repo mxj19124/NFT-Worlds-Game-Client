@@ -9,7 +9,7 @@ import { join as joinPath } from 'path'
 import process from 'process'
 import { initHandlers } from './ipc/handler'
 import { getSecureKey } from './lib/encryption'
-import { APP_ROOT, IS_DEV } from './lib/env'
+import { APP_ROOT, IS_DEV, VERSION } from './lib/env'
 import { exists } from './lib/http'
 
 if (!IS_DEV && module.hot) {
@@ -34,7 +34,7 @@ Store.initRenderer()
 
 const createWindow = async () => {
   const win = new BrowserWindow({
-    title: 'NFT Worlds',
+    title: `NFT Worlds v${VERSION}`,
 
     width: 1280,
     height: 720,
