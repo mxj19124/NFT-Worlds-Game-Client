@@ -178,7 +178,7 @@ export const LayoutIcons: FC = () => {
       <Icon
         type='link'
         title='Discord'
-        href='https://discord.com/invite/nft-worlds'
+        href='https://discord.gg/nftworldsplay'
         icon={faDiscord}
       />
     </IconsContainer>
