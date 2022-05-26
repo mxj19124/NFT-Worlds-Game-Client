@@ -24,6 +24,7 @@ declare namespace IPC {
 
   export interface Environment {
     isDev: boolean
+    version: string
     appRoot: string
     appRootAbsolute: string
     maxMemoryGB: number

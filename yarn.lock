@@ -9330,6 +9330,7 @@ __metadata:
     react: ^18.1.0
     react-dom: ^18.1.0
     react-konami-code: ^2.3.0
+    read-pkg-up: ^7.0.1
     rimraf: ^3.0.2
     semver: ^7.3.7
     source-map-support: ^0.5.21

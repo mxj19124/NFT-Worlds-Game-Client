@@ -4,8 +4,14 @@ copyright: Copyright 2022 NFT Worlds LLC
 publish:
   - github
 mac:
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.plist
   target:
     - target: default
       arch:
         - x64
         - arm64
+dmg:
+  sign: false
