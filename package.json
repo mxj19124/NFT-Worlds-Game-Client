@@ -2,6 +2,7 @@
   "name": "nft-worlds-client",
   "version": "0.0.6",
   "packageManager": "yarn@3.2.0",
+  "repository": "https://github.com/NFT-Worlds/NFT-Worlds-Game-Client",
   "scripts": {
     "dev": "electron-webpack dev",
     "clean": "rimraf dist",
