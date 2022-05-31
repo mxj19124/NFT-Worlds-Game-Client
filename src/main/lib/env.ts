@@ -5,7 +5,7 @@ import path, { join as joinPath } from 'path'
 import { sync as readPkg } from 'read-pkg-up'
 
 export const IS_DEV = isDev
-export const VERSION = readPkg()?.packageJson.version ?? 'unknown'
+export const VERSION = readPkg()?.packageJson.version ?? app.getVersion()
 
 const dataDir = '.nftworlds'
 const appData = app.getPath('appData')
