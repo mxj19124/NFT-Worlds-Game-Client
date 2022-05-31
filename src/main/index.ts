@@ -1,7 +1,7 @@
 import 'source-map-support/register'
 
 import * as remote from '@electron/remote/main'
-import { app, BrowserWindow, Notification } from 'electron'
+import { app, BrowserWindow, dialog } from 'electron'
 import log from 'electron-log'
 import Store from 'electron-store'
 import { autoUpdater } from 'electron-updater'
@@ -99,15 +99,20 @@ void app.whenReady().then(async () => {
     win.setProgressBar(percent / 100, { mode: 'normal' })
   })
 
-  autoUpdater.on('update-downloaded', () => {
+  autoUpdater.on('update-downloaded', async () => {
     win.setProgressBar(-1)
 
-    const notification = new Notification({
-      title: 'Update Available',
-      body: 'An update has been downloaded, restart the client to finish installing.',
+    const { response } = await dialog.showMessageBox(win, {
+      type: 'info',
+      title: win.title,
+      message: 'Update Available',
+      detail:
+        'An update has been downloaded, restart the client to finish installing.',
+      buttons: ['Restart Now', 'Restart Later'],
+      cancelId: 1,
     })
 
-    notification.show()
+    if (response === 0) app.quit()
   })
 
   const hasUpdate = await updateCheckJob
